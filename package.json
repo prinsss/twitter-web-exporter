@@ -1,0 +1,20 @@
+{
+  "name": "twitter-web-exporter",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "preact": "10.16.0"
+  },
+  "devDependencies": {
+    "@preact/preset-vite": "^2.5.0",
+    "typescript": "^5.1.6",
+    "vite": "^4.4.8",
+    "vite-plugin-monkey": "^3.4.0"
+  }
+}
