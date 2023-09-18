@@ -1,7 +1,12 @@
 {
   "name": "twitter-web-exporter",
+  "description": "Export tweets, bookmarks, lists and much more from Twitter(X) web app.",
+  "version": "0.0.1",
+  "author": "prin <hi@prin.studio>",
+  "license": "MIT",
+  "homepage": "https://github.com/prinsss/twitter-web-exporter",
+  "bugs": "https://github.com/prinsss/twitter-web-exporter/issues",
   "private": true,
-  "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -9,10 +14,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@preact/signals": "^1.2.1",
     "preact": "10.16.0"
   },
   "devDependencies": {
     "@preact/preset-vite": "^2.5.0",
+    "@types/node": "^18",
+    "less": "^4.2.0",
     "typescript": "^5.1.6",
     "vite": "^4.4.8",
     "vite-plugin-monkey": "^3.4.0"

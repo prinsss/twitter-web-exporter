@@ -1,0 +1,52 @@
+#twitter-web-exporter-root {
+  .control-panel {
+    position: fixed;
+    top: 30px;
+    left: 30px;
+    padding: 10px;
+    background-color: #f7f9f9;
+    border: 1px solid #bfbfbf;
+    border-radius: 16px;
+    box-shadow: rgba(0, 0, 0, 0.08) 0px 8px 28px;
+    width: 300px;
+    line-height: 2;
+
+    .tweets-preview {
+      margin-top: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #bfbfbf;
+      border-radius: 16px;
+      padding: 10px;
+      background-color: #fff;
+      max-height: 300px;
+      overflow-y: scroll;
+    }
+
+    .logs {
+      text-wrap: wrap;
+      line-height: 1;
+      font-size: 12px;
+      max-height: 300px;
+      overflow-y: scroll;
+    }
+
+    p {
+      margin: 0;
+    }
+
+    .btn-group {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+
+    button {
+      margin-top: 3px;
+      margin-right: 3px;
+    }
+
+    #export-errors {
+      color: #f4212e;
+    }
+  }
+}
