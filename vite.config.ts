@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite';
 import { fileURLToPath, URL } from 'node:url';
 import preact from '@preact/preset-vite';
-import monkey from 'vite-plugin-monkey';
+import monkey, { cdn } from 'vite-plugin-monkey';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -28,12 +28,20 @@ export default defineConfig({
           'https://raw.githubusercontent.com/prinsss/twitter-web-exporter/master/dist/twitter-web-exporter.user.js',
         downloadURL:
           'https://raw.githubusercontent.com/prinsss/twitter-web-exporter/master/dist/twitter-web-exporter.user.js',
+        require: [
+          'https://cdn.jsdelivr.net/npm/preact@10.17.1/dist/preact.min.js',
+          'https://cdn.jsdelivr.net/npm/preact@10.17.1/hooks/dist/hooks.umd.js',
+          'https://cdn.jsdelivr.net/npm/@preact/signals-core@1.5.0/dist/signals-core.min.js',
+          'https://cdn.jsdelivr.net/npm/@preact/signals@1.2.1/dist/signals.min.js',
+        ],
       },
-      // build: {
-      //   externalGlobals: {
-      //     preact: cdn.jsdelivr('preact', 'dist/preact.min.js'),
-      //   },
-      // },
+      build: {
+        externalGlobals: {
+          preact: 'preact',
+          'preact/hooks': 'preactHooks',
+          '@preact/signals': 'preactSignals',
+        },
+      },
     }),
   ],
 });
