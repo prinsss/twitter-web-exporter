@@ -1,26 +1,34 @@
-import { useSignal } from '@preact/signals';
+import { Fragment } from 'preact';
 import extensions from './extensions';
+import { CatButton, CloseButton } from '@/components/buttons';
+import { useToggle } from '@/utils';
+import { Logs } from '@/components/logs';
+import { logLinesSignal } from '@/utils/logger';
 
 import './app.less';
 
 export function App() {
-  const showControlPanel = useSignal(true);
-
-  if (!showControlPanel.value) {
-    return null;
-  }
+  const [showControlPanel, toggleControlPanel] = useToggle();
 
   return (
-    <div class="control-panel">
-      <h2>Control Panel</h2>
-      <div class="btn-group">
-        <button onClick={() => (showControlPanel.value = false)}>DISMISS</button>
-      </div>
-      <div class="panels">
-        {extensions.getPanels().map((Panel) => (
-          <Panel />
-        ))}
-      </div>
-    </div>
+    <Fragment>
+      <CatButton class="btn-cat btn-open-panel" onClick={toggleControlPanel} />
+      {showControlPanel.value && (
+        <section class="control-panel">
+          <header class="control-panel-header">
+            <h2>Web Exporter (α)</h2>
+            <CloseButton onClick={toggleControlPanel} />
+          </header>
+          <main>
+            {extensions.getPanels().map((Panel) => (
+              <Panel />
+            ))}
+          </main>
+          <footer>
+            <Logs lines={logLinesSignal} />
+          </footer>
+        </section>
+      )}
+    </Fragment>
   );
 }

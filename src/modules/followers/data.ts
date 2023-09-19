@@ -1,12 +1,7 @@
 import { signal } from '@preact/signals';
 import { Interceptor } from '@/core/extensions';
 import logger from '@/utils/logger';
-import {
-  TimelineAddEntriesInstruction,
-  TimelineInstructions,
-  User,
-  TimelineUser,
-} from '@/types';
+import { TimelineAddEntriesInstruction, TimelineInstructions, User, TimelineUser } from '@/types';
 
 /**
  * The global store for "Followers".
@@ -54,6 +49,6 @@ export const FollowersInterceptor: Interceptor = (req, res) => {
     // Add captured users to the global store.
     followersSignal.value = [...followersSignal.value, ...newUsers];
   } catch (err) {
-    logger.error((err as Error).message);
+    logger.errorWithBanner('Failed to parse API response.', err as Error);
   }
 };

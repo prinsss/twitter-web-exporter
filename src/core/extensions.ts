@@ -40,7 +40,7 @@ export class ExtensionManager {
    */
   public add(ext: Extension) {
     this.extensions.add(ext);
-    logger.debug(`Setting up extension: ${ext.name}`);
+    logger.info(`Setting up extension: ${ext.name}`);
     ext.setup(this);
   }
 

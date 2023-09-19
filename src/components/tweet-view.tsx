@@ -7,6 +7,8 @@ export type TweetProps = {
 // Replace any https://t.co/ link in the string with its corresponding real URL.
 function renderFullText(tweet: Tweet) {
   let fullText = tweet.legacy.full_text;
+
+  // Should use extended_entities for media
   const { urls, media } = tweet.legacy.entities;
 
   if (urls?.length) {

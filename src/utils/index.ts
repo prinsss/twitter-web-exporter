@@ -1,3 +1,4 @@
+import { useSignal } from '@preact/signals';
 import logger from './logger';
 
 /**
@@ -34,4 +35,14 @@ export function saveFile(filename: string, content: string) {
 
   link.click();
   URL.revokeObjectURL(url);
+}
+
+export function useToggle(defaultValue = false) {
+  const signal = useSignal(defaultValue);
+
+  const toggle = () => {
+    signal.value = !signal.value;
+  };
+
+  return [signal, toggle] as const;
 }

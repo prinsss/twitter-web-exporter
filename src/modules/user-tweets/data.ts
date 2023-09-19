@@ -98,6 +98,6 @@ export const UserTweetsInterceptor: Interceptor = (req, res) => {
     // Add captured tweets to the global store.
     userTweetsSignal.value = [...userTweetsSignal.value, ...newTweets];
   } catch (err) {
-    logger.error((err as Error).message);
+    logger.errorWithBanner('Failed to parse API response.', err as Error);
   }
 };
