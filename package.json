@@ -21,6 +21,9 @@
     "@preact/preset-vite": "^2.5.0",
     "@types/node": "^18",
     "less": "^4.2.0",
+    "postcss-prefix-selector": "^1.16.0",
+    "postcss-rem-to-pixel-next": "^5.0.3",
+    "tailwindcss": "^3.3.3",
     "typescript": "^5.1.6",
     "vite": "^4.4.8",
     "vite-plugin-monkey": "^3.4.0"

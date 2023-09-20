@@ -1,4 +1,5 @@
-import { useSignal } from '@preact/signals';
+import { signal } from '@preact/signals';
+import { useMemo } from 'preact/hooks';
 import logger from './logger';
 
 /**
@@ -37,6 +38,18 @@ export function saveFile(filename: string, content: string) {
   URL.revokeObjectURL(url);
 }
 
+/**
+ * Avoid importing `useSignal` from "@preact/signals" package.
+ *
+ * @see https://github.com/preactjs/signals/pull/415
+ */
+export function useSignal<T>(value: T) {
+	return useMemo(() => signal<T>(value), []);
+}
+
+/**
+ * A signal representing a boolean value.
+ */
 export function useToggle(defaultValue = false) {
   const signal = useSignal(defaultValue);
 
@@ -45,4 +58,14 @@ export function useToggle(defaultValue = false) {
   };
 
   return [signal, toggle] as const;
+}
+
+/**
+ * Merge CSS class names.
+ *
+ * @example
+ * cx('foo', 'bar', false && 'baz') // => 'foo bar'
+ */
+export function cx(...classNames: any[]) {
+  return classNames.filter(Boolean).join(' ');
 }

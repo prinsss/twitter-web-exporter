@@ -1,7 +1,10 @@
 import { defineConfig } from 'vite';
 import { fileURLToPath, URL } from 'node:url';
 import preact from '@preact/preset-vite';
-import monkey, { cdn } from 'vite-plugin-monkey';
+import tailwindcss from 'tailwindcss';
+import prefixSelector from 'postcss-prefix-selector';
+import remToPx from 'postcss-rem-to-pixel-next';
+import monkey from 'vite-plugin-monkey';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -12,6 +15,16 @@ export default defineConfig({
   },
   build: {
     minify: false,
+  },
+  css: {
+    postcss: {
+      // @ts-ignore
+      plugins: [
+        tailwindcss(),
+        prefixSelector({ prefix: '#twe-root' }),
+        remToPx({ propList: ['*'] }),
+      ],
+    },
   },
   plugins: [
     preact(),
