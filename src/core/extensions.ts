@@ -87,7 +87,7 @@ export class ExtensionManager {
       xhrOpen.apply(this, arguments);
     };
 
-    logger.info('Hooked into XMLHttpRequest.');
+    logger.error('Hooked into XMLHttpRequest.');
   }
 }
 

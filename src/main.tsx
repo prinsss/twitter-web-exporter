@@ -3,10 +3,12 @@ import { App } from './core/app';
 import extensions from './core/extensions';
 import FollowersModule from './modules/followers';
 import UserTweetsModule from './modules/user-tweets';
+import RuntimeLogsModule from './modules/runtime-logs';
 import './index.css';
 
 extensions.add(FollowersModule);
 extensions.add(UserTweetsModule);
+extensions.add(RuntimeLogsModule);
 
 function mountApp() {
   const root = document.createElement('div');
