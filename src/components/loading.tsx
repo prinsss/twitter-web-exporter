@@ -1,8 +1,6 @@
-import './loading.less';
-
 export function Loading() {
   return (
-    <div class="loading">
+    <div class="animate-spin duration-[0.75s] w-6 h-6">
       <svg height="100%" viewBox="0 0 32 32" width="100%">
         <circle
           cx="16"

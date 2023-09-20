@@ -1,5 +1,4 @@
 import { JSX } from 'preact';
-import './modal.less';
 import { CloseButton } from './buttons';
 
 type ModalProps = {
@@ -13,13 +12,13 @@ export function Modal({ show, onClose, title, children }: ModalProps) {
   if (!show) return null;
 
   return (
-    <div class="modal-wrapper">
-      <section class="modal-content">
-        <header class="modal-header">
-          <CloseButton onClick={onClose} />
-          <h2>{title}</h2>
+    <div class="fixed w-screen h-screen flex items-center justify-center left-0 top-0 bg-black bg-opacity-40">
+      <section class="relative w-[800px] h-[600px] bg-[#f7f9f9] p-4 rounded-2xl">
+        <header class="flex items-center h-9">
+          <CloseButton class="mr-2" onClick={onClose} />
+          <h2 class="leading-none text-xl m-0">{title}</h2>
         </header>
-        <main class="modal-body">{children}</main>
+        <main>{children}</main>
       </section>
     </div>
   );
