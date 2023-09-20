@@ -15,11 +15,14 @@
   },
   "dependencies": {
     "@preact/signals": "^1.2.1",
-    "preact": "10.16.0"
+    "preact": "10.16.0",
+    "tailwind-merge": "^1.14.0"
   },
   "devDependencies": {
     "@preact/preset-vite": "^2.5.0",
     "@types/node": "^18",
+    "autoprefixer": "^10.4.16",
+    "daisyui": "^3.7.6",
     "less": "^4.2.0",
     "postcss-prefix-selector": "^1.16.0",
     "postcss-rem-to-pixel-next": "^5.0.3",

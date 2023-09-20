@@ -2,6 +2,7 @@ import { defineConfig } from 'vite';
 import { fileURLToPath, URL } from 'node:url';
 import preact from '@preact/preset-vite';
 import tailwindcss from 'tailwindcss';
+import autoprefixer from 'autoprefixer';
 import prefixSelector from 'postcss-prefix-selector';
 import remToPx from 'postcss-rem-to-pixel-next';
 import monkey from 'vite-plugin-monkey';
@@ -21,8 +22,19 @@ export default defineConfig({
       // @ts-ignore
       plugins: [
         tailwindcss(),
-        prefixSelector({ prefix: '#twe-root' }),
+        autoprefixer(),
         remToPx({ propList: ['*'] }),
+        // Use scoped CSS.
+        prefixSelector({
+          prefix: '#twe-root',
+          transform(prefix, selector, prefixedSelector) {
+            if (selector.match(/:root/)) {
+              return selector.replace(/:root/, prefix);
+            }
+
+            return prefixedSelector;
+          },
+        }),
       ],
     },
   },
