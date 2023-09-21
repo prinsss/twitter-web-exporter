@@ -27,7 +27,7 @@ class Logger {
   public errorWithBanner(msg: string, err: Error) {
     this.error(
       `${msg} (Message: ${err.message})\n` +
-        'This may be a problem caused by Twitter updates. Please file an issue on GitHub: ' +
+        'This may be a problem caused by Twitter updates.\nPlease file an issue on GitHub: ' +
         'https://github.com/prinsss/twitter-web-exporter/issues'
     );
   }

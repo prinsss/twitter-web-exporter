@@ -20,22 +20,22 @@ export interface TimelineTerminateTimelineInstruction {
   direction: 'Top' | 'Bottom';
 }
 
+export interface TimelineEntry<T> {
+  content: T;
+  entryId: string;
+  sortIndex: string;
+}
+
 export interface TimelinePinEntryInstruction {
   type: 'TimelinePinEntry';
-  entry: {
-    content: TimelineTimelineItem<TimelineTweet>;
-    entryId: string;
-    sortIndex: string;
-  };
+  entry: TimelineEntry<TimelineTimelineItem<TimelineTweet>>;
 }
 
 export interface TimelineAddEntriesInstruction<T = TimelineTweet | TimelineUser> {
   type: 'TimelineAddEntries';
-  entries: {
-    content: TimelineTimelineItem<T> | TimelineTimelineCursor | TimelineTimelineModule;
-    entryId: string;
-    sortIndex: string;
-  }[];
+  entries: TimelineEntry<
+    TimelineTimelineItem<T> | TimelineTimelineCursor | TimelineTimelineModule
+  >[];
 }
 
 // entryId: "tweet-{id}"

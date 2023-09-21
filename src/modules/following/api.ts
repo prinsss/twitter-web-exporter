@@ -4,11 +4,11 @@ import { TimelineInstructions, User } from '@/types';
 import { extractDataFromResponse } from '@/utils/api';
 
 /**
- * The global store for "Followers".
+ * The global store for "Following".
  */
-export const followersSignal = signal<User[]>([]);
+export const followingSignal = signal<User[]>([]);
 
-interface FollowersResponse {
+interface FollowingResponse {
   data: {
     user: {
       result: {
@@ -23,20 +23,19 @@ interface FollowersResponse {
   };
 }
 
-// https://twitter.com/i/api/graphql/rRXFSG5vR6drKr5M37YOTw/Followers
-// https://twitter.com/i/api/graphql/kXi37EbqWokFUNypPHhQDQ/BlueVerifiedFollowers
-export const FollowersInterceptor: Interceptor = (req, res) => {
-  if (!/api\/graphql\/.+\/(BlueVerified)*Followers/.test(req.url)) {
+// https://twitter.com/i/api/graphql/iSicc7LrzWGBgDPL0tM_TQ/Following
+export const FollowingInterceptor: Interceptor = (req, res) => {
+  if (!/api\/graphql\/.+\/Following/.test(req.url)) {
     return;
   }
 
-  extractDataFromResponse<FollowersResponse, User>(
+  extractDataFromResponse<FollowingResponse, User>(
     res,
     (json) => json.data.user.result.timeline.timeline.instructions,
     (entry) => entry.content.itemContent.user_results.result,
     (newData) => {
       // Add captured data to the global store.
-      followersSignal.value = [...followersSignal.value, ...newData];
+      followingSignal.value = [...followingSignal.value, ...newData];
     },
   );
 };
