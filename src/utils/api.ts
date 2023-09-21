@@ -49,3 +49,16 @@ export function extractDataFromResponse<
     logger.errorWithBanner('Failed to parse API response.', err as Error);
   }
 }
+
+/**
+ * Deal with tweets with visibility limitation.
+ */
+export function extractTweetWithVisibility(itemContent: TimelineTweet): Tweet {
+  const result = itemContent.tweet_results.result;
+
+  if (result.__typename === 'TweetWithVisibilityResults') {
+    return result.tweet;
+  }
+
+  return result;
+}

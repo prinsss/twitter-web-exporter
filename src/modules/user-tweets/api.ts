@@ -8,6 +8,7 @@ import {
   TimelinePinEntryInstruction,
   Tweet,
 } from '@/types';
+import { extractTweetWithVisibility } from '@/utils/api';
 
 // The global store for "UserTweets".
 export const userTweetsSignal = signal<Tweet[]>([]);
@@ -26,17 +27,6 @@ interface UserTweetsResponse {
       };
     };
   };
-}
-
-// Deal with tweets with visibility limitation.
-function extractTweetWithVisibility(itemContent: TimelineTweet): Tweet {
-  const result = itemContent.tweet_results.result;
-
-  if (result.__typename === 'TweetWithVisibilityResults') {
-    return result.tweet;
-  }
-
-  return result;
 }
 
 // https://twitter.com/i/api/graphql/H8OOoI-5ZE4NxgRr8lfyWg/UserTweets
