@@ -3,6 +3,17 @@ import { useMemo } from 'preact/hooks';
 import logger from './logger';
 
 /**
+ * Supported formats of exporting.
+ */
+export const EXPORT_FORMAT = {
+  JSON: 'JSON',
+  HTML: 'HTML',
+  CSV: 'CSV',
+} as const;
+
+export type ExportFormatType = typeof EXPORT_FORMAT[keyof typeof EXPORT_FORMAT];
+
+/**
  * JSON.parse with error handling.
  */
 export function safeJSONParse(text: string) {
@@ -44,7 +55,7 @@ export function saveFile(filename: string, content: string) {
  * @see https://github.com/preactjs/signals/pull/415
  */
 export function useSignal<T>(value: T) {
-	return useMemo(() => signal<T>(value), []);
+  return useMemo(() => signal<T>(value), []);
 }
 
 /**

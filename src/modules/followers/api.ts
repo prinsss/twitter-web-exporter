@@ -34,14 +34,13 @@ export const FollowersInterceptor: Interceptor = (req, res) => {
     const instructions = json.data.user.result.timeline.timeline.instructions;
 
     const timelineAddEntriesInstruction = instructions.find(
-      (i) => i.type === 'TimelineAddEntries'
+      (i) => i.type === 'TimelineAddEntries',
     ) as TimelineAddEntriesInstruction<TimelineUser>;
 
     const newUsers: User[] = [];
 
     for (const entry of timelineAddEntriesInstruction.entries) {
       if (entry.content.entryType === 'TimelineTimelineItem') {
-        logger.debug('normal users', entry.content.itemContent);
         newUsers.push(entry.content.itemContent.user_results.result);
       }
     }

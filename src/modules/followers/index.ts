@@ -1,13 +1,10 @@
-import logger from '@/utils/logger';
 import { Extension } from '@/core/extensions';
-import { FollowersInterceptor } from './data';
+import { FollowersInterceptor } from './api';
 import { FollowersPanel } from './ui';
 
 const FollowersModule: Extension = {
-  name: 'followers',
+  name: 'FollowersModule',
   setup(ctx) {
-    logger.debug('FollowersModule setup');
-
     ctx.registerInterceptor(FollowersInterceptor);
     ctx.registerPanel(FollowersPanel);
   },
