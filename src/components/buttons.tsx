@@ -33,6 +33,10 @@ export function CatButton(props: ButtonProps) {
   );
 }
 
+/**
+ * @license
+ * Icon Credit: https://tabler-icons.io
+ */
 export function CloseButton(props: ButtonProps) {
   return (
     <div
@@ -42,10 +46,48 @@ export function CloseButton(props: ButtonProps) {
         props.class,
       )}
     >
-      <svg viewBox="0 0 24 24" class="w-5 h-5 select-none">
-        <g>
-          <path d="M10.59 12L4.54 5.96l1.42-1.42L12 10.59l6.04-6.05 1.42 1.42L13.41 12l6.05 6.04-1.42 1.42L12 13.41l-6.04 6.05-1.42-1.42L10.59 12z"></path>
-        </g>
+      <svg
+        class="w-6 h-6 select-none"
+        viewBox="0 0 24 24"
+        stroke-width="2"
+        stroke="currentColor"
+        fill="none"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+        <path d="M18 6l-12 12"></path>
+        <path d="M6 6l12 12"></path>
+      </svg>
+    </div>
+  );
+}
+
+/**
+ * @license
+ * Icon Credit: https://tabler-icons.io
+ */
+export function SettingsButton(props: ButtonProps) {
+  return (
+    <div
+      {...props}
+      class={twMerge(
+        'w-9 h-9 cursor-pointer flex justify-center items-center transition-colors duration-200 rounded-full hover:bg-base-200',
+        props.class,
+      )}
+    >
+      <svg
+        class="w-6 h-6 select-none"
+        viewBox="0 0 24 24"
+        stroke-width="2"
+        stroke="currentColor"
+        fill="none"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+        <path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z"></path>
+        <path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"></path>
       </svg>
     </div>
   );
