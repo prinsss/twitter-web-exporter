@@ -1,5 +1,5 @@
+import { cx } from '@/utils';
 import { JSX } from 'preact';
-import { twMerge } from 'tailwind-merge';
 
 type ButtonProps = JSX.HTMLAttributes<HTMLDivElement> & {
   class?: string;
@@ -13,10 +13,7 @@ export function CatButton(props: ButtonProps) {
   return (
     <div
       {...props}
-      class={twMerge(
-        'group w-12 h-12 cursor-pointer flex justify-center items-center',
-        props.class,
-      )}
+      class={cx('group w-12 h-12 cursor-pointer flex justify-center items-center', props.class)}
     >
       <svg
         viewBox="0 0 512 512"
@@ -41,7 +38,7 @@ export function CloseButton(props: ButtonProps) {
   return (
     <div
       {...props}
-      class={twMerge(
+      class={cx(
         'w-9 h-9 cursor-pointer flex justify-center items-center transition-colors duration-200 rounded-full hover:bg-base-200',
         props.class,
       )}
@@ -71,7 +68,7 @@ export function SettingsButton(props: ButtonProps) {
   return (
     <div
       {...props}
-      class={twMerge(
+      class={cx(
         'w-9 h-9 cursor-pointer flex justify-center items-center transition-colors duration-200 rounded-full hover:bg-base-200',
         props.class,
       )}

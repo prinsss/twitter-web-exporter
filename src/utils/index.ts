@@ -73,6 +73,7 @@ export function useToggle(defaultValue = false) {
 
 /**
  * Merge CSS class names.
+ * Avoid using `tailwind-merge` here since it increases bundle size.
  *
  * @example
  * cx('foo', 'bar', false && 'baz') // => 'foo bar'

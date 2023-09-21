@@ -1,7 +1,6 @@
 import { JSX } from 'preact';
 import { CloseButton } from './buttons';
-import { twMerge } from 'tailwind-merge';
-import { EXPORT_FORMAT, ExportFormatType, useSignal } from '@/utils';
+import { EXPORT_FORMAT, ExportFormatType, cx, useSignal } from '@/utils';
 
 type ExtensionPanelProps = {
   title: string;
@@ -96,9 +95,9 @@ export function Modal({
         {/* Modal content. */}
         <main class="max-w-full h-[600px] overflow-scroll bg-base-200 p-2">{children}</main>
         {/* Action buttons. */}
-        <div class={twMerge('flex mt-3 space-x-2', disableFooter && 'hidden')}>
+        <div class={cx('flex mt-3 space-x-2', disableFooter && 'hidden')}>
           <button
-            class={twMerge('btn btn-neutral btn-ghost', loading.value && 'pointer-events-none')}
+            class={cx('btn btn-neutral btn-ghost', loading.value && 'pointer-events-none')}
             onClick={onClear}
           >
             Clear
@@ -112,7 +111,7 @@ export function Modal({
             ))}
           </select>
           <button
-            class={twMerge('btn btn-primary', loading.value && 'btn-disabled')}
+            class={cx('btn btn-primary', loading.value && 'btn-disabled')}
             onClick={onButtonClick}
           >
             {loading.value && <span class="loading loading-spinner" />}

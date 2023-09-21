@@ -1,8 +1,7 @@
 import { Fragment } from 'preact';
-import { twMerge } from 'tailwind-merge';
 import extensions from './extensions';
 import { CatButton, CloseButton, SettingsButton } from '@/components/buttons';
-import { useToggle } from '@/utils';
+import { cx, useToggle } from '@/utils';
 
 export function App() {
   const [showControlPanel, toggleControlPanel] = useToggle(true);
@@ -10,12 +9,12 @@ export function App() {
   return (
     <Fragment>
       {/* To show and hide the main UI. */}
-      <CatButton class="btn-cat fixed top-[60%] left-[-20px]" onClick={toggleControlPanel} />
+      <CatButton class="fixed top-[60%] left-[-20px]" onClick={toggleControlPanel} />
       {/* The main UI block. */}
       <section
-        class={twMerge(
-          'card card-compact bg-base-100 fixed border shadow-xl w-80 leading-loose text-base-content px-4 py-3 rounded-2xl border-solid border-neutral-content left-8 top-8 transition-transform translate-x-[-500px] duration-500',
-          showControlPanel.value && 'block translate-x-0 transform-none',
+        class={cx(
+          'card card-compact bg-base-100 fixed border shadow-xl w-80 leading-loose text-base-content px-4 py-3 rounded-2xl border-solid border-neutral-content left-8 top-8 transition-transform duration-500',
+          showControlPanel.value ? 'translate-x-0 transform-none' : 'translate-x-[-500px]',
         )}
       >
         {/* Card title. */}

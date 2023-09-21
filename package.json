@@ -15,8 +15,7 @@
   },
   "dependencies": {
     "@preact/signals": "^1.2.1",
-    "preact": "10.16.0",
-    "tailwind-merge": "^1.14.0"
+    "preact": "10.16.0"
   },
   "devDependencies": {
     "@preact/preset-vite": "^2.5.0",
