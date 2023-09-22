@@ -6,7 +6,7 @@ import { Tweet } from '@/types';
 const ModuleUI = AbstractModuleUI<Tweet>;
 
 function BookmarksPanel() {
-  return <ModuleUI title="Bookmarks" recordsSignal={bookmarksSignal} />;
+  return <ModuleUI title="Bookmarks" recordsSignal={bookmarksSignal} isTweet />;
 }
 
 export default class BookmarksModule extends Extension {

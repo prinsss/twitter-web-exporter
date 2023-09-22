@@ -6,7 +6,7 @@ import { Tweet } from '@/types';
 const ModuleUI = AbstractModuleUI<Tweet>;
 
 function LikesPanel() {
-  return <ModuleUI title="Likes" recordsSignal={likesSignal} />;
+  return <ModuleUI title="Likes" recordsSignal={likesSignal} isTweet />;
 }
 
 export default class LikesModule extends Extension {

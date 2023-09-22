@@ -8,6 +8,7 @@ type ExtensionPanelProps = {
   active?: boolean;
   onClick?: () => void;
   children?: JSX.Element | JSX.Element[];
+  indicatorColor?: string;
 };
 
 /**
@@ -19,6 +20,7 @@ export function ExtensionPanel({
   children,
   onClick,
   active,
+  indicatorColor = 'bg-secondary',
 }: ExtensionPanelProps) {
   return (
     <section class="module-panel">
@@ -26,9 +28,14 @@ export function ExtensionPanel({
       <div class="h-14 flex items-center justify-start">
         <div class="relative flex h-4 w-4 mr-3 shrink-0">
           {active && (
-            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75" />
+            <span
+              class={cx(
+                'animate-ping absolute inline-flex h-full w-full rounded-full opacity-75',
+                indicatorColor,
+              )}
+            />
           )}
-          <span class="relative inline-flex rounded-full h-4 w-4 bg-secondary" />
+          <span class={cx('relative inline-flex rounded-full h-4 w-4', indicatorColor)} />
         </div>
         <div class="flex flex-col flex-grow">
           <p class="text-base m-0 font-medium leading-none">{title}</p>

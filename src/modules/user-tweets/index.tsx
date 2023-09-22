@@ -6,7 +6,7 @@ import { Tweet } from '@/types';
 const ModuleUI = AbstractModuleUI<Tweet>;
 
 function UserTweetsPanel() {
-  return <ModuleUI title="UserTweets" recordsSignal={userTweetsSignal} />;
+  return <ModuleUI title="UserTweets" recordsSignal={userTweetsSignal} isTweet />;
 }
 
 export default class UserTweetsModule extends Extension {

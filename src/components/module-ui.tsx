@@ -7,12 +7,13 @@ import logger from '@/utils/logger';
 type AbstractModuleUIProps<T> = {
   title: string;
   recordsSignal: Signal<T[]>;
+  isTweet?: boolean;
 };
 
 /**
  * A common UI boilerplate for modules.
  */
-export function AbstractModuleUI<T>({ title, recordsSignal }: AbstractModuleUIProps<T>) {
+export function AbstractModuleUI<T>({ title, recordsSignal, isTweet }: AbstractModuleUIProps<T>) {
   const [showPreviewSignal, togglePreview] = useToggle();
 
   const loading = useSignal<boolean>(false);
@@ -62,6 +63,7 @@ export function AbstractModuleUI<T>({ title, recordsSignal }: AbstractModuleUIPr
       description={`Captured: ${recordsSignal.value.length}`}
       active={recordsSignal.value.length > 0}
       onClick={togglePreview}
+      indicatorColor={isTweet ? 'bg-primary' : 'bg-secondary'}
     >
       <Modal title={title} show={showPreviewSignal.value} onClose={togglePreview}>
         {/* Modal content. */}
