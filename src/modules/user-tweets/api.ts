@@ -8,7 +8,11 @@ import {
   TimelinePinEntryInstruction,
   Tweet,
 } from '@/types';
-import { extractTweetWithVisibility } from '@/utils/api';
+import {
+  extractTweetWithVisibility,
+  isTimelineEntryProfileConversation,
+  isTimelineEntryTweet,
+} from '@/utils/api';
 
 // The global store for "UserTweets".
 export const userTweetsSignal = signal<Tweet[]>([]);
@@ -40,53 +44,44 @@ export const UserTweetsInterceptor: Interceptor = (req, res) => {
     const json: UserTweetsResponse = JSON.parse(res.responseText);
     const instructions = json.data.user.result.timeline_v2.timeline.instructions;
 
-    const newTweets: Tweet[] = [];
+    const newData: Tweet[] = [];
 
     // The pinned tweet.
     const timelinePinEntryInstruction = instructions.find(
-      (i) => i.type === 'TimelinePinEntry'
+      (i) => i.type === 'TimelinePinEntry',
     ) as TimelinePinEntryInstruction;
 
     if (timelinePinEntryInstruction) {
-      newTweets.push(
-        extractTweetWithVisibility(timelinePinEntryInstruction.entry.content.itemContent)
+      newData.push(
+        extractTweetWithVisibility(timelinePinEntryInstruction.entry.content.itemContent),
       );
     }
 
     // Normal tweets.
     const timelineAddEntriesInstruction = instructions.find(
-      (i) => i.type === 'TimelineAddEntries'
+      (i) => i.type === 'TimelineAddEntries',
     ) as TimelineAddEntriesInstruction<TimelineTweet>;
 
     for (const entry of timelineAddEntriesInstruction.entries) {
-      // Ignore timeline cursors.
-      if (entry.content.entryType === 'TimelineTimelineCursor') {
-        logger.debug('skip TimelineTimelineCursor');
-        continue;
+      // Extract normal tweets.
+      if (isTimelineEntryTweet(entry)) {
+        newData.push(extractTweetWithVisibility(entry.content.itemContent));
       }
 
       // Extract conversations.
-      if (
-        entry.content.entryType === 'TimelineTimelineModule' &&
-        entry.content.metadata?.conversationMetadata
-      ) {
+      if (isTimelineEntryProfileConversation(entry)) {
         const tweetsInConversation = entry.content.items.map((i) =>
-          extractTweetWithVisibility(i.item.itemContent as TimelineTweet)
+          extractTweetWithVisibility(i.item.itemContent),
         );
 
-        logger.debug('conversation', tweetsInConversation);
-        newTweets.push(...tweetsInConversation);
-      }
-
-      // Extract normal tweets.
-      if (entry.content.entryType === 'TimelineTimelineItem') {
-        logger.debug('normal tweets', entry.content.itemContent);
-        newTweets.push(extractTweetWithVisibility(entry.content.itemContent));
+        newData.push(...tweetsInConversation);
       }
     }
 
+    logger.info(`UserTweets: ${newData.length} items received`);
+
     // Add captured tweets to the global store.
-    userTweetsSignal.value = [...userTweetsSignal.value, ...newTweets];
+    userTweetsSignal.value = [...userTweetsSignal.value, ...newData];
   } catch (err) {
     logger.errorWithBanner('Failed to parse API response.', err as Error);
   }

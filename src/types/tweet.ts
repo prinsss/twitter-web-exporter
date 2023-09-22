@@ -6,7 +6,9 @@ export interface TimelineTweet {
   tweet_results: {
     result: TweetWithVisibilityResults | Tweet;
   };
-  tweetDisplayType: string;
+  tweetDisplayType: 'Tweet' | 'SelfThread';
+  hasModeratedReplies?: boolean;
+  socialContext?: unknown;
 }
 
 export interface TweetWithVisibilityResults {

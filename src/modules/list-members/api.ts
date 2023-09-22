@@ -2,6 +2,7 @@ import { signal } from '@preact/signals';
 import { Interceptor } from '@/core/extensions';
 import { TimelineInstructions, User } from '@/types';
 import { extractDataFromResponse } from '@/utils/api';
+import logger from '@/utils/logger';
 
 /**
  * The global store for "ListMembers".
@@ -26,13 +27,14 @@ export const ListMembersInterceptor: Interceptor = (req, res) => {
     return;
   }
 
-  extractDataFromResponse<ListMembersResponse, User>(
+  const newData = extractDataFromResponse<ListMembersResponse, User>(
     res,
     (json) => json.data.list.members_timeline.timeline.instructions,
     (entry) => entry.content.itemContent.user_results.result,
-    (newData) => {
-      // Add captured data to the global store.
-      listMembersSignal.value = [...listMembersSignal.value, ...newData];
-    },
   );
+
+  logger.info(`ListMembers: ${newData.length} items received`);
+
+  // Add captured data to the global store.
+  listMembersSignal.value = [...listMembersSignal.value, ...newData];
 };

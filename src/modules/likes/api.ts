@@ -2,6 +2,7 @@ import { signal } from '@preact/signals';
 import { Interceptor } from '@/core/extensions';
 import { TimelineInstructions, Tweet } from '@/types';
 import { extractDataFromResponse, extractTweetWithVisibility } from '@/utils/api';
+import logger from '@/utils/logger';
 
 /**
  * The global store for "Likes".
@@ -30,13 +31,14 @@ export const LikesInterceptor: Interceptor = (req, res) => {
     return;
   }
 
-  extractDataFromResponse<LikesResponse, Tweet>(
+  const newData = extractDataFromResponse<LikesResponse, Tweet>(
     res,
     (json) => json.data.user.result.timeline_v2.timeline.instructions,
     (entry) => extractTweetWithVisibility(entry.content.itemContent),
-    (newData) => {
-      // Add captured data to the global store.
-      likesSignal.value = [...likesSignal.value, ...newData];
-    },
   );
+
+  logger.info(`Likes: ${newData.length} items received`);
+
+  // Add captured data to the global store.
+  likesSignal.value = [...likesSignal.value, ...newData];
 };

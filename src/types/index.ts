@@ -20,44 +20,47 @@ export interface TimelineTerminateTimelineInstruction {
   direction: 'Top' | 'Bottom';
 }
 
-export interface TimelineEntry<T> {
-  content: T;
+export interface TimelineEntry<
+  T = TimelineTweet | TimelineUser,
+  C = TimelineTimelineItem<T> | TimelineTimelineModule<T> | TimelineTimelineCursor,
+> {
+  content: C;
   entryId: string;
   sortIndex: string;
 }
 
 export interface TimelinePinEntryInstruction {
   type: 'TimelinePinEntry';
-  entry: TimelineEntry<TimelineTimelineItem<TimelineTweet>>;
+  entry: TimelineEntry<TimelineTweet, TimelineTimelineItem<TimelineTweet>>;
 }
 
 export interface TimelineAddEntriesInstruction<T = TimelineTweet | TimelineUser> {
   type: 'TimelineAddEntries';
-  entries: TimelineEntry<
-    TimelineTimelineItem<T> | TimelineTimelineCursor | TimelineTimelineModule
-  >[];
+  entries: TimelineEntry<T>[];
 }
 
-// entryId: "tweet-{id}"
-// entryId: "user-{id}"
-export interface TimelineTimelineItem<T> {
+// TimelineEntry.entryId: "tweet-{id}"
+// TimelineEntry.entryId: "user-{id}"
+export interface TimelineTimelineItem<T = TimelineTweet | TimelineUser> {
   entryType: 'TimelineTimelineItem';
   __typename: 'TimelineTimelineItem';
   itemContent: T;
   clientEventInfo: unknown;
 }
 
-// entryId: "cursor-top-{id}"
-// entryId: "cursor-bottom-{id}"
+// TimelineEntry.entryId: "cursor-top-{id}"
+// TimelineEntry.entryId: "cursor-bottom-{id}"
 export interface TimelineTimelineCursor {
   entryType: 'TimelineTimelineCursor';
   __typename: 'TimelineTimelineCursor';
   value: string;
-  cursorType: 'Top' | 'Bottom';
+  cursorType: 'Top' | 'Bottom' | 'ShowMoreThreads';
 }
 
-// entryId: "who-to-follow-{id}"
-// entryId: "profile-conversation-{id}"
+// TimelineEntry.entryId: "who-to-follow-{id}"
+// TimelineEntry.entryId: "profile-conversation-{id}"
+// TimelineEntry.entryId: "conversationthread-{id}"
+// TimelineEntry.entryId: "tweetdetailrelatedtweets-{id}"
 export interface TimelineTimelineModule<T = TimelineTweet | TimelineUser> {
   entryType: 'TimelineTimelineModule';
   __typename: 'TimelineTimelineModule';
@@ -66,12 +69,15 @@ export interface TimelineTimelineModule<T = TimelineTweet | TimelineUser> {
   items: {
     // "who-to-follow-{id}-user-{uid}"
     // "profile-conversation-{id}-tweet-{tid}"
+    // "conversationthread-{id}-tweet-{tid}"
+    // "tweetdetailrelatedtweets-{id}-tweet-{tid}"
     entryId: string;
     item: {
       clientEventInfo: unknown;
       itemContent: T;
     };
   }[];
+  header?: unknown;
   metadata?: {
     conversationMetadata: {
       allTweetIds: string[];
