@@ -17,6 +17,7 @@ function renderFullText(tweet: Tweet) {
     }
   }
 
+  // NOTE: In some situations, media with different `media_url_https` can share same `url` and `display_url`.
   if (media?.length) {
     for (const { url, display_url } of media) {
       fullText = fullText.replace(url, display_url);

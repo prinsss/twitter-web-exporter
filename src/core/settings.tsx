@@ -1,7 +1,6 @@
 import { Fragment } from 'preact';
-import { useSignal } from '@preact/signals';
 import { Modal } from '@/components/common';
-import { capitalizeFirstLetter, cx, useToggle } from '@/utils';
+import { capitalizeFirstLetter, cx, useSignal, useToggle } from '@/utils';
 import { GitHubButton, SettingsButton } from '@/components/buttons';
 import packageJson from '@/../package.json';
 import extensionManager from './extensions';

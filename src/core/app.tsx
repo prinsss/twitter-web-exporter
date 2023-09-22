@@ -1,7 +1,6 @@
 import { Fragment } from 'preact';
 import { useEffect } from 'preact/hooks';
-import { useSignal } from '@preact/signals';
-import { cx } from '@/utils';
+import { cx, useSignal } from '@/utils';
 import { CatButton, CloseButton } from '@/components/buttons';
 import extensionManager, { Extension } from './extensions';
 import { Settings } from './settings';

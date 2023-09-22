@@ -1,7 +1,7 @@
 import { JSX } from 'preact';
-import { Signal, useSignal } from '@preact/signals';
+import { Signal } from '@preact/signals';
 import { ExtensionPanel, Modal } from '@/components/common';
-import { EXPORT_FORMAT, ExportFormatType, cx, saveFile, useToggle } from '@/utils';
+import { EXPORT_FORMAT, ExportFormatType, cx, saveFile, useSignal, useToggle } from '@/utils';
 import logger from '@/utils/logger';
 
 type AbstractModuleUIProps<T> = {
