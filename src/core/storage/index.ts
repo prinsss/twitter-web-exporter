@@ -1,6 +1,9 @@
 import { DatabaseManager } from './database';
 import { AppOptionsManager } from './options';
 
+export * from './database';
+export * from './options';
+
 /**
  * Global options manager singleton instance.
  */

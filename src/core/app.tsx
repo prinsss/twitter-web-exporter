@@ -4,14 +4,14 @@ import { useSignal } from '@preact/signals';
 import { cx } from '@/utils';
 import { CatButton, CloseButton } from '@/components/buttons';
 import extensionManager, { Extension } from './extensions';
-import { DEFAULT_THEME, Settings } from './settings';
+import { Settings } from './settings';
 import { options } from './storage';
 import logger from '@/utils/logger';
 
 export function App() {
   const extensions = useSignal<Extension[]>([]);
-  const currentTheme = useSignal(options.get('theme', DEFAULT_THEME));
-  const showControlPanel = useSignal(options.get('showControlPanel', false));
+  const currentTheme = useSignal(options.get('theme'));
+  const showControlPanel = useSignal(options.get('showControlPanel'));
 
   // Remember the last state of the control panel.
   const toggleControlPanel = () => {
@@ -26,7 +26,7 @@ export function App() {
     });
 
     options.signal.subscribe(() => {
-      currentTheme.value = options.get('theme', DEFAULT_THEME);
+      currentTheme.value = options.get('theme');
     });
 
     logger.debug('App useEffect executed.');

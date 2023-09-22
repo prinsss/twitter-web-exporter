@@ -13,14 +13,36 @@ export interface AppOptions {
   version?: string;
 }
 
+export const DEFAULT_APP_OPTIONS: AppOptions = {
+  theme: 'system',
+  showControlPanel: true,
+  disabledExtensions: [],
+  version: packageJson.version,
+};
+
+// https://daisyui.com/docs/themes/
+export const THEMES = [
+  'system',
+  'cupcake',
+  'dark',
+  'emerald',
+  'cyberpunk',
+  'valentine',
+  'lofi',
+  'dracula',
+  'cmyk',
+  'business',
+  'winter',
+] as const;
+
 const LOCAL_STORAGE_KEY = packageJson.name;
 
 /**
  * Persist app options to browser local storage.
  */
 export class AppOptionsManager {
-  private appOptions: AppOptions = {};
-  private previous: AppOptions = {};
+  private appOptions: AppOptions = { ...DEFAULT_APP_OPTIONS };
+  private previous: AppOptions = { ...DEFAULT_APP_OPTIONS };
 
   /**
    * Signal for subscribing to option changes.

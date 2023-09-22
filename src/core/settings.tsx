@@ -5,27 +5,10 @@ import { capitalizeFirstLetter, cx, useToggle } from '@/utils';
 import { GitHubButton, SettingsButton } from '@/components/buttons';
 import packageJson from '@/../package.json';
 import extensionManager from './extensions';
-import { options } from './storage';
-
-// https://daisyui.com/docs/themes/
-export const THEMES = [
-  'system',
-  'cupcake',
-  'dark',
-  'emerald',
-  'cyberpunk',
-  'valentine',
-  'lofi',
-  'dracula',
-  'cmyk',
-  'business',
-  'winter',
-] as const;
-
-export const DEFAULT_THEME = 'system';
+import { options, DEFAULT_APP_OPTIONS, THEMES } from './storage';
 
 export function Settings() {
-  const currentTheme = useSignal(options.get('theme', DEFAULT_THEME));
+  const currentTheme = useSignal(options.get('theme'));
   const [showSettings, toggleSettings] = useToggle(false);
 
   const styles = {
@@ -44,7 +27,8 @@ export function Settings() {
           <select
             class="select select-sm"
             onChange={(e) => {
-              currentTheme.value = (e.target as HTMLSelectElement)?.value ?? DEFAULT_THEME;
+              currentTheme.value =
+                (e.target as HTMLSelectElement)?.value ?? DEFAULT_APP_OPTIONS.theme;
               options.set('theme', currentTheme.value);
             }}
           >
