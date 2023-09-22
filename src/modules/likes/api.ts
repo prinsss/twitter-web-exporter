@@ -31,14 +31,18 @@ export const LikesInterceptor: Interceptor = (req, res) => {
     return;
   }
 
-  const newData = extractDataFromResponse<LikesResponse, Tweet>(
-    res,
-    (json) => json.data.user.result.timeline_v2.timeline.instructions,
-    (entry) => extractTweetWithVisibility(entry.content.itemContent),
-  );
+  try {
+    const newData = extractDataFromResponse<LikesResponse, Tweet>(
+      res,
+      (json) => json.data.user.result.timeline_v2.timeline.instructions,
+      (entry) => extractTweetWithVisibility(entry.content.itemContent),
+    );
 
-  logger.info(`Likes: ${newData.length} items received`);
+    // Add captured data to the global store.
+    likesSignal.value = [...likesSignal.value, ...newData];
 
-  // Add captured data to the global store.
-  likesSignal.value = [...likesSignal.value, ...newData];
+    logger.info(`Likes: ${newData.length} items received`);
+  } catch (err) {
+    logger.errorWithBanner('Likes: Failed to parse API response.', err as Error);
+  }
 };

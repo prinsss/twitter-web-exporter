@@ -27,14 +27,18 @@ export const ListMembersInterceptor: Interceptor = (req, res) => {
     return;
   }
 
-  const newData = extractDataFromResponse<ListMembersResponse, User>(
-    res,
-    (json) => json.data.list.members_timeline.timeline.instructions,
-    (entry) => entry.content.itemContent.user_results.result,
-  );
+  try {
+    const newData = extractDataFromResponse<ListMembersResponse, User>(
+      res,
+      (json) => json.data.list.members_timeline.timeline.instructions,
+      (entry) => entry.content.itemContent.user_results.result,
+    );
 
-  logger.info(`ListMembers: ${newData.length} items received`);
+    // Add captured data to the global store.
+    listMembersSignal.value = [...listMembersSignal.value, ...newData];
 
-  // Add captured data to the global store.
-  listMembersSignal.value = [...listMembersSignal.value, ...newData];
+    logger.info(`ListMembers: ${newData.length} items received`);
+  } catch (err) {
+    logger.errorWithBanner('ListMembers: Failed to parse API response.', err as Error);
+  }
 };

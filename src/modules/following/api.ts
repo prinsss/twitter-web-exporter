@@ -30,14 +30,18 @@ export const FollowingInterceptor: Interceptor = (req, res) => {
     return;
   }
 
-  const newData = extractDataFromResponse<FollowingResponse, User>(
-    res,
-    (json) => json.data.user.result.timeline.timeline.instructions,
-    (entry) => entry.content.itemContent.user_results.result,
-  );
+  try {
+    const newData = extractDataFromResponse<FollowingResponse, User>(
+      res,
+      (json) => json.data.user.result.timeline.timeline.instructions,
+      (entry) => entry.content.itemContent.user_results.result,
+    );
 
-  logger.info(`Following: ${newData.length} items received`);
+    // Add captured data to the global store.
+    followingSignal.value = [...followingSignal.value, ...newData];
 
-  // Add captured data to the global store.
-  followingSignal.value = [...followingSignal.value, ...newData];
+    logger.info(`Following: ${newData.length} items received`);
+  } catch (err) {
+    logger.errorWithBanner('Following: Failed to parse API response.', err as Error);
+  }
 };

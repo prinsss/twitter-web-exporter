@@ -28,30 +28,25 @@ export function extractDataFromResponse<
   extractInstructionsFromJson: (json: R) => TimelineInstructions,
   extractDataFromTimelineEntry: (entry: TimelineEntry<P, TimelineTimelineItem<P>>) => T | undefined,
 ): T[] {
-  try {
-    const json: R = JSON.parse(response.responseText);
-    const instructions = extractInstructionsFromJson(json);
+  const json: R = JSON.parse(response.responseText);
+  const instructions = extractInstructionsFromJson(json);
 
-    const timelineAddEntriesInstruction = instructions.find(
-      (i) => i.type === 'TimelineAddEntries',
-    ) as TimelineAddEntriesInstruction<P>;
+  const timelineAddEntriesInstruction = instructions.find(
+    (i) => i.type === 'TimelineAddEntries',
+  ) as TimelineAddEntriesInstruction<P>;
 
-    const newData: T[] = [];
+  const newData: T[] = [];
 
-    for (const entry of timelineAddEntriesInstruction.entries) {
-      if (isTimelineEntryItem<P>(entry)) {
-        const data = extractDataFromTimelineEntry(entry);
-        if (data) {
-          newData.push(data);
-        }
+  for (const entry of timelineAddEntriesInstruction.entries) {
+    if (isTimelineEntryItem<P>(entry)) {
+      const data = extractDataFromTimelineEntry(entry);
+      if (data) {
+        newData.push(data);
       }
     }
-
-    return newData;
-  } catch (err) {
-    logger.errorWithBanner('Failed to parse API response.', err as Error);
-    return [];
   }
+
+  return newData;
 }
 
 /**

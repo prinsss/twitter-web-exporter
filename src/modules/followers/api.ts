@@ -31,14 +31,18 @@ export const FollowersInterceptor: Interceptor = (req, res) => {
     return;
   }
 
-  const newData = extractDataFromResponse<FollowersResponse, User>(
-    res,
-    (json) => json.data.user.result.timeline.timeline.instructions,
-    (entry) => entry.content.itemContent.user_results.result,
-  );
+  try {
+    const newData = extractDataFromResponse<FollowersResponse, User>(
+      res,
+      (json) => json.data.user.result.timeline.timeline.instructions,
+      (entry) => entry.content.itemContent.user_results.result,
+    );
 
-  logger.info(`Followers: ${newData.length} items received`);
+    // Add captured data to the global store.
+    followersSignal.value = [...followersSignal.value, ...newData];
 
-  // Add captured data to the global store.
-  followersSignal.value = [...followersSignal.value, ...newData];
+    logger.info(`Followers: ${newData.length} items received`);
+  } catch (err) {
+    logger.errorWithBanner('Followers: Failed to parse API response.', err as Error);
+  }
 };

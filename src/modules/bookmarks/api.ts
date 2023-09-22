@@ -26,14 +26,18 @@ export const BookmarksInterceptor: Interceptor = (req, res) => {
     return;
   }
 
-  const newData = extractDataFromResponse<BookmarksResponse, Tweet>(
-    res,
-    (json) => json.data.bookmark_timeline_v2.timeline.instructions,
-    (entry) => extractTweetWithVisibility(entry.content.itemContent),
-  );
+  try {
+    const newData = extractDataFromResponse<BookmarksResponse, Tweet>(
+      res,
+      (json) => json.data.bookmark_timeline_v2.timeline.instructions,
+      (entry) => extractTweetWithVisibility(entry.content.itemContent),
+    );
 
-  logger.info(`Bookmarks: ${newData.length} items received`);
+    // Add captured data to the global store.
+    bookmarksSignal.value = [...bookmarksSignal.value, ...newData];
 
-  // Add captured data to the global store.
-  bookmarksSignal.value = [...bookmarksSignal.value, ...newData];
+    logger.info(`Bookmarks: ${newData.length} items received`);
+  } catch (err) {
+    logger.errorWithBanner('Bookmarks: Failed to parse API response.', err as Error);
+  }
 };
