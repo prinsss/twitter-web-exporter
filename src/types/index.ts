@@ -9,6 +9,7 @@ export type TimelineInstructions = Array<
   | TimelineTerminateTimelineInstruction
   | TimelinePinEntryInstruction
   | TimelineAddEntriesInstruction
+  | TimelineAddToModuleInstruction
 >;
 
 export interface TimelineClearCacheInstruction {
@@ -39,6 +40,21 @@ export interface TimelineAddEntriesInstruction<T = TimelineTweet | TimelineUser>
   entries: TimelineEntry<T>[];
 }
 
+export interface TimelineAddToModuleInstruction<T = TimelineTweet | TimelineUser> {
+  type: 'TimelineAddToModule';
+  // "conversationthread-{cid}"
+  moduleEntryId: string;
+  prepend: boolean;
+  moduleItems: {
+    // "conversationthread-{id}-tweet-{tid}"
+    entryId: string;
+    item: {
+      clientEventInfo: unknown;
+      itemContent: T;
+    };
+  }[];
+}
+
 // TimelineEntry.entryId: "tweet-{id}"
 // TimelineEntry.entryId: "user-{id}"
 export interface TimelineTimelineItem<T = TimelineTweet | TimelineUser> {
@@ -54,14 +70,14 @@ export interface TimelineTimelineCursor {
   entryType: 'TimelineTimelineCursor';
   __typename: 'TimelineTimelineCursor';
   value: string;
-  cursorType: 'Top' | 'Bottom' | 'ShowMoreThreads';
+  cursorType: 'Top' | 'Bottom' | 'ShowMore' | 'ShowMoreThreads';
 }
 
 // TimelineEntry.entryId: "who-to-follow-{id}"
 // TimelineEntry.entryId: "profile-conversation-{id}"
 // TimelineEntry.entryId: "conversationthread-{id}"
 // TimelineEntry.entryId: "tweetdetailrelatedtweets-{id}"
-export interface TimelineTimelineModule<T = TimelineTweet | TimelineUser> {
+export interface TimelineTimelineModule<T = TimelineTweet | TimelineUser | TimelineTimelineCursor> {
   entryType: 'TimelineTimelineModule';
   __typename: 'TimelineTimelineModule';
   clientEventInfo: unknown;
@@ -70,6 +86,7 @@ export interface TimelineTimelineModule<T = TimelineTweet | TimelineUser> {
     // "who-to-follow-{id}-user-{uid}"
     // "profile-conversation-{id}-tweet-{tid}"
     // "conversationthread-{id}-tweet-{tid}"
+    // "conversationthread-{id}-cursor-showmore-{cid}"
     // "tweetdetailrelatedtweets-{id}-tweet-{tid}"
     entryId: string;
     item: {

@@ -30,6 +30,7 @@ export interface Tweet {
       result: User;
     };
   };
+  has_birdwatch_notes?: boolean;
   card?: unknown;
   unified_card?: unknown;
   edit_control: {
@@ -39,6 +40,12 @@ export interface Tweet {
     edits_remaining: string;
   };
   is_translatable: boolean;
+  quoted_status_result?: {
+    result: TweetWithVisibilityResults | Tweet;
+  };
+  quotedRefResult?: {
+    result: Partial<TweetWithVisibilityResults | Tweet>;
+  };
   views: {
     count: string;
     state: string;
@@ -66,6 +73,12 @@ export interface Tweet {
     possibly_sensitive: boolean;
     possibly_sensitive_editable: boolean;
     quote_count: number;
+    quoted_status_id_str?: string;
+    quoted_status_permalink?: {
+      url: string;
+      expanded: string;
+      display: string;
+    };
     reply_count: number;
     retweet_count: number;
     retweeted: boolean;

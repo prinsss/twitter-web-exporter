@@ -1,6 +1,12 @@
 import { signal } from '@preact/signals';
 import { Interceptor } from '@/core/extensions';
-import { TimelineAddEntriesInstruction, TimelineInstructions, TimelineTweet, Tweet } from '@/types';
+import {
+  TimelineAddEntriesInstruction,
+  TimelineAddToModuleInstruction,
+  TimelineInstructions,
+  TimelineTweet,
+  Tweet,
+} from '@/types';
 import {
   extractTweetWithVisibility,
   isTimelineEntryConversationThread,
@@ -37,7 +43,10 @@ export const TweetDetailInterceptor: Interceptor = (req, res) => {
       (i) => i.type === 'TimelineAddEntries',
     ) as TimelineAddEntriesInstruction<TimelineTweet>;
 
-    for (const entry of timelineAddEntriesInstruction.entries) {
+    // When loading more tweets in conversation, the "TimelineAddEntries" instruction may not exist.
+    const timelineAddEntriesInstructionEntries = timelineAddEntriesInstruction?.entries ?? [];
+
+    for (const entry of timelineAddEntriesInstructionEntries) {
       // The main tweet.
       if (isTimelineEntryTweet(entry)) {
         newData.push(extractTweetWithVisibility(entry.content.itemContent));
@@ -45,19 +54,35 @@ export const TweetDetailInterceptor: Interceptor = (req, res) => {
 
       // The conversation thread.
       if (isTimelineEntryConversationThread(entry)) {
-        const tweetsInConversation = entry.content.items.map((i) =>
-          extractTweetWithVisibility(i.item.itemContent),
-        );
+        // Be careful about the "conversationthread-{id}-cursor-showmore-{cid}" item.
+        const tweetsInConversation = entry.content.items.map((i) => {
+          if (i.entryId.includes('-tweet-')) {
+            return extractTweetWithVisibility(i.item.itemContent);
+          }
+        });
 
-        newData.push(...tweetsInConversation);
+        newData.push(...tweetsInConversation.filter((t): t is Tweet => !!t));
       }
     }
 
-    logger.info(`TweetDetail: ${newData.length} items received`);
+    // Lazy-loaded conversations.
+    const timelineAddToModuleInstruction = instructions.find(
+      (i) => i.type === 'TimelineAddToModule',
+    ) as TimelineAddToModuleInstruction<TimelineTweet>;
+
+    if (timelineAddToModuleInstruction) {
+      const tweetsInConversation = timelineAddToModuleInstruction.moduleItems.map((i) =>
+        extractTweetWithVisibility(i.item.itemContent),
+      );
+
+      newData.push(...tweetsInConversation);
+    }
 
     // Add captured tweets to the global store.
     tweetDetailSignal.value = [...tweetDetailSignal.value, ...newData];
+
+    logger.info(`TweetDetail: ${newData.length} items received`);
   } catch (err) {
-    logger.errorWithBanner('Failed to parse API response.', err as Error);
+    logger.errorWithBanner('TweetDetail: Failed to parse API response.', err as Error);
   }
 };

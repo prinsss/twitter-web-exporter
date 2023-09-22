@@ -50,6 +50,15 @@ export interface User {
     want_retweets: boolean;
     withheld_in_countries: unknown[];
   };
+  professional?: {
+    rest_id: string;
+    professional_type: string;
+    category: {
+      id: number;
+      name: string;
+      icon_name: string;
+    }[];
+  };
 }
 
 interface UserEntities {
