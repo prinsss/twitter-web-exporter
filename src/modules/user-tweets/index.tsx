@@ -9,12 +9,14 @@ function UserTweetsPanel() {
   return <ModuleUI title="UserTweets" recordsSignal={userTweetsSignal} />;
 }
 
-const UserTweetsModule: Extension = {
-  name: 'UserTweetsModule',
-  setup(ctx) {
-    ctx.registerInterceptor(UserTweetsInterceptor);
-    ctx.registerPanel(UserTweetsPanel);
-  },
-};
+export default class UserTweetsModule extends Extension {
+  name = 'UserTweetsModule';
 
-export default UserTweetsModule;
+  intercept() {
+    return UserTweetsInterceptor;
+  }
+
+  render() {
+    return UserTweetsPanel;
+  }
+}

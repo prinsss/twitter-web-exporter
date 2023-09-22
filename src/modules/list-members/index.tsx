@@ -9,12 +9,14 @@ function ListMembersPanel() {
   return <ModuleUI title="ListMembers" recordsSignal={listMembersSignal} />;
 }
 
-const ListMembersModule: Extension = {
-  name: 'ListMembersModule',
-  setup(ctx) {
-    ctx.registerInterceptor(ListMembersInterceptor);
-    ctx.registerPanel(ListMembersPanel);
-  },
-};
+export default class ListMembersModule extends Extension {
+  name = 'ListMembersModule';
 
-export default ListMembersModule;
+  intercept() {
+    return ListMembersInterceptor;
+  }
+
+  render() {
+    return ListMembersPanel;
+  }
+}

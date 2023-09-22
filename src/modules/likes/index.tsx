@@ -9,12 +9,14 @@ function LikesPanel() {
   return <ModuleUI title="Likes" recordsSignal={likesSignal} />;
 }
 
-const LikesModule: Extension = {
-  name: 'LikesModule',
-  setup(ctx) {
-    ctx.registerInterceptor(LikesInterceptor);
-    ctx.registerPanel(LikesPanel);
-  },
-};
+export default class LikesModule extends Extension {
+  name = 'LikesModule';
 
-export default LikesModule;
+  intercept() {
+    return LikesInterceptor;
+  }
+
+  render() {
+    return LikesPanel;
+  }
+}

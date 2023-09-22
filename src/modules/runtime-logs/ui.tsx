@@ -16,7 +16,7 @@ function Logs({ lines }: LogsProps) {
   const reversed = lines.value.slice().reverse();
 
   return (
-    <pre class="leading-none text-xs max-h-48 bg-base-200 overflow-y-scroll m-0 px-1 py-2.5 rounded-lg">
+    <pre class="leading-none text-xs max-h-48 bg-base-200 overflow-y-scroll m-0 px-1 py-2.5 no-scrollbar rounded-box-half">
       {reversed.map((line) => (
         <span class={colors[line.type]} key={line.index}>
           #{line.index} {line.line}

@@ -9,12 +9,14 @@ function FollowingPanel() {
   return <ModuleUI title="Following" recordsSignal={followingSignal} />;
 }
 
-const FollowingModule: Extension = {
-  name: 'FollowingModule',
-  setup(ctx) {
-    ctx.registerInterceptor(FollowingInterceptor);
-    ctx.registerPanel(FollowingPanel);
-  },
-};
+export default class FollowingModule extends Extension {
+  name = 'FollowingModule';
 
-export default FollowingModule;
+  intercept() {
+    return FollowingInterceptor;
+  }
+
+  render() {
+    return FollowingPanel;
+  }
+}

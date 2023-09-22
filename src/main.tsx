@@ -20,6 +20,7 @@ extensions.add(UserTweetsModule);
 extensions.add(ListMembersModule);
 extensions.add(ListSubscribersModule);
 extensions.add(RuntimeLogsModule);
+extensions.start();
 
 function mountApp() {
   const root = document.createElement('div');

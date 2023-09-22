@@ -9,12 +9,14 @@ function BookmarksPanel() {
   return <ModuleUI title="Bookmarks" recordsSignal={bookmarksSignal} />;
 }
 
-const BookmarksModule: Extension = {
-  name: 'BookmarksModule',
-  setup(ctx) {
-    ctx.registerInterceptor(BookmarksInterceptor);
-    ctx.registerPanel(BookmarksPanel);
-  },
-};
+export default class BookmarksModule extends Extension {
+  name = 'BookmarksModule';
 
-export default BookmarksModule;
+  intercept() {
+    return BookmarksInterceptor;
+  }
+
+  render() {
+    return BookmarksPanel;
+  }
+}
