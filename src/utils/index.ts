@@ -11,7 +11,7 @@ export const EXPORT_FORMAT = {
   CSV: 'CSV',
 } as const;
 
-export type ExportFormatType = typeof EXPORT_FORMAT[keyof typeof EXPORT_FORMAT];
+export type ExportFormatType = (typeof EXPORT_FORMAT)[keyof typeof EXPORT_FORMAT];
 
 /**
  * JSON.parse with error handling.
@@ -80,4 +80,12 @@ export function useToggle(defaultValue = false) {
  */
 export function cx(...classNames: any[]) {
   return classNames.filter(Boolean).join(' ');
+}
+
+export function isEqual(obj1: any, obj2: any) {
+  return JSON.stringify(obj1) === JSON.stringify(obj2);
+}
+
+export function capitalizeFirstLetter(str: string) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
 }

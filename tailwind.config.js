@@ -8,6 +8,18 @@ export default {
   },
   plugins: [daisyui],
   daisyui: {
-    themes: ['cupcake', 'dark'],
+    themes: [
+      'cupcake',
+      'dark',
+      'emerald',
+      'cyberpunk',
+      'valentine',
+      'lofi',
+      'dracula',
+      'cmyk',
+      'business',
+      'winter',
+    ],
+    darkTheme: 'dracula',
   },
 };
