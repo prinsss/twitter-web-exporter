@@ -8,6 +8,7 @@ import packageJson from '@/../package.json';
  */
 export interface AppOptions {
   theme?: string;
+  showControlPanel?: boolean;
   disabledExtensions?: string[];
   version?: string;
 }
@@ -71,7 +72,7 @@ export class AppOptionsManager {
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(this.appOptions));
 
     this.previous = { ...this.appOptions };
-    logger.info('App options saved.', this.appOptions);
+    logger.debug('App options saved.', this.appOptions);
     this.signal.value++;
   }
 }

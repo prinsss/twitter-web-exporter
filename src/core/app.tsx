@@ -1,7 +1,7 @@
 import { Fragment } from 'preact';
 import { useEffect } from 'preact/hooks';
 import { useSignal } from '@preact/signals';
-import { cx, useToggle } from '@/utils';
+import { cx } from '@/utils';
 import { CatButton, CloseButton } from '@/components/buttons';
 import extensionManager, { Extension } from './extensions';
 import { DEFAULT_THEME, Settings } from './settings';
@@ -11,7 +11,13 @@ import logger from '@/utils/logger';
 export function App() {
   const extensions = useSignal<Extension[]>([]);
   const currentTheme = useSignal(options.get('theme', DEFAULT_THEME));
-  const [showControlPanel, toggleControlPanel] = useToggle(true);
+  const showControlPanel = useSignal(options.get('showControlPanel', false));
+
+  // Remember the last state of the control panel.
+  const toggleControlPanel = () => {
+    showControlPanel.value = !showControlPanel.value;
+    options.set('showControlPanel', showControlPanel.value);
+  };
 
   // Update UI when extensions or options change.
   useEffect(() => {
