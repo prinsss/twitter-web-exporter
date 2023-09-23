@@ -72,7 +72,7 @@ export class AppOptionsManager {
     };
 
     this.previous = { ...this.appOptions };
-    logger.info('App options loaded.', this.appOptions);
+    logger.info('App options loaded', this.appOptions);
     this.signal.value++;
   }
 
@@ -94,7 +94,7 @@ export class AppOptionsManager {
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(this.appOptions));
 
     this.previous = { ...this.appOptions };
-    logger.debug('App options saved.', this.appOptions);
+    logger.debug('App options saved', this.appOptions);
     this.signal.value++;
   }
 }

@@ -42,6 +42,6 @@ export const FollowingInterceptor: Interceptor = (req, res) => {
 
     logger.info(`Following: ${newData.length} items received`);
   } catch (err) {
-    logger.errorWithBanner('Following: Failed to parse API response.', err as Error);
+    logger.errorWithBanner('Following: Failed to parse API response', err as Error);
   }
 };

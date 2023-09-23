@@ -43,6 +43,6 @@ export const LikesInterceptor: Interceptor = (req, res) => {
 
     logger.info(`Likes: ${newData.length} items received`);
   } catch (err) {
-    logger.errorWithBanner('Likes: Failed to parse API response.', err as Error);
+    logger.errorWithBanner('Likes: Failed to parse API response', err as Error);
   }
 };

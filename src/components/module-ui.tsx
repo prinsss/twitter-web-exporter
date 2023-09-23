@@ -47,7 +47,7 @@ export function AbstractModuleUI<T>({ title, recordsSignal, isTweet }: AbstractM
 
       saveFile(filename, content);
     } catch (err) {
-      logger.errorWithBanner('Failed to export file.', err as Error);
+      logger.errorWithBanner('Failed to export file', err as Error);
     } finally {
       loading.value = false;
     }

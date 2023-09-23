@@ -28,7 +28,7 @@ export function App() {
       currentTheme.value = options.get('theme');
     });
 
-    logger.debug('App useEffect executed.');
+    logger.debug('App useEffect executed');
   }, []);
 
   return (
