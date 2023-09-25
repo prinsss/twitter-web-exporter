@@ -1,3 +1,4 @@
+import { EntityURL } from '.';
 import { User } from './user';
 
 export interface TimelineTweet {
@@ -88,19 +89,12 @@ export interface Tweet {
   };
 }
 
-interface TweetEntities {
+export interface TweetEntities {
   media?: Media[];
   user_mentions: UserMention[];
-  urls: URL[];
+  urls: EntityURL[];
   hashtags: Hashtag[];
   symbols: unknown[];
-}
-
-interface URL {
-  display_url: string;
-  expanded_url: string;
-  url: string;
-  indices: number[];
 }
 
 interface Hashtag {

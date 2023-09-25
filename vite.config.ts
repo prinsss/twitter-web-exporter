@@ -58,6 +58,7 @@ export default defineConfig({
           'https://cdn.jsdelivr.net/npm/preact@10.17.1/hooks/dist/hooks.umd.js',
           'https://cdn.jsdelivr.net/npm/@preact/signals-core@1.5.0/dist/signals-core.min.js',
           'https://cdn.jsdelivr.net/npm/@preact/signals@1.2.1/dist/signals.min.js',
+          'https://cdn.jsdelivr.net/npm/@tanstack/table-core@8.10.1/build/umd/index.production.js',
         ],
       },
       build: {
@@ -65,6 +66,7 @@ export default defineConfig({
           preact: 'preact',
           'preact/hooks': 'preactHooks',
           '@preact/signals': 'preactSignals',
+          '@tanstack/table-core': 'TableCore',
         },
       },
     }),

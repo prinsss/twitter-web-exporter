@@ -3,20 +3,35 @@
 @tailwind utilities;
 
 @layer utilities {
+  /* Set border radius relative to the current theme. */
   .rounded-box-half {
     border-radius: calc(var(--rounded-box) / 2);
   }
 
-  @variants responsive {
-    /* Hide scrollbar for Chrome, Safari and Opera */
-    .no-scrollbar::-webkit-scrollbar {
-      display: none;
-    }
+  /* Set a different border color for tables. */
+  .table-border-bc :where(thead, tbody) :where(tr:not(:last-child)),
+  .table-border-bc :where(thead, tbody) :where(tr:first-child:last-child) {
+    --tw-border-opacity: 1;
+    border-bottom-width: 1px;
+    border-bottom-color: hsl(var(--bc) / 20%);
+  }
 
-    /* Hide scrollbar for IE, Edge and Firefox */
-    .no-scrollbar {
-      -ms-overflow-style: none;
-      scrollbar-width: none;
-    }
+  /* Set a smaller padding for tables. */
+  .table-padding-sm :where(th, td) {
+    padding-left: 0.75rem /* 12px */;
+    padding-right: 0.75rem /* 12px */;
+    padding-top: 0.5rem /* 8px */;
+    padding-bottom: 0.5rem /* 8px */;
+  }
+
+  /* Hide scrollbar for Chrome, Safari and Opera. */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Hide scrollbar for IE, Edge and Firefox. */
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
 }

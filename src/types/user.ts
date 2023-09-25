@@ -1,3 +1,5 @@
+import { EntityURL } from '.';
+
 export interface TimelineUser {
   itemType: 'TimelineUser';
   __typename: 'TimelineUser';
@@ -61,18 +63,11 @@ export interface User {
   };
 }
 
-interface UserEntities {
+export interface UserEntities {
   description: {
-    urls: URL[];
+    urls: EntityURL[];
   };
   url: {
-    urls: URL[];
+    urls: EntityURL[];
   };
-}
-
-interface URL {
-  display_url: string;
-  expanded_url: string;
-  url: string;
-  indices: number[];
 }

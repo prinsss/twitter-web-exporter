@@ -4,6 +4,13 @@ import { TimelineUser } from './user';
 export * from './tweet';
 export * from './user';
 
+export interface EntityURL {
+  display_url: string;
+  expanded_url: string;
+  url: string;
+  indices: number[];
+}
+
 export type TimelineInstructions = Array<
   | TimelineClearCacheInstruction
   | TimelineTerminateTimelineInstruction

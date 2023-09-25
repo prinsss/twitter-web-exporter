@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@preact/signals": "^1.2.1",
+    "@tanstack/table-core": "^8.10.1",
     "preact": "10.16.0"
   },
   "devDependencies": {
