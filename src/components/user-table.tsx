@@ -41,7 +41,7 @@ const columns = [
             info.row.original.legacy.entities.description.urls,
           ),
         }}
-      ></p>
+      />
     ),
   }),
   columnHelper.accessor('legacy.followers_count', {

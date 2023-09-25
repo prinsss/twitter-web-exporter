@@ -61,7 +61,7 @@ export interface Tweet {
     conversation_id_str: string;
     display_text_range: number[];
     entities: TweetEntities;
-    extended_entities: TweetExtendedEntities;
+    extended_entities?: TweetExtendedEntities;
     favorite_count: number;
     favorited: boolean;
     full_text: string;

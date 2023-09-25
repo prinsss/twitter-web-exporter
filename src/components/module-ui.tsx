@@ -3,8 +3,9 @@ import { Signal } from '@preact/signals';
 import { ExtensionPanel, Modal } from '@/components/common';
 import { EXPORT_FORMAT, ExportFormatType, cx, saveFile, useSignal, useToggle } from '@/utils';
 import logger from '@/utils/logger';
+import { Tweet, User } from '@/types';
 import { UserTable } from './user-table';
-import { User } from '@/types';
+import { TweetTable } from './tweet-table';
 
 type AbstractModuleUIProps<T> = {
   title: string;
@@ -71,7 +72,7 @@ export function AbstractModuleUI<T>({ title, recordsSignal, isTweet }: AbstractM
         {/* Modal content. */}
         <main class="max-w-full h-[600px] overflow-scroll bg-base-200 p-2">
           {isTweet ? (
-            <pre class="text-xs leading-none">{JSON.stringify(recordsSignal.value, null, 2)}</pre>
+            <TweetTable data={recordsSignal.value as Tweet[]} />
           ) : (
             <UserTable data={recordsSignal.value as User[]} />
           )}
