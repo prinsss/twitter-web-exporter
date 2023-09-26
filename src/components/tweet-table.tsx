@@ -4,6 +4,13 @@ import { flexRender, useReactTable } from '@/utils/react-table';
 import { strEntitiesToHTML } from '@/utils';
 import { useState } from 'preact/hooks';
 import { Modal } from './common';
+import {
+  extractRetweetedTweet as rt,
+  extractTweetMedia,
+  extractTweetUserScreenName,
+  formatTwitterImage,
+  getMediaOriginalUrl,
+} from '@/utils/api';
 
 const columnHelper = createColumnHelper<Tweet>();
 
@@ -40,25 +47,21 @@ const columns = [
       />
     ),
   }),
-  columnHelper.display({
+  columnHelper.accessor((row) => extractTweetMedia(row).length, {
     id: 'media',
     header: () => <span>Media</span>,
     cell: (info) => (
       <div class="flex flex-row items-start space-x-1 w-max">
-        {info.row.original.legacy?.extended_entities?.media?.map((media) => (
-          <a
-            class="flex-shrink-0 block"
-            target="_blank"
-            href={`${media.media_url_https}?name=orig`}
-          >
+        {extractTweetMedia(info.row.original).map((media) => (
+          <a class="flex-shrink-0 block" target="_blank" href={getMediaOriginalUrl(media)}>
             <img
               key={media.media_key}
               class="w-12 h-12 rounded"
-              src={`${media.media_url_https}?name=thumb`}
+              src={formatTwitterImage(media.media_url_https, 'thumb')}
             />
           </a>
         ))}
-        {info.row.original.legacy?.extended_entities?.media?.length ? null : 'N/A'}
+        {extractTweetMedia(info.row.original).length ? null : 'N/A'}
       </div>
     ),
   }),
@@ -98,6 +101,25 @@ const columns = [
       </p>
     ),
   }),
+  columnHelper.accessor((row) => extractTweetUserScreenName(rt(row)), {
+    id: 'rt_source',
+    header: () => <span>RT Source</span>,
+    cell: (info) => (
+      <p class="whitespace-pre">
+        {rt(info.row.original)?.rest_id ? (
+          <a
+            class="link"
+            target="_blank"
+            href={`https://twitter.com/i/status/${rt(info.row.original)?.rest_id}`}
+          >
+            @{info.getValue()}
+          </a>
+        ) : (
+          'N/A'
+        )}
+      </p>
+    ),
+  }),
   columnHelper.accessor('legacy.favorite_count', {
     header: () => <span>Favorites</span>,
     cell: (info) => <p>{info.getValue()}</p>,
@@ -120,18 +142,18 @@ const columns = [
   }),
   columnHelper.accessor('views.count', {
     header: () => <span>Views</span>,
-    cell: (info) => <p>{info.getValue()}</p>,
+    cell: (info) => <p>{info.getValue() ?? 'N/A'}</p>,
   }),
   columnHelper.accessor('legacy.favorited', {
-    header: () => <span>Is Favorite</span>,
+    header: () => <span>Favorited</span>,
     cell: (info) => <p>{info.getValue() ? 'YES' : 'NO'}</p>,
   }),
   columnHelper.accessor('legacy.retweeted', {
-    header: () => <span>Is Retweeted</span>,
+    header: () => <span>Retweeted</span>,
     cell: (info) => <p>{info.getValue() ? 'YES' : 'NO'}</p>,
   }),
   columnHelper.accessor('legacy.bookmarked', {
-    header: () => <span>Is Bookmarked</span>,
+    header: () => <span>Bookmarked</span>,
     cell: (info) => <p>{info.getValue() ? 'YES' : 'NO'}</p>,
   }),
 ];

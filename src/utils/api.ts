@@ -1,4 +1,5 @@
 import {
+  Media,
   TimelineAddEntriesInstruction,
   TimelineEntry,
   TimelineInstructions,
@@ -9,7 +10,6 @@ import {
   Tweet,
   User,
 } from '@/types';
-import logger from './logger';
 
 /**
  * A generic function to extract data from the API response.
@@ -121,4 +121,64 @@ export function isTimelineEntryProfileConversation(
     entry.entryId.startsWith('profile-conversation-') &&
     Array.isArray(entry.content.items)
   );
+}
+
+export function extractRetweetedTweet(tweet: Tweet): Tweet | undefined {
+  if (tweet.legacy.retweeted_status_result) {
+    const result = tweet.legacy.retweeted_status_result.result;
+    return result.__typename === 'TweetWithVisibilityResults' ? result.tweet : result;
+  }
+
+  return undefined;
+}
+
+export function extractTweetUserScreenName(tweet: Tweet | undefined): string | undefined {
+  return tweet?.core.user_results.result.legacy.screen_name;
+}
+
+export function extractTweetMedia(tweet: Tweet): Media[] {
+  // Always use the real tweet object for retweeted tweets
+  // since Twitter may truncate the media list for retweets.
+  const realTweet = extractRetweetedTweet(tweet) ?? tweet;
+
+  // Prefer `extended_entities` over `entities` for media list.
+  if (realTweet.legacy.extended_entities?.media) {
+    return realTweet.legacy.extended_entities.media;
+  }
+
+  return realTweet.legacy.entities.media ?? [];
+}
+
+export function getMediaOriginalUrl(media: Media): string {
+  // For videos, use the highest bitrate variant.
+  if (media.type === 'video' || media.type === 'animated_gif') {
+    const variants = media.video_info?.variants ?? [];
+    let maxBitrateVariant = variants[0];
+
+    for (const variant of variants) {
+      if (variant.bitrate && variant.bitrate > (maxBitrateVariant?.bitrate ?? 0)) {
+        maxBitrateVariant = variant;
+      }
+    }
+
+    return maxBitrateVariant.url;
+  }
+
+  // For photos, use the original size.
+  return formatTwitterImage(media.media_url_https, 'orig');
+}
+
+export function formatTwitterImage(
+  imgUrl: string,
+  name: 'thumb' | 'small' | 'medium' | 'large' | 'orig' = 'medium',
+): string {
+  const regex = /^(https?:\/\/pbs\.twimg\.com\/media\/.+)\.(\w+)$/;
+  const match = imgUrl.match(regex);
+
+  if (!match) {
+    return `${imgUrl}?name=${name}`;
+  }
+
+  const [, url, ext] = match;
+  return `${url}?format=${ext}&name=${name}`;
 }

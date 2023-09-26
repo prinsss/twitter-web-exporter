@@ -100,12 +100,12 @@ export interface TweetEntities {
   symbols: unknown[];
 }
 
-interface Hashtag {
+export interface Hashtag {
   indices: number[];
   text: string;
 }
 
-interface Media {
+export interface Media {
   display_url: string;
   expanded_url: string;
   id_str: string;
