@@ -2,6 +2,7 @@ import { Fragment } from 'preact';
 import { useEffect } from 'preact/hooks';
 import { cx, useSignal } from '@/utils';
 import { CatButton, CloseButton } from '@/components/buttons';
+import { ErrorBoundary } from '@/components/error-boundary';
 import extensionManager, { Extension } from './extensions';
 import { Settings } from './settings';
 import { options } from './storage';
@@ -50,7 +51,9 @@ export function App() {
         {/* Card title. */}
         <header class="flex items-center h-9">
           <h2 class="font-semibold leading-none text-xl m-0 flex-grow">Web Exporter (α)</h2>
-          <Settings />
+          <ErrorBoundary>
+            <Settings />
+          </ErrorBoundary>
           <CloseButton class="mr-[-5px]" onClick={toggleControlPanel} />
         </header>
         <p class="text-sm text-base-content text-opacity-70 mt-1 mb-2 leading-none">
@@ -62,7 +65,11 @@ export function App() {
           {extensions.value.map((ext) => {
             const Component = ext.render();
             if (ext.enabled && Component) {
-              return <Component key={ext.name} />;
+              return (
+                <ErrorBoundary>
+                  <Component key={ext.name} />
+                </ErrorBoundary>
+              );
             }
             return null;
           })}
