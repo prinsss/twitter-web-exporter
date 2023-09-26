@@ -30,7 +30,7 @@ const columns = [
     header: () => <span>Content</span>,
     cell: (info) => (
       <p
-        class="w-52"
+        class="w-60 whitespace-pre-wrap"
         dangerouslySetInnerHTML={{
           __html: strEntitiesToHTML(info.row.original.legacy.full_text, [
             ...info.row.original.legacy.entities.urls,
@@ -40,7 +40,6 @@ const columns = [
       />
     ),
   }),
-  // core.user_results.result.legacy.profile_image_url_https
   columnHelper.display({
     id: 'media',
     header: () => <span>Media</span>,
@@ -154,8 +153,8 @@ export function TweetTable({ data }: TweetTableProps) {
   });
 
   return (
-    <div class="overflow-x-auto">
-      <table class="table table-border-bc table-padding-sm">
+    <div>
+      <table class="table table-pin-rows table-border-bc table-padding-sm">
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>

@@ -75,8 +75,8 @@ export function UserTable({ data }: UserTableProps) {
   });
 
   return (
-    <div class="overflow-x-auto">
-      <table class="table table-border-bc table-padding-sm">
+    <div>
+      <table class="table table-pin-rows table-border-bc table-padding-sm">
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>

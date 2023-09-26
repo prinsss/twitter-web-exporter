@@ -86,6 +86,9 @@ export interface Tweet {
     scopes?: unknown;
     user_id_str: string;
     id_str: string;
+    retweeted_status_result?: {
+      result: TweetWithVisibilityResults | Tweet;
+    }
   };
 }
 

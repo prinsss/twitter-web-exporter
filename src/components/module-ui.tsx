@@ -70,7 +70,7 @@ export function AbstractModuleUI<T>({ title, recordsSignal, isTweet }: AbstractM
     >
       <Modal title={title} show={showPreviewSignal.value} onClose={togglePreview}>
         {/* Modal content. */}
-        <main class="max-w-full h-[600px] overflow-scroll bg-base-200 p-2">
+        <main class="max-w-full h-[600px] overflow-scroll bg-base-200">
           {isTweet ? (
             <TweetTable data={recordsSignal.value as Tweet[]} />
           ) : (
