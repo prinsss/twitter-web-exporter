@@ -3,7 +3,12 @@ import { createColumnHelper, getCoreRowModel } from '@tanstack/table-core';
 import { flexRender, useReactTable } from '@/utils/react-table';
 import { strEntitiesToHTML } from '@/utils';
 import { useState } from 'preact/hooks';
+import { Signal } from '@preact/signals';
 import { Modal } from './common';
+import { getProfileImageOriginalUrl } from '@/utils/api';
+
+/** Show a preview modal for profile images. */
+const mediaPreviewSignal = new Signal<string>('');
 
 const columnHelper = createColumnHelper<User>();
 
@@ -26,10 +31,6 @@ const columns = [
     header: () => <span>Profile Name</span>,
     cell: (info) => <p class="w-32">{info.getValue()}</p>,
   }),
-  columnHelper.accessor('legacy.profile_image_url_https', {
-    header: () => <span>Profile Image</span>,
-    cell: (info) => <img class="w-12 h-12 rounded" src={info.getValue()} />,
-  }),
   columnHelper.accessor('legacy.description', {
     header: () => <span>Description</span>,
     cell: (info) => (
@@ -42,6 +43,17 @@ const columns = [
           ),
         }}
       />
+    ),
+  }),
+  columnHelper.accessor('legacy.profile_image_url_https', {
+    header: () => <span>Profile Image</span>,
+    cell: (info) => (
+      <div
+        class="cursor-pointer"
+        onClick={() => (mediaPreviewSignal.value = getProfileImageOriginalUrl(info.getValue()))}
+      >
+        <img class="w-12 h-12 rounded" src={info.getValue()} />
+      </div>
     ),
   }),
   columnHelper.accessor('legacy.followers_count', {
@@ -125,6 +137,17 @@ export function UserTable({ data }: UserTableProps) {
       <Modal title="JSON View" class="max-w-xl" show={!!details} onClose={() => setDetails(null)}>
         <main class="max-w-full max-h-[500px] overflow-scroll">
           <pre class="text-xs leading-none">{JSON.stringify(details, null, 2)}</pre>
+        </main>
+      </Modal>
+      {/* Extra modal for previewing profile images. */}
+      <Modal
+        title="Media View"
+        class="max-w-xl"
+        show={!!mediaPreviewSignal.value}
+        onClose={() => (mediaPreviewSignal.value = '')}
+      >
+        <main class="max-w-full">
+          <img class="w-full max-h-[400px] object-contain" src={mediaPreviewSignal.value} />
         </main>
       </Modal>
     </div>

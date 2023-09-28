@@ -182,3 +182,7 @@ export function formatTwitterImage(
   const [, url, ext] = match;
   return `${url}?format=${ext}&name=${name}`;
 }
+
+export function getProfileImageOriginalUrl(url: string): string {
+  return url.replace(/_normal\.(jpe?g|png|gif)$/, '.$1');
+}

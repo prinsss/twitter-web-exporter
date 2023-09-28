@@ -3,6 +3,7 @@ import { createColumnHelper, getCoreRowModel } from '@tanstack/table-core';
 import { flexRender, useReactTable } from '@/utils/react-table';
 import { strEntitiesToHTML } from '@/utils';
 import { useState } from 'preact/hooks';
+import { Signal } from '@preact/signals';
 import { Modal } from './common';
 import {
   extractRetweetedTweet as rt,
@@ -10,7 +11,11 @@ import {
   extractTweetUserScreenName,
   formatTwitterImage,
   getMediaOriginalUrl,
+  getProfileImageOriginalUrl,
 } from '@/utils/api';
+
+/** Show a preview modal for images and videos. */
+const mediaPreviewSignal = new Signal<string>('');
 
 const columnHelper = createColumnHelper<Tweet>();
 
@@ -53,13 +58,16 @@ const columns = [
     cell: (info) => (
       <div class="flex flex-row items-start space-x-1 w-max">
         {extractTweetMedia(info.row.original).map((media) => (
-          <a class="flex-shrink-0 block" target="_blank" href={getMediaOriginalUrl(media)}>
+          <div
+            class="flex-shrink-0 block cursor-pointer"
+            onClick={() => (mediaPreviewSignal.value = getMediaOriginalUrl(media))}
+          >
             <img
               key={media.media_key}
               class="w-12 h-12 rounded"
               src={formatTwitterImage(media.media_url_https, 'thumb')}
             />
-          </a>
+          </div>
         ))}
         {extractTweetMedia(info.row.original).length ? null : 'N/A'}
       </div>
@@ -81,7 +89,14 @@ const columns = [
   }),
   columnHelper.accessor('core.user_results.result.legacy.profile_image_url_https', {
     header: () => <span>Profile Image</span>,
-    cell: (info) => <img class="w-12 h-12 rounded" src={info.getValue()} />,
+    cell: (info) => (
+      <div
+        class="cursor-pointer"
+        onClick={() => (mediaPreviewSignal.value = getProfileImageOriginalUrl(info.getValue()))}
+      >
+        <img class="w-12 h-12 rounded" src={info.getValue()} />
+      </div>
+    ),
   }),
   columnHelper.accessor('legacy.in_reply_to_screen_name', {
     header: () => <span>Replying To</span>,
@@ -225,6 +240,25 @@ export function TweetTable({ data }: TweetTableProps) {
       <Modal title="JSON View" class="max-w-xl" show={!!details} onClose={() => setDetails(null)}>
         <main class="max-w-full max-h-[500px] overflow-scroll">
           <pre class="text-xs leading-none">{JSON.stringify(details, null, 2)}</pre>
+        </main>
+      </Modal>
+      {/* Extra modal for previewing images and videos. */}
+      <Modal
+        title="Media View"
+        class="max-w-xl"
+        show={!!mediaPreviewSignal.value}
+        onClose={() => (mediaPreviewSignal.value = '')}
+      >
+        <main class="max-w-full">
+          {mediaPreviewSignal.value.includes('.mp4') ? (
+            <video
+              controls
+              class="w-full max-h-[400px] object-contain"
+              src={mediaPreviewSignal.value}
+            />
+          ) : (
+            <img class="w-full max-h-[400px] object-contain" src={mediaPreviewSignal.value} />
+          )}
         </main>
       </Modal>
     </div>
