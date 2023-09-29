@@ -1,7 +1,9 @@
 import { unsafeWindow } from '$';
-import { Signal } from '@preact/signals';
+
 import { options } from '@/core/storage';
 import logger from '@/utils/logger';
+import { Signal } from '@preact/signals';
+
 import { Extension, ExtensionConstructor, Interceptor } from './extension';
 
 /**

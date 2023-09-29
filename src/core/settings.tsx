@@ -1,10 +1,12 @@
 import { Fragment } from 'preact';
+
+import packageJson from '@/../package.json';
+import { GitHubButton, SettingsButton } from '@/components/buttons';
 import { Modal } from '@/components/common';
 import { capitalizeFirstLetter, cx, useSignal, useToggle } from '@/utils';
-import { GitHubButton, SettingsButton } from '@/components/buttons';
-import packageJson from '@/../package.json';
+
 import extensionManager from './extensions';
-import { options, DEFAULT_APP_OPTIONS, THEMES } from './storage';
+import { DEFAULT_APP_OPTIONS, options, THEMES } from './storage';
 
 export function Settings() {
   const currentTheme = useSignal(options.get('theme'));

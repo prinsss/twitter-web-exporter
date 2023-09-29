@@ -1,12 +1,14 @@
 import { Fragment } from 'preact';
 import { useEffect } from 'preact/hooks';
-import { cx, useSignal } from '@/utils';
+
 import { CatButton, CloseButton } from '@/components/buttons';
 import { ErrorBoundary } from '@/components/error-boundary';
+import { cx, useSignal } from '@/utils';
+import logger from '@/utils/logger';
+
 import extensionManager, { Extension } from './extensions';
 import { Settings } from './settings';
 import { options } from './storage';
-import logger from '@/utils/logger';
 
 export function App() {
   const extensions = useSignal<Extension[]>([]);

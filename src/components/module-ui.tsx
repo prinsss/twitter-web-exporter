@@ -1,12 +1,14 @@
 import { JSX } from 'preact';
 import { Signal } from '@preact/signals';
+
 import { ExtensionPanel, Modal } from '@/components/common';
-import { EXPORT_FORMAT, ExportFormatType, cx, saveFile, useSignal, useToggle } from '@/utils';
-import logger from '@/utils/logger';
 import { Tweet, User } from '@/types';
-import { UserTable } from './user-table';
-import { TweetTable } from './tweet-table';
+import { cx, EXPORT_FORMAT, ExportFormatType, saveFile, useSignal, useToggle } from '@/utils';
+import logger from '@/utils/logger';
+
 import { ErrorBoundary } from './error-boundary';
+import { TweetTable } from './tweet-table';
+import { UserTable } from './user-table';
 
 type AbstractModuleUIProps<T> = {
   title: string;

@@ -1,7 +1,6 @@
 import { render } from 'preact';
 import { App } from './core/app';
 import extensions from './core/extensions';
-import './index.css';
 
 import BookmarksModule from './modules/bookmarks';
 import FollowersModule from './modules/followers';
@@ -12,6 +11,8 @@ import ListSubscribersModule from './modules/list-subscribers';
 import RuntimeLogsModule from './modules/runtime-logs';
 import TweetDetailModule from './modules/tweet-detail';
 import UserTweetsModule from './modules/user-tweets';
+
+import './index.css';
 
 extensions.add(FollowersModule);
 extensions.add(FollowingModule);

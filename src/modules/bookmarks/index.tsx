@@ -1,7 +1,8 @@
-import { Extension } from '@/core/extensions';
-import { BookmarksInterceptor, bookmarksSignal } from './api';
 import { AbstractModuleUI } from '@/components/module-ui';
+import { Extension } from '@/core/extensions';
 import { Tweet } from '@/types';
+
+import { BookmarksInterceptor, bookmarksSignal } from './api';
 
 const ModuleUI = AbstractModuleUI<Tweet>;
 

@@ -1,7 +1,8 @@
-import { Extension } from '@/core/extensions';
-import { UserTweetsInterceptor, userTweetsSignal } from './api';
 import { AbstractModuleUI } from '@/components/module-ui';
+import { Extension } from '@/core/extensions';
 import { Tweet } from '@/types';
+
+import { UserTweetsInterceptor, userTweetsSignal } from './api';
 
 const ModuleUI = AbstractModuleUI<Tweet>;
 

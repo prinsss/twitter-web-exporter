@@ -1,6 +1,6 @@
 import { JSX } from 'preact';
-import { CloseButton } from './buttons';
 import { cx } from '@/utils';
+import { CloseButton } from './buttons';
 
 type ExtensionPanelProps = {
   title: string;

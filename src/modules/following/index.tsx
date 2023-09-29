@@ -1,7 +1,8 @@
-import { Extension } from '@/core/extensions';
-import { FollowingInterceptor, followingSignal } from './api';
 import { AbstractModuleUI } from '@/components/module-ui';
+import { Extension } from '@/core/extensions';
 import { User } from '@/types';
+
+import { FollowingInterceptor, followingSignal } from './api';
 
 const ModuleUI = AbstractModuleUI<User>;
 

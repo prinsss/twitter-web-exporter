@@ -1,5 +1,5 @@
-import { cx } from '@/utils';
 import { JSX } from 'preact';
+import { cx } from '@/utils';
 
 type ButtonProps = JSX.HTMLAttributes<HTMLDivElement> & {
   class?: string;

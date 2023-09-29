@@ -1,7 +1,8 @@
-import { Extension } from '@/core/extensions';
-import { ListSubscribersInterceptor, listSubscribersSignal } from './api';
 import { AbstractModuleUI } from '@/components/module-ui';
+import { Extension } from '@/core/extensions';
 import { User } from '@/types';
+
+import { ListSubscribersInterceptor, listSubscribersSignal } from './api';
 
 const ModuleUI = AbstractModuleUI<User>;
 

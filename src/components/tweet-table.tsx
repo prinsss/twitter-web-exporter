@@ -1,10 +1,9 @@
-import { Tweet } from '@/types';
-import { createColumnHelper, getCoreRowModel } from '@tanstack/table-core';
-import { flexRender, useReactTable } from '@/utils/react-table';
-import { strEntitiesToHTML } from '@/utils';
 import { useState } from 'preact/hooks';
 import { Signal } from '@preact/signals';
-import { Modal } from './common';
+import { createColumnHelper, getCoreRowModel } from '@tanstack/table-core';
+
+import { Tweet } from '@/types';
+import { strEntitiesToHTML } from '@/utils';
 import {
   extractRetweetedTweet as rt,
   extractTweetMedia,
@@ -13,6 +12,9 @@ import {
   getMediaOriginalUrl,
   getProfileImageOriginalUrl,
 } from '@/utils/api';
+import { flexRender, useReactTable } from '@/utils/react-table';
+
+import { Modal } from './common';
 
 /** Show a preview modal for images and videos. */
 const mediaPreviewSignal = new Signal<string>('');

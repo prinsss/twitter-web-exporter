@@ -161,7 +161,7 @@ export function getMediaOriginalUrl(media: Media): string {
       }
     }
 
-    return maxBitrateVariant.url;
+    return maxBitrateVariant?.url ?? media.media_url_https;
   }
 
   // For photos, use the original size.

@@ -1,4 +1,4 @@
-import { EntityURL } from '.';
+import { EntityURL } from './index';
 import { User } from './user';
 
 export interface TimelineTweet {

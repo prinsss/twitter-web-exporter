@@ -1,5 +1,6 @@
 import { Fragment } from 'preact';
 import { Signal } from '@preact/signals';
+
 import { LogLine, logLinesSignal } from '@/utils/logger';
 
 const colors = {

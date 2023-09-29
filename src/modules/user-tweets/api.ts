@@ -1,11 +1,11 @@
 import { signal } from '@preact/signals';
+
 import { Interceptor } from '@/core/extensions';
-import logger from '@/utils/logger';
 import {
-  TimelineTweet,
   TimelineAddEntriesInstruction,
   TimelineInstructions,
   TimelinePinEntryInstruction,
+  TimelineTweet,
   Tweet,
 } from '@/types';
 import {
@@ -13,6 +13,7 @@ import {
   isTimelineEntryProfileConversation,
   isTimelineEntryTweet,
 } from '@/utils/api';
+import logger from '@/utils/logger';
 
 // The global store for "UserTweets".
 export const userTweetsSignal = signal<Tweet[]>([]);

@@ -1,6 +1,6 @@
 import { ComponentType, JSX } from 'preact';
 import { useState } from 'preact/hooks';
-import { TableOptions, TableOptionsResolved, RowData, createTable } from '@tanstack/table-core';
+import { createTable, RowData, TableOptions, TableOptionsResolved } from '@tanstack/table-core';
 
 export type Renderable<TProps> = ComponentType<TProps> | null | undefined | string;
 

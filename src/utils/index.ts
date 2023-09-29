@@ -1,6 +1,8 @@
-import { signal } from '@preact/signals';
 import { useMemo } from 'preact/hooks';
+import { signal } from '@preact/signals';
+
 import { EntityURL } from '@/types';
+
 import logger from './logger';
 
 /**
