@@ -40,7 +40,7 @@ export interface User {
     normal_followers_count: number;
     pinned_tweet_ids_str: string[];
     possibly_sensitive: boolean;
-    profile_banner_url: string;
+    profile_banner_url?: string;
     profile_image_url_https: string;
     profile_interstitial_type: string;
     screen_name: string;

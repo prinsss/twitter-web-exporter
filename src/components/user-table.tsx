@@ -8,7 +8,7 @@ import {
 } from '@tanstack/table-core';
 
 import { User } from '@/types';
-import { strEntitiesToHTML } from '@/utils';
+import { formatDateTime, parseTwitterDateTime, strEntitiesToHTML } from '@/utils';
 import { getProfileImageOriginalUrl } from '@/utils/api';
 import { flexRender, useReactTable } from '@/utils/react-table';
 
@@ -68,9 +68,13 @@ const columns = [
     cell: (info) => (
       <div
         class="cursor-pointer w-36 h-12"
-        onClick={() => (mediaPreviewSignal.value = info.getValue())}
+        onClick={() => (mediaPreviewSignal.value = info.getValue() ?? '')}
       >
-        <img class="w-auto h-12 rounded" src={`${info.getValue()}/600x200`} />
+        {info.getValue() ? (
+          <img class="w-auto h-12 rounded" src={`${info.getValue()}/600x200`} />
+        ) : (
+          <span class="leading-[48px]">N/A</span>
+        )}
       </div>
     ),
   }),
@@ -106,9 +110,10 @@ const columns = [
     header: () => <span>Follows You</span>,
     cell: (info) => <p>{info.getValue() ? 'YES' : 'NO'}</p>,
   }),
-  columnHelper.accessor('legacy.created_at', {
+  columnHelper.accessor((row) => +parseTwitterDateTime(row.legacy.created_at), {
+    id: 'created_at',
     header: () => <span>Created At</span>,
-    cell: (info) => <p class="w-32 text-xs">{info.getValue()}</p>,
+    cell: (info) => <p class="w-24">{formatDateTime(info.getValue())}</p>,
   }),
 ];
 

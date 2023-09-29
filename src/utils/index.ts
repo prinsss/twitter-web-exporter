@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import { useMemo } from 'preact/hooks';
 import { signal } from '@preact/signals';
 
@@ -133,4 +134,20 @@ export function strEntitiesToHTML(str: string, urls: EntityURL[]) {
   }
 
   return temp;
+}
+
+export function parseTwitterDateTime(str: string) {
+  // "Thu Sep 28 11:07:25 +0000 2023"
+  // const regex = /^\w+ (\w+) (\d+) ([\d:]+) \+0000 (\d+)$/;
+  const trimmed = str.replace(/^\w+ (.*)$/, '$1');
+  return dayjs(trimmed, 'MMM DD HH:mm:ss ZZ YYYY', 'en');
+}
+
+export function formatDateTime(date: string | number | dayjs.Dayjs) {
+  if (typeof date === 'number' || typeof date === 'string') {
+    date = dayjs(date);
+  }
+
+  // Display in local time zone.
+  return date.format('YYYY-MM-DD HH:mm:ss');
 }

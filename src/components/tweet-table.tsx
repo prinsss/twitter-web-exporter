@@ -8,7 +8,7 @@ import {
 } from '@tanstack/table-core';
 
 import { Tweet } from '@/types';
-import { strEntitiesToHTML } from '@/utils';
+import { formatDateTime, parseTwitterDateTime, strEntitiesToHTML } from '@/utils';
 import {
   extractRetweetedTweet,
   extractTweetMedia,
@@ -45,16 +45,17 @@ const columns = [
     header: () => <span>ID</span>,
     cell: (info) => <p class="w-20 break-all font-mono text-xs">{info.getValue()}</p>,
   }),
-  columnHelper.accessor('legacy.created_at', {
+  columnHelper.accessor((row) => +parseTwitterDateTime(row.legacy.created_at), {
+    id: 'created_at',
     header: () => <span>Date</span>,
     cell: (info) => (
-      <p class="w-32 text-xs">
+      <p class="w-24">
         <a
           class="link"
           target="_blank"
           href={`https://twitter.com/i/status/${info.row.original.legacy.id_str}`}
         >
-          {info.getValue()}
+          {formatDateTime(info.getValue())}
         </a>
       </p>
     ),
