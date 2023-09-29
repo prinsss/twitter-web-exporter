@@ -1,6 +1,9 @@
 import { JSX } from 'preact';
+import { useRef } from 'preact/hooks';
+
 import { cx } from '@/utils';
-import { CloseIcon } from './icons';
+
+import { CloseIcon, SearchIcon } from './icons';
 
 type ExtensionPanelProps = {
   title: string;
@@ -91,5 +94,31 @@ export function Modal({
         <div onClick={onClose} />
       </form>
     </dialog>
+  );
+}
+
+/**
+ * Common template for global table filter.
+ */
+export function SearchArea({ onChange }: { onChange: (value: string) => void }) {
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
+  return (
+    <div class="join justify-end my-[2px] w-full max-w-xs absolute top-3 right-3">
+      <input
+        ref={inputRef}
+        type="text"
+        class="input input-bordered input-sm join-item"
+        placeholder="Search..."
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            onChange(inputRef.current?.value ?? '');
+          }
+        }}
+      />
+      <button class="btn btn-sm join-item" onClick={() => onChange(inputRef.current?.value ?? '')}>
+        <SearchIcon />
+      </button>
+    </div>
   );
 }

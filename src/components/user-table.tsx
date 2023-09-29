@@ -1,13 +1,13 @@
 import { useState } from 'preact/hooks';
 import { Signal } from '@preact/signals';
-import { createColumnHelper, getCoreRowModel } from '@tanstack/table-core';
+import { createColumnHelper, getCoreRowModel, getFilteredRowModel } from '@tanstack/table-core';
 
 import { User } from '@/types';
 import { strEntitiesToHTML } from '@/utils';
 import { getProfileImageOriginalUrl } from '@/utils/api';
 import { flexRender, useReactTable } from '@/utils/react-table';
 
-import { Modal } from './common';
+import { Modal, SearchArea } from './common';
 
 /** Show a preview modal for profile images. */
 const mediaPreviewSignal = new Signal<string>('');
@@ -116,15 +116,21 @@ type UserTableProps = {
  */
 export function UserTable({ data }: UserTableProps) {
   const [details, setDetails] = useState<User | null>(null);
+  const [globalFilter, setGlobalFilter] = useState('');
 
   const table = useReactTable({
     data,
     columns,
+    state: {
+      globalFilter,
+    },
     getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
   });
 
   return (
     <div>
+      <SearchArea onChange={setGlobalFilter} />
       <table class="table table-pin-rows table-border-bc table-padding-sm">
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (

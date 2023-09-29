@@ -73,6 +73,22 @@ export const ErrorIcon = () => (
 
 /**
  * @license
+ * Credit: https://daisyui.com/components/input-group/
+ */
+export const SearchIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    class="w-5 h-5 select-none stroke-2 stroke-current fill-none shrink-0"
+    viewBox="0 0 24 24"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+  </svg>
+);
+
+/**
+ * @license
  * Credit: https://icooon-mono.com/12776-%e7%8c%ab%e3%81%ae%e7%84%a1%e6%96%99%e3%82%a2%e3%82%a4%e3%82%b3%e3%83%b32/
  */
 export const CatIcon = () => (

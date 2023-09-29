@@ -1,6 +1,6 @@
 import { useState } from 'preact/hooks';
 import { Signal } from '@preact/signals';
-import { createColumnHelper, getCoreRowModel } from '@tanstack/table-core';
+import { createColumnHelper, getCoreRowModel, getFilteredRowModel } from '@tanstack/table-core';
 
 import { Tweet } from '@/types';
 import { strEntitiesToHTML } from '@/utils';
@@ -16,7 +16,7 @@ import {
 } from '@/utils/api';
 import { flexRender, useReactTable } from '@/utils/react-table';
 
-import { Modal } from './common';
+import { Modal, SearchArea } from './common';
 
 /** Show a preview modal for images and videos. */
 const mediaPreviewSignal = new Signal<string>('');
@@ -216,15 +216,21 @@ type TweetTableProps = {
  */
 export function TweetTable({ data }: TweetTableProps) {
   const [details, setDetails] = useState<Tweet | null>(null);
+  const [globalFilter, setGlobalFilter] = useState('');
 
   const table = useReactTable({
     data,
     columns,
+    state: {
+      globalFilter,
+    },
     getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
   });
 
   return (
     <div>
+      <SearchArea onChange={setGlobalFilter} />
       <table class="table table-pin-rows table-border-bc table-padding-sm">
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (
