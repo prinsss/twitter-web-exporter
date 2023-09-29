@@ -2,7 +2,7 @@ import { signal } from '@preact/signals';
 
 import { Interceptor } from '@/core/extensions';
 import { TimelineInstructions, Tweet } from '@/types';
-import { extractDataFromResponse, extractTweetWithVisibility } from '@/utils/api';
+import { extractDataFromResponse, extractTimelineTweet } from '@/utils/api';
 import logger from '@/utils/logger';
 
 /**
@@ -31,7 +31,7 @@ export const BookmarksInterceptor: Interceptor = (req, res) => {
     const newData = extractDataFromResponse<BookmarksResponse, Tweet>(
       res,
       (json) => json.data.bookmark_timeline_v2.timeline.instructions,
-      (entry) => extractTweetWithVisibility(entry.content.itemContent),
+      (entry) => extractTimelineTweet(entry.content.itemContent),
     );
 
     // Add captured data to the global store.

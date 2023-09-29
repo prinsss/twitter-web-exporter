@@ -5,12 +5,14 @@ import { createColumnHelper, getCoreRowModel } from '@tanstack/table-core';
 import { Tweet } from '@/types';
 import { strEntitiesToHTML } from '@/utils';
 import {
-  extractRetweetedTweet as rt,
+  extractRetweetedTweet,
   extractTweetMedia,
   extractTweetUserScreenName,
   formatTwitterImage,
   getMediaOriginalUrl,
   getProfileImageOriginalUrl,
+  extractTweetWithVisibility,
+  extractQuotedTweet,
 } from '@/utils/api';
 import { flexRender, useReactTable } from '@/utils/react-table';
 
@@ -20,6 +22,18 @@ import { Modal } from './common';
 const mediaPreviewSignal = new Signal<string>('');
 
 const columnHelper = createColumnHelper<Tweet>();
+
+// Extract the screen name of the retweeted tweet.
+const rtSourceAccessor = (row: Tweet) => {
+  const source = extractRetweetedTweet(row);
+  return source ? extractTweetUserScreenName(source) : null;
+};
+
+// Extract the screen name of the quoted tweet.
+const quoteSourceAccessor = (row: Tweet) => {
+  const source = extractQuotedTweet(row);
+  return source ? extractTweetUserScreenName(source) : null;
+};
 
 const columns = [
   columnHelper.accessor('rest_id', {
@@ -118,24 +132,42 @@ const columns = [
       </p>
     ),
   }),
-  columnHelper.accessor((row) => extractTweetUserScreenName(rt(row)), {
+  columnHelper.accessor(rtSourceAccessor, {
     id: 'rt_source',
     header: () => <span>RT Source</span>,
-    cell: (info) => (
-      <p class="whitespace-pre">
-        {rt(info.row.original)?.rest_id ? (
-          <a
-            class="link"
-            target="_blank"
-            href={`https://twitter.com/i/status/${rt(info.row.original)?.rest_id}`}
-          >
-            @{info.getValue()}
-          </a>
-        ) : (
-          'N/A'
-        )}
-      </p>
-    ),
+    cell: (info) => {
+      const source = extractRetweetedTweet(info.row.original);
+      return (
+        <p class="whitespace-pre">
+          {source ? (
+            <a class="link" target="_blank" href={`https://twitter.com/i/status/${source.rest_id}`}>
+              @{info.getValue()}
+            </a>
+          ) : (
+            'N/A'
+          )}
+        </p>
+      );
+    },
+  }),
+  columnHelper.accessor(quoteSourceAccessor, {
+    id: 'quote_source',
+    header: () => <span>Quote Source</span>,
+    cell: (info) => {
+      const res = info.row.original.quoted_status_result?.result;
+      const source = res ? extractTweetWithVisibility(res) : null;
+      return (
+        <p class="whitespace-pre">
+          {source ? (
+            <a class="link" target="_blank" href={`https://twitter.com/i/status/${source.rest_id}`}>
+              @{info.getValue()}
+            </a>
+          ) : (
+            'N/A'
+          )}
+        </p>
+      );
+    },
   }),
   columnHelper.accessor('legacy.favorite_count', {
     header: () => <span>Favorites</span>,

@@ -9,7 +9,7 @@ import {
   Tweet,
 } from '@/types';
 import {
-  extractTweetWithVisibility,
+  extractTimelineTweet,
   isTimelineEntryConversationThread,
   isTimelineEntryTweet,
 } from '@/utils/api';
@@ -50,7 +50,7 @@ export const TweetDetailInterceptor: Interceptor = (req, res) => {
     for (const entry of timelineAddEntriesInstructionEntries) {
       // The main tweet.
       if (isTimelineEntryTweet(entry)) {
-        newData.push(extractTweetWithVisibility(entry.content.itemContent));
+        newData.push(extractTimelineTweet(entry.content.itemContent));
       }
 
       // The conversation thread.
@@ -58,7 +58,7 @@ export const TweetDetailInterceptor: Interceptor = (req, res) => {
         // Be careful about the "conversationthread-{id}-cursor-showmore-{cid}" item.
         const tweetsInConversation = entry.content.items.map((i) => {
           if (i.entryId.includes('-tweet-')) {
-            return extractTweetWithVisibility(i.item.itemContent);
+            return extractTimelineTweet(i.item.itemContent);
           }
         });
 
@@ -73,7 +73,7 @@ export const TweetDetailInterceptor: Interceptor = (req, res) => {
 
     if (timelineAddToModuleInstruction) {
       const tweetsInConversation = timelineAddToModuleInstruction.moduleItems.map((i) =>
-        extractTweetWithVisibility(i.item.itemContent),
+        extractTimelineTweet(i.item.itemContent),
       );
 
       newData.push(...tweetsInConversation);

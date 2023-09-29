@@ -8,6 +8,7 @@ import {
   TimelineTweet,
   TimelineUser,
   Tweet,
+  TweetWithVisibilityResults,
   User,
 } from '@/types';
 
@@ -53,14 +54,8 @@ export function extractDataFromResponse<
  * Tweets with visibility limitation have an additional layer of nesting.
  * Extract the real tweet object from the wrapper.
  */
-export function extractTweetWithVisibility(itemContent: TimelineTweet): Tweet {
-  const result = itemContent.tweet_results.result;
-
-  if (result.__typename === 'TweetWithVisibilityResults') {
-    return result.tweet;
-  }
-
-  return result;
+export function extractTimelineTweet(itemContent: TimelineTweet): Tweet {
+  return extractTweetWithVisibility(itemContent.tweet_results.result);
 }
 
 /*
@@ -123,17 +118,40 @@ export function isTimelineEntryProfileConversation(
   );
 }
 
-export function extractRetweetedTweet(tweet: Tweet): Tweet | undefined {
-  if (tweet.legacy.retweeted_status_result) {
-    const result = tweet.legacy.retweeted_status_result.result;
-    return result.__typename === 'TweetWithVisibilityResults' ? result.tweet : result;
+/*
+|--------------------------------------------------------------------------
+| Object extractors.
+|
+| Use these functions to extract data from the API response.
+|--------------------------------------------------------------------------
+*/
+
+export function extractTweetWithVisibility(tweet: Tweet | TweetWithVisibilityResults): Tweet {
+  if (tweet?.__typename === 'TweetWithVisibilityResults') {
+    return tweet.tweet;
   }
 
-  return undefined;
+  return tweet;
 }
 
-export function extractTweetUserScreenName(tweet: Tweet | undefined): string | undefined {
-  return tweet?.core.user_results.result.legacy.screen_name;
+export function extractRetweetedTweet(tweet: Tweet): Tweet | null {
+  if (tweet.legacy.retweeted_status_result?.result) {
+    return extractTweetWithVisibility(tweet.legacy.retweeted_status_result.result);
+  }
+
+  return null;
+}
+
+export function extractQuotedTweet(tweet: Tweet): Tweet | null {
+  if (tweet.quoted_status_result?.result) {
+    return extractTweetWithVisibility(tweet.quoted_status_result.result);
+  }
+
+  return null;
+}
+
+export function extractTweetUserScreenName(tweet: Tweet): string {
+  return tweet.core.user_results.result.legacy.screen_name;
 }
 
 export function extractTweetMedia(tweet: Tweet): Media[] {
@@ -148,6 +166,14 @@ export function extractTweetMedia(tweet: Tweet): Media[] {
 
   return realTweet.legacy.entities.media ?? [];
 }
+
+/*
+|--------------------------------------------------------------------------
+| Media operations.
+|
+| Use these functions to manipulate media URLs.
+|--------------------------------------------------------------------------
+*/
 
 export function getMediaOriginalUrl(media: Media): string {
   // For videos, use the highest bitrate variant.

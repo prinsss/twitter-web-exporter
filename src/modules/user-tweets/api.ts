@@ -9,7 +9,7 @@ import {
   Tweet,
 } from '@/types';
 import {
-  extractTweetWithVisibility,
+  extractTimelineTweet,
   isTimelineEntryProfileConversation,
   isTimelineEntryTweet,
 } from '@/utils/api';
@@ -54,7 +54,7 @@ export const UserTweetsInterceptor: Interceptor = (req, res) => {
 
     if (timelinePinEntryInstruction) {
       newData.push(
-        extractTweetWithVisibility(timelinePinEntryInstruction.entry.content.itemContent),
+        extractTimelineTweet(timelinePinEntryInstruction.entry.content.itemContent),
       );
     }
 
@@ -66,13 +66,13 @@ export const UserTweetsInterceptor: Interceptor = (req, res) => {
     for (const entry of timelineAddEntriesInstruction.entries) {
       // Extract normal tweets.
       if (isTimelineEntryTweet(entry)) {
-        newData.push(extractTweetWithVisibility(entry.content.itemContent));
+        newData.push(extractTimelineTweet(entry.content.itemContent));
       }
 
       // Extract conversations.
       if (isTimelineEntryProfileConversation(entry)) {
         const tweetsInConversation = entry.content.items.map((i) =>
-          extractTweetWithVisibility(i.item.itemContent),
+          extractTimelineTweet(i.item.itemContent),
         );
 
         newData.push(...tweetsInConversation);
