@@ -32,6 +32,7 @@ export interface Tweet {
     };
   };
   has_birdwatch_notes?: boolean;
+  // Usually used by advertisers.
   card?: unknown;
   unified_card?: unknown;
   edit_control: {
@@ -52,7 +53,13 @@ export interface Tweet {
     state: string;
   };
   source: string;
-  note_tweet?: unknown;
+  // Used for long tweets.
+  note_tweet?: {
+    is_expandable: boolean;
+    note_tweet_results: {
+      result: NoteTweet;
+    };
+  };
   legacy: {
     bookmark_count: number;
     bookmarked: boolean;
@@ -88,8 +95,14 @@ export interface Tweet {
     id_str: string;
     retweeted_status_result?: {
       result: TweetWithVisibilityResults | Tweet;
-    }
+    };
   };
+}
+
+export interface NoteTweet {
+  id: string;
+  text: string;
+  entity_set: TweetEntities;
 }
 
 export interface TweetEntities {

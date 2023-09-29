@@ -1,6 +1,11 @@
 import { useState } from 'preact/hooks';
 import { Signal } from '@preact/signals';
-import { createColumnHelper, getCoreRowModel, getFilteredRowModel } from '@tanstack/table-core';
+import {
+  createColumnHelper,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getSortedRowModel,
+} from '@tanstack/table-core';
 
 import { Tweet } from '@/types';
 import { strEntitiesToHTML } from '@/utils';
@@ -226,6 +231,7 @@ export function TweetTable({ data }: TweetTableProps) {
     },
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
+    getSortedRowModel: getSortedRowModel(),
   });
 
   return (
@@ -236,10 +242,18 @@ export function TweetTable({ data }: TweetTableProps) {
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
-                <th key={header.id}>
+                <th
+                  key={header.id}
+                  className={header.column.getCanSort() ? 'cursor-pointer select-none' : ''}
+                  onClick={header.column.getToggleSortingHandler()}
+                >
                   {header.isPlaceholder
                     ? null
                     : flexRender(header.column.columnDef.header, header.getContext())}
+                  {{
+                    asc: ' 🔼',
+                    desc: ' 🔽',
+                  }[header.column.getIsSorted() as string] ?? null}
                 </th>
               ))}
               {/* Extra column. */}
