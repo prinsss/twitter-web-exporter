@@ -1,8 +1,8 @@
 import { Fragment } from 'preact';
 
 import packageJson from '@/../package.json';
-import { GitHubButton, SettingsButton } from '@/components/buttons';
 import { Modal } from '@/components/common';
+import { GitHubIcon, SettingsIcon } from '@/components/icons';
 import { capitalizeFirstLetter, cx, useSignal, useToggle } from '@/utils';
 
 import extensionManager from './extensions';
@@ -19,7 +19,14 @@ export function Settings() {
 
   return (
     <Fragment>
-      <SettingsButton class="mr-2" onClick={toggleSettings} />
+      {/* Settings button. */}
+      <div
+        onClick={toggleSettings}
+        class="w-9 h-9 mr-2 cursor-pointer flex justify-center items-center transition-colors duration-200 rounded-full hover:bg-base-200"
+      >
+        <SettingsIcon />
+      </div>
+      {/* Settings modal. */}
       <Modal title="Settings" show={showSettings.value} onClose={toggleSettings} class="max-w-lg">
         {/* Change themes. */}
         <p class={styles.subtitle}>Appearance</p>
@@ -66,7 +73,10 @@ export function Settings() {
         <p class={styles.subtitle}>About</p>
         <div class={styles.item}>
           <span class="label-text">Version {packageJson.version}</span>
-          <GitHubButton target="_blank" href={packageJson.homepage} />
+          <a class="btn btn-xs btn-ghost" target="_blank" href={packageJson.homepage}>
+            <GitHubIcon />
+            GitHub
+          </a>
         </div>
       </Modal>
     </Fragment>

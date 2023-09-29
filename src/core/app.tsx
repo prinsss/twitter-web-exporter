@@ -1,8 +1,8 @@
 import { Fragment } from 'preact';
 import { useEffect } from 'preact/hooks';
 
-import { CatButton, CloseButton } from '@/components/buttons';
 import { ErrorBoundary } from '@/components/error-boundary';
+import { CatIcon, CloseIcon } from '@/components/icons';
 import { cx, useSignal } from '@/utils';
 import logger from '@/utils/logger';
 
@@ -37,11 +37,15 @@ export function App() {
   return (
     <Fragment>
       {/* To show and hide the main UI. */}
-      <CatButton
-        class="fixed top-[60%] left-[-20px] bg-transparent"
+      <div
         onClick={toggleControlPanel}
         data-theme={currentTheme.value}
-      />
+        class="group w-12 h-12 fixed top-[60%] left-[-20px] cursor-pointer bg-transparent fill-base-content"
+      >
+        <div class="w-full h-full origin origin-[bottom_center] transition-all duration-200 group-hover:translate-x-[5px] group-hover:rotate-[20deg] opacity-50 group-hover:opacity-90">
+          <CatIcon />
+        </div>
+      </div>
       {/* The main UI block. */}
       <section
         data-theme={currentTheme.value}
@@ -56,7 +60,12 @@ export function App() {
           <ErrorBoundary>
             <Settings />
           </ErrorBoundary>
-          <CloseButton class="mr-[-5px]" onClick={toggleControlPanel} />
+          <div
+            onClick={toggleControlPanel}
+            class="w-9 h-9 mr-[-5px] cursor-pointer flex justify-center items-center transition-colors duration-200 rounded-full hover:bg-base-200"
+          >
+            <CloseIcon />
+          </div>
         </header>
         <p class="text-sm text-base-content text-opacity-70 mt-1 mb-2 leading-none">
           Refresh or clear to start new captures.

@@ -1,6 +1,6 @@
 import { JSX } from 'preact';
 import { cx } from '@/utils';
-import { CloseButton } from './buttons';
+import { CloseIcon } from './icons';
 
 type ExtensionPanelProps = {
   title: string;
@@ -77,7 +77,12 @@ export function Modal({
     <dialog class="modal modal-open" open>
       <div class={cx('modal-box p-3', className)}>
         <header class="flex items-center h-9 mb-2">
-          <CloseButton class="mr-2" onClick={onClose} />
+          <div
+            onClick={onClose}
+            class="w-9 h-9 mr-2 cursor-pointer flex justify-center items-center transition-colors duration-200 rounded-full hover:bg-base-200"
+          >
+            <CloseIcon />
+          </div>
           <h2 class="leading-none text-xl m-0 font-semibold">{title}</h2>
         </header>
         {children}
