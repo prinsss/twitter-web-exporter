@@ -1,6 +1,6 @@
 import { Component } from 'preact';
+import { IconExclamationCircle } from '@tabler/icons-preact';
 import logger from '@/utils/logger';
-import { ErrorIcon } from './icons';
 
 export class ErrorBoundary extends Component {
   state = { error: null };
@@ -18,7 +18,7 @@ export class ErrorBoundary extends Component {
     if (this.state.error) {
       return (
         <div class="alert alert-error p-2">
-          <ErrorIcon />
+          <IconExclamationCircle />
           <div>
             <h3 class="font-bold leading-normal">Something went wrong.</h3>
             <p class="text-xs">Error: {this.state.error}</p>

@@ -1,8 +1,9 @@
 import { Fragment } from 'preact';
 import { useEffect } from 'preact/hooks';
+import { IconX } from '@tabler/icons-preact';
 
 import { ErrorBoundary } from '@/components/error-boundary';
-import { CatIcon, CloseIcon } from '@/components/icons';
+import { CatIcon } from '@/components/common';
 import { cx, useSignal } from '@/utils';
 import logger from '@/utils/logger';
 
@@ -64,7 +65,7 @@ export function App() {
             onClick={toggleControlPanel}
             class="w-9 h-9 mr-[-5px] cursor-pointer flex justify-center items-center transition-colors duration-200 rounded-full hover:bg-base-200"
           >
-            <CloseIcon />
+            <IconX />
           </div>
         </header>
         <p class="text-sm text-base-content text-opacity-70 mt-1 mb-2 leading-none">

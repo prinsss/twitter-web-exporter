@@ -11,6 +11,9 @@ dependencies:
   '@preact/signals-core':
     specifier: 1.5.0
     version: 1.5.0
+  '@tabler/icons-preact':
+    specifier: ^2.39.0
+    version: 2.39.0(preact@10.17.1)
   '@tanstack/table-core':
     specifier: 8.10.1
     version: 8.10.1
@@ -628,6 +631,19 @@ packages:
       estree-walker: 2.0.2
       picomatch: 2.3.1
     dev: true
+
+  /@tabler/icons-preact@2.39.0(preact@10.17.1):
+    resolution: {integrity: sha512-3E82meMKs8BQkMGHWBCsoFqv8awqI1cK9OfHpm7nOYU+GLum+4gRgToFrgFVrVADIYw1IW1YIix3HPhWpdXAFQ==}
+    peerDependencies:
+      preact: ^10.5.13
+    dependencies:
+      '@tabler/icons': 2.39.0
+      preact: 10.17.1
+    dev: false
+
+  /@tabler/icons@2.39.0:
+    resolution: {integrity: sha512-iK3j2jIEGIUaJcbYYg5iwyG1Y/m4lzUxAUbxRpvgeXCWP29jvZaH5hajZmU3KaSealddHuJg7PSQislPHpCsoQ==}
+    dev: false
 
   /@tanstack/table-core@8.10.1:
     resolution: {integrity: sha512-dvO7wz+WjnT+7KI6ZZ+GAe9tljIFResDaV/TfOhfpeTB0ud9pILsavuM22HAXG2NsVaIG2Zax2OaVIsNt0z7Og==}

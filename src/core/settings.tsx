@@ -1,8 +1,8 @@
 import { Fragment } from 'preact';
+import { IconSettings, IconBrandGithubFilled } from '@tabler/icons-preact';
 
 import packageJson from '@/../package.json';
 import { Modal } from '@/components/common';
-import { GitHubIcon, SettingsIcon } from '@/components/icons';
 import { capitalizeFirstLetter, cx, useSignal, useToggle } from '@/utils';
 
 import extensionManager from './extensions';
@@ -24,7 +24,7 @@ export function Settings() {
         onClick={toggleSettings}
         class="w-9 h-9 mr-2 cursor-pointer flex justify-center items-center transition-colors duration-200 rounded-full hover:bg-base-200"
       >
-        <SettingsIcon />
+        <IconSettings />
       </div>
       {/* Settings modal. */}
       <Modal title="Settings" show={showSettings.value} onClose={toggleSettings} class="max-w-lg">
@@ -74,7 +74,7 @@ export function Settings() {
         <div class={styles.item}>
           <span class="label-text">Version {packageJson.version}</span>
           <a class="btn btn-xs btn-ghost" target="_blank" href={packageJson.homepage}>
-            <GitHubIcon />
+            <IconBrandGithubFilled class="[&>path]:stroke-0" />
             GitHub
           </a>
         </div>
