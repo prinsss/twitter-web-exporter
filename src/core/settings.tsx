@@ -10,7 +10,7 @@ import { DEFAULT_APP_OPTIONS, options, THEMES } from './storage';
 
 export function Settings() {
   const currentTheme = useSignal(options.get('theme'));
-  const [showSettings, toggleSettings] = useToggle(false);
+  const [showSettings, toggleSettings] = useToggle(true);
 
   const styles = {
     subtitle: 'mb-2 text-base-content ml-4 opacity-50 font-semibold text-xs',
@@ -49,6 +49,17 @@ export function Settings() {
                 </option>
               ))}
             </select>
+          </label>
+          <label class={styles.item}>
+            <span class="label-text">Debug</span>
+            <input
+              type="checkbox"
+              class="toggle toggle-primary"
+              checked={options.get('debug')}
+              onChange={(e) => {
+                options.set('debug', (e.target as HTMLInputElement)?.checked);
+              }}
+            />
           </label>
         </div>
         {/* Enable or disable modules. */}

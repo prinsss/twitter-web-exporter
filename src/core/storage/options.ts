@@ -8,6 +8,7 @@ import packageJson from '@/../package.json';
  */
 export interface AppOptions {
   theme?: string;
+  debug?: boolean;
   showControlPanel?: boolean;
   disabledExtensions?: string[];
   version?: string;
@@ -15,6 +16,7 @@ export interface AppOptions {
 
 export const DEFAULT_APP_OPTIONS: AppOptions = {
   theme: 'system',
+  debug: false,
   showControlPanel: true,
   disabledExtensions: [],
   version: packageJson.version,

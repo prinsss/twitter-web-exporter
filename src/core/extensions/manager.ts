@@ -15,6 +15,7 @@ const xhrOpen = unsafeWindow.XMLHttpRequest.prototype.open;
 export class ExtensionManager {
   private extensions: Map<string, Extension> = new Map();
   private disabledExtensions: Set<string> = new Set();
+  private debugEnabled = false;
 
   /**
    * Signal for subscribing to extension changes.
@@ -24,6 +25,12 @@ export class ExtensionManager {
   constructor() {
     this.installHttpHooks();
     this.disabledExtensions = new Set(options.get('disabledExtensions', []));
+
+    // Do some extra logging when debug mode is enabled.
+    if (options.get('debug')) {
+      this.debugEnabled = true;
+      logger.info('Debug mode enabled');
+    }
   }
 
   /**
@@ -98,6 +105,10 @@ export class ExtensionManager {
     const manager = this;
 
     unsafeWindow.XMLHttpRequest.prototype.open = function (method: string, url: string) {
+      if (manager.debugEnabled) {
+        logger.debug(`XHR initialized`, { method, url });
+      }
+
       // Get current enabled interceptors.
       const interceptors = manager
         .getExtensions()
@@ -107,6 +118,10 @@ export class ExtensionManager {
 
       // When the request is done, we call all registered interceptors.
       this.addEventListener('load', () => {
+        if (manager.debugEnabled) {
+          logger.debug(`XHR finished`, { method, url, interceptors });
+        }
+
         interceptors.forEach((func) => {
           func({ method, url }, this);
         });
