@@ -1,14 +1,7 @@
-import { useState } from 'preact/hooks';
-import { Signal } from '@preact/signals';
-import {
-  createColumnHelper,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getSortedRowModel,
-} from '@tanstack/table-core';
+import { createColumnHelper } from '@tanstack/table-core';
 
-import { Tweet } from '@/types';
 import { formatDateTime, parseTwitterDateTime, strEntitiesToHTML } from '@/utils';
+import { Tweet } from '@/types';
 import {
   extractRetweetedTweet,
   extractTweetMedia,
@@ -19,12 +12,6 @@ import {
   extractTweetWithVisibility,
   extractQuotedTweet,
 } from '@/utils/api';
-import { flexRender, useReactTable } from '@/utils/react-table';
-
-import { Modal, SearchArea } from './common';
-
-/** Show a preview modal for images and videos. */
-const mediaPreviewSignal = new Signal<string>('');
 
 const columnHelper = createColumnHelper<Tweet>();
 
@@ -40,7 +27,10 @@ const quoteSourceAccessor = (row: Tweet) => {
   return source ? extractTweetUserScreenName(source) : null;
 };
 
-const columns = [
+/**
+ * Table columns definition for tweets.
+ */
+export const columns = [
   columnHelper.accessor('rest_id', {
     header: () => <span>ID</span>,
     cell: (info) => <p class="w-20 break-all font-mono text-xs">{info.getValue()}</p>,
@@ -82,7 +72,7 @@ const columns = [
         {extractTweetMedia(info.row.original).map((media) => (
           <div
             class="flex-shrink-0 block cursor-pointer"
-            onClick={() => (mediaPreviewSignal.value = getMediaOriginalUrl(media))}
+            onClick={() => info.table.options.meta?.setMediaPreview(getMediaOriginalUrl(media))}
           >
             <img
               key={media.media_key}
@@ -114,7 +104,9 @@ const columns = [
     cell: (info) => (
       <div
         class="cursor-pointer"
-        onClick={() => (mediaPreviewSignal.value = getProfileImageOriginalUrl(info.getValue()))}
+        onClick={() =>
+          info.table.options.meta?.setMediaPreview(getProfileImageOriginalUrl(info.getValue()))
+        }
       >
         <img class="w-12 h-12 rounded" src={info.getValue()} />
       </div>
@@ -211,111 +203,18 @@ const columns = [
     header: () => <span>Bookmarked</span>,
     cell: (info) => <p>{info.getValue() ? 'YES' : 'NO'}</p>,
   }),
+  columnHelper.display({
+    id: 'actions',
+    header: () => <span>Actions</span>,
+    cell: (info) => (
+      <div class="flex flex-row items-start space-x-1">
+        <button
+          onClick={() => info.table.options.meta?.setRawDataPreview(info.row.original)}
+          class="btn btn-xs btn-neutral whitespace-nowrap"
+        >
+          Details
+        </button>
+      </div>
+    ),
+  }),
 ];
-
-type TweetTableProps = {
-  data: Tweet[];
-};
-
-/**
- * Render a list of tweets.
- */
-export function TweetTable({ data }: TweetTableProps) {
-  const [details, setDetails] = useState<Tweet | null>(null);
-  const [globalFilter, setGlobalFilter] = useState('');
-
-  const table = useReactTable({
-    data,
-    columns,
-    state: {
-      globalFilter,
-    },
-    getCoreRowModel: getCoreRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-  });
-
-  return (
-    <div>
-      <SearchArea onChange={setGlobalFilter} />
-      <table class="table table-pin-rows table-border-bc table-padding-sm">
-        <thead>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <tr key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <th
-                  key={header.id}
-                  className={header.column.getCanSort() ? 'cursor-pointer select-none' : ''}
-                  onClick={header.column.getToggleSortingHandler()}
-                >
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(header.column.columnDef.header, header.getContext())}
-                  {{
-                    asc: ' 🔼',
-                    desc: ' 🔽',
-                  }[header.column.getIsSorted() as string] ?? null}
-                </th>
-              ))}
-              {/* Extra column. */}
-              <th>
-                <span>Actions</span>
-              </th>
-            </tr>
-          ))}
-        </thead>
-        <tbody>
-          {table.getRowModel().rows.map((row) => (
-            <tr key={row.id}>
-              {row.getVisibleCells().map((cell) => (
-                <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
-              ))}
-              {/* Extra column. */}
-              <td>
-                <div class="flex flex-row items-start space-x-1">
-                  <button
-                    onClick={() => setDetails(row.original)}
-                    class="btn btn-xs btn-neutral whitespace-nowrap"
-                  >
-                    Details
-                  </button>
-                </div>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      {/* Empty view. */}
-      {data?.length > 0 ? null : (
-        <div class="flex items-center justify-center h-52 w-full">
-          <p class="text-base-content text-opacity-50">No data available.</p>
-        </div>
-      )}
-      {/* Extra modal for previewing JSON data. */}
-      <Modal title="JSON View" class="max-w-xl" show={!!details} onClose={() => setDetails(null)}>
-        <main class="max-w-full max-h-[500px] overflow-scroll">
-          <pre class="text-xs leading-none">{JSON.stringify(details, null, 2)}</pre>
-        </main>
-      </Modal>
-      {/* Extra modal for previewing images and videos. */}
-      <Modal
-        title="Media View"
-        class="max-w-xl"
-        show={!!mediaPreviewSignal.value}
-        onClose={() => (mediaPreviewSignal.value = '')}
-      >
-        <main class="max-w-full">
-          {mediaPreviewSignal.value.includes('.mp4') ? (
-            <video
-              controls
-              class="w-full max-h-[400px] object-contain"
-              src={mediaPreviewSignal.value}
-            />
-          ) : (
-            <img class="w-full max-h-[400px] object-contain" src={mediaPreviewSignal.value} />
-          )}
-        </main>
-      </Modal>
-    </div>
-  );
-}

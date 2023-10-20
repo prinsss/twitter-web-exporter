@@ -1,21 +1,8 @@
 import dayjs from 'dayjs';
 import { useMemo } from 'preact/hooks';
 import { signal } from '@preact/signals';
-
 import { EntityURL } from '@/types';
-
 import logger from './logger';
-
-/**
- * Supported formats of exporting.
- */
-export const EXPORT_FORMAT = {
-  JSON: 'JSON',
-  HTML: 'HTML',
-  CSV: 'CSV',
-} as const;
-
-export type ExportFormatType = (typeof EXPORT_FORMAT)[keyof typeof EXPORT_FORMAT];
 
 /**
  * JSON.parse with error handling.
@@ -34,23 +21,6 @@ export function safeJSONParse(text: string) {
  */
 export function csvEscapeStr(str: string) {
   return `"${str.replace(/\"/g, '""').replace(/\n/g, '\\n').replace(/\r/g, '\\r')}"`;
-}
-
-/**
- * Save a text file to disk.
- */
-export function saveFile(filename: string, content: string) {
-  const link = document.createElement('a');
-  link.style.display = 'none';
-  document.body.appendChild(link);
-
-  const blob = new Blob([content], { type: 'text/plain' });
-  const url = URL.createObjectURL(blob);
-  link.href = url;
-  link.download = filename;
-
-  link.click();
-  URL.revokeObjectURL(url);
 }
 
 /**

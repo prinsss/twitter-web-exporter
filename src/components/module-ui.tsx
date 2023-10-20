@@ -1,14 +1,33 @@
-import { JSX } from 'preact';
 import { Signal } from '@preact/signals';
+import {
+  ColumnDef,
+  RowData,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+} from '@tanstack/table-core';
+import { IconSortAscending, IconSortDescending } from '@tabler/icons-preact';
 
-import { ExtensionPanel, Modal } from '@/components/common';
+import { ExtensionPanel, Modal, SearchArea } from '@/components/common';
+import { flexRender, useReactTable } from '@/utils/react-table';
+import { useSignalState, useToggle, cx } from '@/utils';
 import { Tweet, User } from '@/types';
-import { cx, EXPORT_FORMAT, ExportFormatType, saveFile, useSignal, useToggle } from '@/utils';
-import logger from '@/utils/logger';
 
-import { ErrorBoundary } from './error-boundary';
-import { TweetTable } from './tweet-table';
-import { UserTable } from './user-table';
+import { columns as columnsTweet } from './columns-tweet';
+import { columns as columnsUser } from './columns-user';
+import { Pagination } from './pagination';
+import { EXPORT_FORMAT, ExportFormatType, exportData } from '@/utils/exporter';
+
+// For opening media preview modal in column definitions.
+declare module '@tanstack/table-core' {
+  interface TableMeta<TData extends RowData> {
+    mediaPreview: string;
+    setMediaPreview: (url: string) => void;
+    rawDataPreview: TData | null;
+    setRawDataPreview: (data: TData | null) => void;
+  }
+}
 
 type AbstractModuleUIProps<T> = {
   title: string;
@@ -20,89 +39,148 @@ type AbstractModuleUIProps<T> = {
  * A common UI boilerplate for modules.
  */
 export function AbstractModuleUI<T>({ title, recordsSignal, isTweet }: AbstractModuleUIProps<T>) {
-  const [showPreviewSignal, togglePreview] = useToggle();
+  const data = recordsSignal.value;
 
-  const loading = useSignal<boolean>(false);
-  const selectedFormat = useSignal<ExportFormatType>(EXPORT_FORMAT.JSON);
+  const [showModal, toggleShowModal] = useToggle();
+  const [mediaPreview, setMediaPreview] = useSignalState('');
+  const [rawDataPreview, setRawDataPreview] = useSignalState<T | null>(null);
 
-  const onSelectChange: JSX.GenericEventHandler<HTMLSelectElement> = (e) => {
-    // @ts-expect-error it's fine.
-    selectedFormat.value = e.target.value;
-  };
+  const [loading, setLoading] = useSignalState(false);
+  const [selectedFormat, setSelectedFormat] = useSignalState<ExportFormatType>(EXPORT_FORMAT.JSON);
 
-  const onExport = async () => {
-    try {
-      let content = '';
-      const format = selectedFormat.value;
-      loading.value = true;
-
-      const filename = `twitter-${title}-${Date.now()}.${format.toLowerCase()}`;
-      logger.info(`Exporting to ${format} file: ${filename}`);
-
-      switch (format) {
-        case EXPORT_FORMAT.JSON:
-          content = JSON.stringify(recordsSignal.value, undefined, '  ');
-          break;
-        case EXPORT_FORMAT.HTML:
-          content = '<html></html>';
-          break;
-        case EXPORT_FORMAT.CSV:
-          content = 'id,name';
-          break;
-      }
-
-      saveFile(filename, content);
-    } catch (err) {
-      logger.errorWithBanner('Failed to export file', err as Error);
-    } finally {
-      loading.value = false;
-    }
-  };
-
-  const onClear = async () => {
-    recordsSignal.value = [];
-  };
+  const table = useReactTable<T>({
+    data,
+    columns: (isTweet ? columnsTweet : columnsUser) as ColumnDef<T, unknown>[],
+    getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    meta: {
+      mediaPreview,
+      setMediaPreview: (url) => setMediaPreview(url),
+      rawDataPreview,
+      setRawDataPreview: (data) => setRawDataPreview(data),
+    },
+  });
 
   return (
     <ExtensionPanel
       title={title}
-      description={`Captured: ${recordsSignal.value.length}`}
-      active={recordsSignal.value.length > 0}
-      onClick={togglePreview}
+      description={`Captured: ${data.length}`}
+      active={data.length > 0}
+      onClick={toggleShowModal}
       indicatorColor={isTweet ? 'bg-primary' : 'bg-secondary'}
     >
-      <Modal title={title} show={showPreviewSignal.value} onClose={togglePreview}>
-        {/* Modal content. */}
-        <main class="max-w-full h-[600px] overflow-scroll bg-base-200">
-          <ErrorBoundary>
-            {isTweet ? (
-              <TweetTable data={recordsSignal.value as Tweet[]} />
-            ) : (
-              <UserTable data={recordsSignal.value as User[]} />
-            )}
-          </ErrorBoundary>
+      <Modal title={title} show={showModal} onClose={toggleShowModal}>
+        <SearchArea defaultValue={table.getState().globalFilter} onChange={table.setGlobalFilter} />
+        <main class="max-w-full h-[600px] overflow-scroll bg-base-200 overscroll-none">
+          <table class="table table-pin-rows table-border-bc table-padding-sm">
+            <thead>
+              {table.getHeaderGroups().map((headerGroup) => (
+                <tr key={headerGroup.id}>
+                  {headerGroup.headers.map((header) => (
+                    <th
+                      key={header.id}
+                      className={header.column.getCanSort() ? 'cursor-pointer select-none' : ''}
+                      onClick={header.column.getToggleSortingHandler()}
+                    >
+                      {flexRender(header.column.columnDef.header, header.getContext())}
+                      {header.column.getIsSorted() === 'asc' && (
+                        <IconSortAscending size={15} class="inline align-top ml-1" />
+                      )}
+                      {header.column.getIsSorted() === 'desc' && (
+                        <IconSortDescending size={15} class="inline align-top ml-1" />
+                      )}
+                    </th>
+                  ))}
+                </tr>
+              ))}
+            </thead>
+            <tbody>
+              {table.getRowModel().rows.map((row) => (
+                <tr key={row.id}>
+                  {row.getVisibleCells().map((cell) => (
+                    <td key={cell.id}>
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          {/* Empty view. */}
+          {table.getRowModel().rows.length > 0 ? null : (
+            <div class="flex items-center justify-center h-52 w-full">
+              <p class="text-base-content text-opacity-50">No data available.</p>
+            </div>
+          )}
         </main>
+        {/* Page navigation. */}
+        <Pagination table={table} />
         {/* Action buttons. */}
         <div class="flex mt-3 space-x-2">
           <button
-            class={cx('btn btn-neutral btn-ghost', loading.value && 'pointer-events-none')}
-            onClick={onClear}
+            class={cx('btn btn-neutral btn-ghost', loading && 'pointer-events-none')}
+            onClick={() => {
+              recordsSignal.value = [];
+            }}
           >
             Clear
           </button>
           <span class="flex-grow" />
-          <select class="select select-secondary w-32" onChange={onSelectChange}>
+          <select
+            class="select select-secondary w-32"
+            onChange={(e) => {
+              setSelectedFormat((e.target as HTMLSelectElement).value as ExportFormatType);
+            }}
+          >
             {Object.values(EXPORT_FORMAT).map((type) => (
-              <option key={type} selected={type === selectedFormat.value}>
+              <option key={type} selected={type === selectedFormat}>
                 {type}
               </option>
             ))}
           </select>
-          <button class={cx('btn btn-primary', loading.value && 'btn-disabled')} onClick={onExport}>
-            {loading.value && <span class="loading loading-spinner" />}
+          <button
+            class={cx('btn btn-primary', loading && 'btn-disabled')}
+            onClick={() =>
+              exportData(
+                data as Tweet[] | User[],
+                selectedFormat,
+                `twitter-${title}-${Date.now()}.${selectedFormat.toLowerCase()}`,
+                setLoading,
+              )
+            }
+          >
+            {loading && <span class="loading loading-spinner" />}
             Export
           </button>
         </div>
+        {/* Extra modal for previewing JSON data. */}
+        <Modal
+          title="JSON View"
+          class="max-w-xl"
+          show={!!rawDataPreview}
+          onClose={() => setRawDataPreview(null)}
+        >
+          <main class="max-w-full max-h-[500px] overflow-scroll overscroll-none">
+            <pre class="text-xs leading-none">{JSON.stringify(rawDataPreview, null, 2)}</pre>
+          </main>
+        </Modal>
+        {/* Extra modal for previewing images and videos. */}
+        <Modal
+          title="Media View"
+          class="max-w-xl"
+          show={!!mediaPreview}
+          onClose={() => setMediaPreview('')}
+        >
+          <main class="max-w-full">
+            {mediaPreview.includes('.mp4') ? (
+              <video controls class="w-full max-h-[400px] object-contain" src={mediaPreview} />
+            ) : (
+              <img class="w-full max-h-[400px] object-contain" src={mediaPreview} />
+            )}
+          </main>
+        </Modal>
       </Modal>
     </ExtensionPanel>
   );

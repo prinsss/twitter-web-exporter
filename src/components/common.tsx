@@ -1,8 +1,8 @@
 import { JSX } from 'preact';
 import { useRef } from 'preact/hooks';
 import { IconSearch, IconX } from '@tabler/icons-preact';
-
 import { cx } from '@/utils';
+import { ErrorBoundary } from './error-boundary';
 
 type ExtensionPanelProps = {
   title: string;
@@ -87,7 +87,7 @@ export function Modal({
           </div>
           <h2 class="leading-none text-xl m-0 font-semibold">{title}</h2>
         </header>
-        {children}
+        <ErrorBoundary>{children}</ErrorBoundary>
       </div>
       <form method="dialog" class="modal-backdrop">
         <div onClick={onClose} />
