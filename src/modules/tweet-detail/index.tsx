@@ -1,13 +1,10 @@
-import { AbstractModuleUI } from '@/components/module-ui';
+import { ModuleUI } from '@/components/module-ui';
 import { Extension } from '@/core/extensions';
 import { Tweet } from '@/types';
-
 import { TweetDetailInterceptor, tweetDetailSignal } from './api';
 
-const ModuleUI = AbstractModuleUI<Tweet>;
-
 function TweetDetailPanel() {
-  return <ModuleUI title="TweetDetail" recordsSignal={tweetDetailSignal} isTweet />;
+  return <ModuleUI<Tweet> title="TweetDetail" recordsSignal={tweetDetailSignal} isTweet />;
 }
 
 export default class TweetDetailModule extends Extension {

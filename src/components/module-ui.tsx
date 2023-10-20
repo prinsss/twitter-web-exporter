@@ -29,7 +29,7 @@ declare module '@tanstack/table-core' {
   }
 }
 
-type AbstractModuleUIProps<T> = {
+type ModuleUIProps<T> = {
   title: string;
   recordsSignal: Signal<T[]>;
   isTweet?: boolean;
@@ -38,7 +38,7 @@ type AbstractModuleUIProps<T> = {
 /**
  * A common UI boilerplate for modules.
  */
-export function AbstractModuleUI<T>({ title, recordsSignal, isTweet }: AbstractModuleUIProps<T>) {
+export function ModuleUI<T>({ title, recordsSignal, isTweet }: ModuleUIProps<T>) {
   const data = recordsSignal.value;
 
   const [showModal, toggleShowModal] = useToggle();

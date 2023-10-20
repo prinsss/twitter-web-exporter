@@ -1,5 +1,4 @@
 import { signal } from '@preact/signals';
-
 import { Interceptor } from '@/core/extensions';
 import { TimelineInstructions, Tweet } from '@/types';
 import { extractDataFromResponse, extractTimelineTweet } from '@/utils/api';

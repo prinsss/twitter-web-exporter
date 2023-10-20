@@ -1,13 +1,10 @@
-import { AbstractModuleUI } from '@/components/module-ui';
+import { ModuleUI } from '@/components/module-ui';
 import { Extension } from '@/core/extensions';
 import { User } from '@/types';
-
 import { FollowersInterceptor, followersSignal } from './api';
 
-const ModuleUI = AbstractModuleUI<User>;
-
 function FollowersPanel() {
-  return <ModuleUI title="Followers" recordsSignal={followersSignal} />;
+  return <ModuleUI<User> title="Followers" recordsSignal={followersSignal} />;
 }
 
 export default class FollowersModule extends Extension {

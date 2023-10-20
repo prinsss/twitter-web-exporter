@@ -1,13 +1,10 @@
-import { AbstractModuleUI } from '@/components/module-ui';
+import { ModuleUI } from '@/components/module-ui';
 import { Extension } from '@/core/extensions';
 import { User } from '@/types';
-
 import { ListSubscribersInterceptor, listSubscribersSignal } from './api';
 
-const ModuleUI = AbstractModuleUI<User>;
-
 function ListSubscribersPanel() {
-  return <ModuleUI title="ListSubscribers" recordsSignal={listSubscribersSignal} />;
+  return <ModuleUI<User> title="ListSubscribers" recordsSignal={listSubscribersSignal} />;
 }
 
 export default class ListSubscribersModule extends Extension {

@@ -1,5 +1,4 @@
 import { signal } from '@preact/signals';
-
 import { Interceptor } from '@/core/extensions';
 import { TimelineInstructions, User } from '@/types';
 import { extractDataFromResponse } from '@/utils/api';
