@@ -63,12 +63,12 @@ export function App() {
           </ErrorBoundary>
           <div
             onClick={toggleControlPanel}
-            class="w-9 h-9 mr-[-5px] cursor-pointer flex justify-center items-center transition-colors duration-200 rounded-full hover:bg-base-200"
+            class="w-9 h-9 cursor-pointer flex justify-center items-center transition-colors duration-200 rounded-full hover:bg-base-200"
           >
             <IconX />
           </div>
         </header>
-        <p class="text-sm text-base-content text-opacity-70 mt-1 mb-2 leading-none">
+        <p class="text-sm text-base-content text-opacity-70 mb-1 leading-none">
           Refresh or clear to start new captures.
         </p>
         <div class="divider mt-0 mb-0"></div>

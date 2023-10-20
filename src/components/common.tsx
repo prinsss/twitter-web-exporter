@@ -1,6 +1,6 @@
 import { JSX } from 'preact';
 import { useRef } from 'preact/hooks';
-import { IconSearch, IconX } from '@tabler/icons-preact';
+import { IconArrowUpRight, IconSearch, IconX } from '@tabler/icons-preact';
 import { cx } from '@/utils';
 import { ErrorBoundary } from './error-boundary';
 
@@ -27,7 +27,7 @@ export function ExtensionPanel({
   return (
     <section class="module-panel">
       {/* Card contents. */}
-      <div class="h-14 flex items-center justify-start">
+      <div class="h-12 flex items-center justify-start">
         <div class="relative flex h-4 w-4 mr-3 shrink-0">
           {active && (
             <span
@@ -43,8 +43,8 @@ export function ExtensionPanel({
           <p class="text-base m-0 font-medium leading-none">{title}</p>
           <p class="text-sm text-base-content leading-5 text-opacity-70 m-0">{description}</p>
         </div>
-        <button class="btn btn-sm" onClick={onClick}>
-          Preview
+        <button class="btn btn-sm p-0 w-9 h-9" onClick={onClick}>
+          <IconArrowUpRight />
         </button>
       </div>
       {/* Modal entries. */}

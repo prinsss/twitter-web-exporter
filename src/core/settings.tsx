@@ -14,7 +14,9 @@ export function Settings() {
 
   const styles = {
     subtitle: 'mb-2 text-base-content ml-4 opacity-50 font-semibold text-xs',
-    item: 'text-sm mb-2 w-full flex p-4 text-base-content bg-base-200 rounded-box justify-between',
+    block:
+      'text-sm mb-2 w-full flex px-4 py-2 text-base-content bg-base-200 rounded-box justify-between',
+    item: 'label cursor-pointer flex justify-between h-8 items-center p-0',
   };
 
   return (
@@ -28,37 +30,36 @@ export function Settings() {
       </div>
       {/* Settings modal. */}
       <Modal title="Settings" show={showSettings} onClose={toggleSettings} class="max-w-lg">
-        {/* Change themes. */}
-        <p class={styles.subtitle}>Appearance</p>
-        <div class={cx(styles.item, 'py-0 h-14 items-center')}>
-          <span class="label-text">Theme</span>
-          <select
-            class="select select-sm"
-            onChange={(e) => {
-              currentTheme.value =
-                (e.target as HTMLSelectElement)?.value ?? DEFAULT_APP_OPTIONS.theme;
-              options.set('theme', currentTheme.value);
-            }}
-          >
-            {THEMES.map((theme) => (
-              <option key={theme} value={theme} selected={currentTheme.value === theme}>
-                {capitalizeFirstLetter(theme)}
-              </option>
-            ))}
-          </select>
+        {/* Common settings. */}
+        <p class={styles.subtitle}>General</p>
+        <div class={cx(styles.block, 'flex-col')}>
+          <label class={styles.item}>
+            <span class="label-text">Theme</span>
+            <select
+              class="select select-xs"
+              onChange={(e) => {
+                currentTheme.value =
+                  (e.target as HTMLSelectElement)?.value ?? DEFAULT_APP_OPTIONS.theme;
+                options.set('theme', currentTheme.value);
+              }}
+            >
+              {THEMES.map((theme) => (
+                <option key={theme} value={theme} selected={currentTheme.value === theme}>
+                  {capitalizeFirstLetter(theme)}
+                </option>
+              ))}
+            </select>
+          </label>
         </div>
         {/* Enable or disable modules. */}
         <p class={styles.subtitle}>Modules</p>
-        <div class={cx(styles.item, 'flex-col')}>
+        <div class={cx(styles.block, 'flex-col')}>
           {extensionManager.getExtensions().map((extension) => (
-            <label
-              class="label cursor-pointer flex justify-between h-8 items-center"
-              key={extension.name}
-            >
+            <label class={styles.item} key={extension.name}>
               <span>{extension.name}</span>
               <input
                 type="checkbox"
-                class="toggle toggle-primary"
+                class="toggle toggle-secondary"
                 checked={extension.enabled}
                 onChange={() => {
                   extension.enabled
@@ -71,7 +72,7 @@ export function Settings() {
         </div>
         {/* Information about this script. */}
         <p class={styles.subtitle}>About</p>
-        <div class={styles.item}>
+        <div class={styles.block}>
           <span class="label-text">Version {packageJson.version}</span>
           <a class="btn btn-xs btn-ghost" target="_blank" href={packageJson.homepage}>
             <IconBrandGithubFilled class="[&>path]:stroke-0" />
