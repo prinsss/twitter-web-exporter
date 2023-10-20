@@ -23,7 +23,7 @@ interface ListMembersResponse {
 
 // https://twitter.com/i/api/graphql/-5VwQkb7axZIxFkFS44iWw/ListMembers
 export const ListMembersInterceptor: Interceptor = (req, res) => {
-  if (!/api\/graphql\/.+\/ListMembers/.test(req.url)) {
+  if (!/\/graphql\/.+\/ListMembers/.test(req.url)) {
     return;
   }
 

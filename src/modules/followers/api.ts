@@ -27,7 +27,7 @@ interface FollowersResponse {
 // https://twitter.com/i/api/graphql/rRXFSG5vR6drKr5M37YOTw/Followers
 // https://twitter.com/i/api/graphql/kXi37EbqWokFUNypPHhQDQ/BlueVerifiedFollowers
 export const FollowersInterceptor: Interceptor = (req, res) => {
-  if (!/api\/graphql\/.+\/(BlueVerified)*Followers/.test(req.url)) {
+  if (!/\/graphql\/.+\/(BlueVerified)*Followers/.test(req.url)) {
     return;
   }
 

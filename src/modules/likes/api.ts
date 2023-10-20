@@ -27,7 +27,7 @@ interface LikesResponse {
 
 // https://twitter.com/i/api/graphql/lVf2NuhLoYVrpN4nO7uw0Q/Likes
 export const LikesInterceptor: Interceptor = (req, res) => {
-  if (!/api\/graphql\/.+\/Likes/.test(req.url)) {
+  if (!/\/graphql\/.+\/Likes/.test(req.url)) {
     return;
   }
 

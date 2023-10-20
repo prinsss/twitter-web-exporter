@@ -29,7 +29,7 @@ interface TweetDetailResponse {
 
 // https://twitter.com/i/api/graphql/8sK2MBRZY9z-fgmdNpR3LA/TweetDetail
 export const TweetDetailInterceptor: Interceptor = (req, res) => {
-  if (!/api\/graphql\/.+\/TweetDetail/.test(req.url)) {
+  if (!/\/graphql\/.+\/TweetDetail/.test(req.url)) {
     return;
   }
 

@@ -22,7 +22,7 @@ interface BookmarksResponse {
 
 // https://twitter.com/i/api/graphql/j5KExFXtSWj8HjRui17ydA/Bookmarks
 export const BookmarksInterceptor: Interceptor = (req, res) => {
-  if (!/api\/graphql\/.+\/Bookmarks/.test(req.url)) {
+  if (!/\/graphql\/.+\/Bookmarks/.test(req.url)) {
     return;
   }
 

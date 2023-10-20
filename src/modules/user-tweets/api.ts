@@ -36,7 +36,7 @@ interface UserTweetsResponse {
 // https://twitter.com/i/api/graphql/H8OOoI-5ZE4NxgRr8lfyWg/UserTweets
 // https://twitter.com/i/api/graphql/Q6aAvPw7azXZbqXzuqTALA/UserTweetsAndReplies
 export const UserTweetsInterceptor: Interceptor = (req, res) => {
-  if (!/api\/graphql\/.+\/UserTweets/.test(req.url)) {
+  if (!/\/graphql\/.+\/UserTweets/.test(req.url)) {
     return;
   }
 

@@ -26,7 +26,7 @@ interface FollowingResponse {
 
 // https://twitter.com/i/api/graphql/iSicc7LrzWGBgDPL0tM_TQ/Following
 export const FollowingInterceptor: Interceptor = (req, res) => {
-  if (!/api\/graphql\/.+\/Following/.test(req.url)) {
+  if (!/\/graphql\/.+\/Following/.test(req.url)) {
     return;
   }
 
