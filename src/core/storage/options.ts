@@ -1,5 +1,4 @@
 import { Signal } from '@preact/signals';
-
 import { isEqual, safeJSONParse } from '@/utils';
 import logger from '@/utils/logger';
 import packageJson from '@/../package.json';

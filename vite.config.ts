@@ -1,11 +1,13 @@
 import { defineConfig } from 'vite';
 import { fileURLToPath, URL } from 'node:url';
+
 import preact from '@preact/preset-vite';
+import monkey from 'vite-plugin-monkey';
+
 import tailwindcss from 'tailwindcss';
 import autoprefixer from 'autoprefixer';
 import prefixSelector from 'postcss-prefix-selector';
 import remToPx from 'postcss-rem-to-pixel-next';
-import monkey from 'vite-plugin-monkey';
 
 // https://vitejs.dev/config/
 export default defineConfig({
