@@ -63,6 +63,19 @@ export function useSignal<T>(value: T) {
 }
 
 /**
+ * Use signal to mimic React's `useState` hook.
+ */
+export function useSignalState<T>(value: T) {
+  const signal = useSignal(value);
+
+  const updateSignal = (newValue: T) => {
+    signal.value = newValue;
+  }
+
+  return [signal.value, updateSignal, signal] as const;
+}
+
+/**
  * A signal representing a boolean value.
  */
 export function useToggle(defaultValue = false) {
@@ -72,7 +85,7 @@ export function useToggle(defaultValue = false) {
     signal.value = !signal.value;
   };
 
-  return [signal, toggle] as const;
+  return [signal.value, toggle, signal] as const;
 }
 
 /**

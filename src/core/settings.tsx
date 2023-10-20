@@ -27,7 +27,7 @@ export function Settings() {
         <IconSettings />
       </div>
       {/* Settings modal. */}
-      <Modal title="Settings" show={showSettings.value} onClose={toggleSettings} class="max-w-lg">
+      <Modal title="Settings" show={showSettings} onClose={toggleSettings} class="max-w-lg">
         {/* Change themes. */}
         <p class={styles.subtitle}>Appearance</p>
         <div class={cx(styles.item, 'py-0 h-14 items-center')}>
