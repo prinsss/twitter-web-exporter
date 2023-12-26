@@ -21,7 +21,6 @@ export default defineConfig({
   },
   css: {
     postcss: {
-      // @ts-ignore
       plugins: [
         tailwindcss(),
         autoprefixer(),
@@ -57,11 +56,11 @@ export default defineConfig({
           'https://raw.githubusercontent.com/prinsss/twitter-web-exporter/master/dist/twitter-web-exporter.user.js',
         require: [
           'https://cdn.jsdelivr.net/npm/dayjs@1.11.10/dayjs.min.js',
-          'https://cdn.jsdelivr.net/npm/preact@10.17.1/dist/preact.min.js',
-          'https://cdn.jsdelivr.net/npm/preact@10.17.1/hooks/dist/hooks.umd.js',
-          'https://cdn.jsdelivr.net/npm/@preact/signals-core@1.5.0/dist/signals-core.min.js',
-          'https://cdn.jsdelivr.net/npm/@preact/signals@1.2.1/dist/signals.min.js',
-          'https://cdn.jsdelivr.net/npm/@tanstack/table-core@8.10.1/build/umd/index.production.js',
+          'https://cdn.jsdelivr.net/npm/preact@10.19.3/dist/preact.min.js',
+          'https://cdn.jsdelivr.net/npm/preact@10.19.3/hooks/dist/hooks.umd.js',
+          'https://cdn.jsdelivr.net/npm/@preact/signals-core@1.5.1/dist/signals-core.min.js',
+          'https://cdn.jsdelivr.net/npm/@preact/signals@1.2.2/dist/signals.min.js',
+          'https://cdn.jsdelivr.net/npm/@tanstack/table-core@8.11.2/build/umd/index.production.js',
         ],
       },
       build: {
