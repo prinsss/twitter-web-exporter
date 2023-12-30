@@ -64,6 +64,6 @@ export async function zipStreamDownload(
   });
 
   // Download the zip archive.
-  logger.info(`Start zip archive: ${zipFilename}`);
+  logger.info(`Exporting to ZIP file: ${zipFilename}`);
   return readableZipStream.pipeTo(writableOutputStream);
 }

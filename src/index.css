@@ -11,9 +11,9 @@
   /* Set a different border color for tables. */
   .table-border-bc :where(thead, tbody) :where(tr:not(:last-child)),
   .table-border-bc :where(thead, tbody) :where(tr:first-child:last-child) {
-    --tw-border-opacity: 1;
+    --tw-border-opacity: 20%;
     border-bottom-width: 1px;
-    border-bottom-color: hsl(var(--bc) / 20%);
+    border-bottom-color: var(--fallback-bc, oklch(var(--bc) / var(--tw-border-opacity)));
   }
 
   /* Set a smaller padding for tables. */

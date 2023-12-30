@@ -9,6 +9,28 @@ const columnHelper = createColumnHelper<User>();
  * Table columns definition for users.
  */
 export const columns = [
+  columnHelper.display({
+    id: 'select',
+    header: ({ table }) => (
+      <input
+        type="checkbox"
+        class="checkbox checkbox-sm align-middle"
+        checked={table.getIsAllRowsSelected()}
+        indeterminate={table.getIsSomeRowsSelected()}
+        onChange={table.getToggleAllRowsSelectedHandler()}
+      />
+    ),
+    cell: ({ row }) => (
+      <input
+        type="checkbox"
+        class="checkbox checkbox-sm"
+        checked={row.getIsSelected()}
+        disabled={!row.getCanSelect()}
+        indeterminate={row.getIsSomeSelected()}
+        onChange={row.getToggleSelectedHandler()}
+      />
+    ),
+  }),
   columnHelper.accessor('rest_id', {
     header: () => <span>ID</span>,
     cell: (info) => <p class="w-20 break-all font-mono text-xs">{info.getValue()}</p>,

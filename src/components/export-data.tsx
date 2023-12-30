@@ -6,7 +6,7 @@ import { Tweet, User } from '@/types';
 
 type ExportDataModalProps<T> = {
   title: string;
-  recordsSignal: Signal<T[]>;
+  data: T[];
   show?: boolean;
   onClose?: () => void;
 };
@@ -14,12 +14,7 @@ type ExportDataModalProps<T> = {
 /**
  * Modal for exporting data.
  */
-export function ExportDataModal<T>({
-  title,
-  recordsSignal,
-  show,
-  onClose,
-}: ExportDataModalProps<T>) {
+export function ExportDataModal<T>({ title, data, show, onClose }: ExportDataModalProps<T>) {
   const [selectedFormat, setSelectedFormat] = useSignalState<ExportFormatType>(EXPORT_FORMAT.JSON);
   const [loading, setLoading] = useSignalState(false);
 
@@ -34,7 +29,7 @@ export function ExportDataModal<T>({
   const onExport = async () => {
     setLoading(true);
     await exportData(
-      recordsSignal.value as Tweet[] | User[],
+      data as Tweet[] | User[],
       selectedFormat,
       `twitter-${title}-${Date.now()}.${selectedFormat.toLowerCase()}`,
       onProgress,
@@ -59,9 +54,7 @@ export function ExportDataModal<T>({
         {/* Export options. */}
         <div class="flex items-center">
           <p class="mr-2 leading-8">Data length:</p>
-          <span class="font-mono leading-6 h-6 bg-base-200 px-2 rounded-md">
-            {recordsSignal.value.length}
-          </span>
+          <span class="font-mono leading-6 h-6 bg-base-200 px-2 rounded-md">{data.length}</span>
         </div>
         <div class="flex items-center">
           <p class="mr-2 leading-8">Include all metadata:</p>
@@ -82,6 +75,11 @@ export function ExportDataModal<T>({
             ))}
           </select>
         </div>
+        {data.length > 0 ? null : (
+          <div class="flex items-center justify-center h-28 w-full">
+            <p class="text-base-content text-opacity-50">No data selected.</p>
+          </div>
+        )}
         {/* Progress bar. */}
         <div class="flex flex-col mt-6">
           <progress
@@ -90,7 +88,7 @@ export function ExportDataModal<T>({
             max="100"
           />
           <span class="text-sm leading-none mt-2 text-base-content text-opacity-60">
-            {`${currentProgress}/${totalProgress || recordsSignal.value.length}`}
+            {`${currentProgress}/${totalProgress || data.length}`}
           </span>
         </div>
       </div>

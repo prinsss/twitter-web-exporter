@@ -139,13 +139,13 @@ export function ModuleUI<T>({ title, recordsSignal, isTweet }: ModuleUIProps<T>)
         {/* Extra modal for exporting data and media. */}
         <ExportDataModal
           title={title}
-          recordsSignal={recordsSignal}
+          data={table.getSelectedRowModel().rows.map((row) => row.original)}
           show={showExportDataModal}
           onClose={toggleShowExportDataModal}
         />
         <ExportMediaModal
           title={title}
-          recordsSignal={recordsSignal}
+          data={table.getSelectedRowModel().rows.map((row) => row.original)}
           show={showExportMediaModal}
           onClose={toggleShowExportMediaModal}
         />

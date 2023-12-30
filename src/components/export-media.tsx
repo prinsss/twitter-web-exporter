@@ -1,6 +1,4 @@
-import { Signal, useComputed } from '@preact/signals';
 import { IconCircleCheck, IconCircleDashed } from '@tabler/icons-preact';
-
 import { FileLike, ProgressCallback, extractMedia } from '@/utils/exporter';
 import { Modal } from '@/components/common';
 import { Tweet, User } from '@/types';
@@ -10,7 +8,7 @@ import logger from '@/utils/logger';
 
 type ExportMediaModalProps<T> = {
   title: string;
-  recordsSignal: Signal<T[]>;
+  data: T[];
   show?: boolean;
   onClose?: () => void;
 };
@@ -18,13 +16,8 @@ type ExportMediaModalProps<T> = {
 /**
  * Modal for exporting media.
  */
-export function ExportMediaModal<T>({
-  title,
-  recordsSignal,
-  show,
-  onClose,
-}: ExportMediaModalProps<T>) {
-  const mediaList = useComputed(() => extractMedia(recordsSignal.value as Tweet[] | User[]));
+export function ExportMediaModal<T>({ title, data, show, onClose }: ExportMediaModalProps<T>) {
+  const mediaList = extractMedia(data as Tweet[] | User[]);
 
   const [loading, setLoading] = useSignalState(false);
   const [rateLimit, setRateLimit] = useSignalState(1000);
@@ -47,11 +40,7 @@ export function ExportMediaModal<T>({
   const onExport = async () => {
     try {
       setLoading(true);
-      await zipStreamDownload(
-        `twitter-${title}-${Date.now()}-media.zip`,
-        mediaList.value,
-        onProgress,
-      );
+      await zipStreamDownload(`twitter-${title}-${Date.now()}-media.zip`, mediaList, onProgress);
       setLoading(false);
     } catch (err) {
       setLoading(false);
@@ -102,7 +91,7 @@ export function ExportMediaModal<T>({
               </tr>
             </thead>
             <tbody>
-              {mediaList.value.map((media, index) => (
+              {mediaList.map((media, index) => (
                 <tr>
                   <td>
                     {taskStatusSignal.value[media.filename] ? (
@@ -127,9 +116,9 @@ export function ExportMediaModal<T>({
               ))}
             </tbody>
           </table>
-          {mediaList.value.length > 0 ? null : (
+          {mediaList.length > 0 ? null : (
             <div class="flex items-center justify-center h-28 w-full">
-              <p class="text-base-content text-opacity-50">No media available.</p>
+              <p class="text-base-content text-opacity-50">No media selected.</p>
             </div>
           )}
         </div>
@@ -141,7 +130,7 @@ export function ExportMediaModal<T>({
             max="100"
           />
           <span class="text-sm leading-none mt-2 text-base-content text-opacity-60">
-            {`${currentProgress}/${totalProgress || mediaList.value.length}`}
+            {`${currentProgress}/${totalProgress || mediaList.length}`}
           </span>
         </div>
       </div>
