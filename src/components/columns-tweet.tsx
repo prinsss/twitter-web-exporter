@@ -33,6 +33,7 @@ const quoteSourceAccessor = (row: Tweet) => {
 export const columns = [
   columnHelper.display({
     id: 'select',
+    meta: { exportable: false },
     header: ({ table }) => (
       <input
         type="checkbox"
@@ -54,11 +55,17 @@ export const columns = [
     ),
   }),
   columnHelper.accessor('rest_id', {
+    meta: { exportKey: 'id', exportHeader: 'ID' },
     header: () => <span>ID</span>,
     cell: (info) => <p class="w-20 break-all font-mono text-xs">{info.getValue()}</p>,
   }),
   columnHelper.accessor((row) => +parseTwitterDateTime(row.legacy.created_at), {
     id: 'created_at',
+    meta: {
+      exportKey: 'created_at',
+      exportHeader: 'Date',
+      exportValue: (row) => row.original.legacy.created_at,
+    },
     header: () => <span>Date</span>,
     cell: (info) => (
       <p class="w-24">
@@ -73,6 +80,11 @@ export const columns = [
     ),
   }),
   columnHelper.accessor('legacy.full_text', {
+    meta: {
+      exportKey: 'full_text',
+      exportHeader: 'Content',
+      exportValue: (row) => extractTweetFullText(row.original),
+    },
     header: () => <span>Content</span>,
     cell: (info) => (
       <div>
@@ -102,6 +114,17 @@ export const columns = [
   }),
   columnHelper.accessor((row) => extractTweetMedia(row).length, {
     id: 'media',
+    meta: {
+      exportKey: 'media',
+      exportHeader: 'Media',
+      exportValue: (row) =>
+        extractTweetMedia(row.original).map((media) => ({
+          type: media.type,
+          url: media.url,
+          thumbnail: formatTwitterImage(media.media_url_https, 'thumb'),
+          original: getMediaOriginalUrl(media),
+        })),
+    },
     header: () => <span>Media</span>,
     cell: (info) => (
       <div class="flex flex-row items-start space-x-1 w-max">
@@ -122,6 +145,7 @@ export const columns = [
     ),
   }),
   columnHelper.accessor('core.user_results.result.legacy.screen_name', {
+    meta: { exportKey: 'screen_name', exportHeader: 'Screen Name' },
     header: () => <span>Screen Name</span>,
     cell: (info) => (
       <p class="whitespace-pre">
@@ -132,10 +156,12 @@ export const columns = [
     ),
   }),
   columnHelper.accessor('core.user_results.result.legacy.name', {
+    meta: { exportKey: 'name', exportHeader: 'Profile Name' },
     header: () => <span>Profile Name</span>,
     cell: (info) => <p class="w-32">{info.getValue()}</p>,
   }),
   columnHelper.accessor('core.user_results.result.legacy.profile_image_url_https', {
+    meta: { exportKey: 'profile_image_url', exportHeader: 'Profile Image' },
     header: () => <span>Profile Image</span>,
     cell: (info) => (
       <div
@@ -149,6 +175,11 @@ export const columns = [
     ),
   }),
   columnHelper.accessor('legacy.in_reply_to_screen_name', {
+    meta: {
+      exportKey: 'in_reply_to',
+      exportHeader: 'Replying To',
+      exportValue: (row) => row.original.legacy.in_reply_to_status_id_str,
+    },
     header: () => <span>Replying To</span>,
     cell: (info) => (
       <p class="whitespace-pre">
@@ -168,6 +199,11 @@ export const columns = [
   }),
   columnHelper.accessor(rtSourceAccessor, {
     id: 'rt_source',
+    meta: {
+      exportKey: 'retweeted_status',
+      exportHeader: 'RT Source',
+      exportValue: (row) => extractRetweetedTweet(row.original)?.rest_id,
+    },
     header: () => <span>RT Source</span>,
     cell: (info) => {
       const source = extractRetweetedTweet(info.row.original);
@@ -186,6 +222,14 @@ export const columns = [
   }),
   columnHelper.accessor(quoteSourceAccessor, {
     id: 'quote_source',
+    meta: {
+      exportKey: 'quoted_status',
+      exportHeader: 'Quote Source',
+      exportValue: (row) => {
+        const res = row.original.quoted_status_result?.result;
+        return res ? extractTweetWithVisibility(res)?.rest_id : undefined;
+      },
+    },
     header: () => <span>Quote Source</span>,
     cell: (info) => {
       const res = info.row.original.quoted_status_result?.result;
@@ -204,43 +248,57 @@ export const columns = [
     },
   }),
   columnHelper.accessor('legacy.favorite_count', {
+    meta: { exportKey: 'favorite_count', exportHeader: 'Favorites' },
     header: () => <span>Favorites</span>,
     cell: (info) => <p>{info.getValue()}</p>,
   }),
   columnHelper.accessor('legacy.retweet_count', {
+    meta: { exportKey: 'retweet_count', exportHeader: 'Retweets' },
     header: () => <span>Retweets</span>,
     cell: (info) => <p>{info.getValue()}</p>,
   }),
   columnHelper.accessor('legacy.bookmark_count', {
+    meta: { exportKey: 'bookmark_count', exportHeader: 'Bookmarks' },
     header: () => <span>Bookmarks</span>,
     cell: (info) => <p>{info.getValue()}</p>,
   }),
   columnHelper.accessor('legacy.quote_count', {
+    meta: { exportKey: 'quote_count', exportHeader: 'Quotes' },
     header: () => <span>Quotes</span>,
     cell: (info) => <p>{info.getValue()}</p>,
   }),
   columnHelper.accessor('legacy.reply_count', {
+    meta: { exportKey: 'reply_count', exportHeader: 'Replies' },
     header: () => <span>Replies</span>,
     cell: (info) => <p>{info.getValue()}</p>,
   }),
   columnHelper.accessor('views.count', {
+    meta: {
+      exportKey: 'views_count',
+      exportHeader: 'Views',
+      exportValue: (row) => +row.original.views.count,
+    },
     header: () => <span>Views</span>,
     cell: (info) => <p>{info.getValue() ?? 'N/A'}</p>,
   }),
   columnHelper.accessor('legacy.favorited', {
+    meta: { exportKey: 'favorited', exportHeader: 'Favorited' },
     header: () => <span>Favorited</span>,
     cell: (info) => <p>{info.getValue() ? 'YES' : 'NO'}</p>,
   }),
   columnHelper.accessor('legacy.retweeted', {
+    meta: { exportKey: 'retweeted', exportHeader: 'Retweeted' },
     header: () => <span>Retweeted</span>,
     cell: (info) => <p>{info.getValue() ? 'YES' : 'NO'}</p>,
   }),
   columnHelper.accessor('legacy.bookmarked', {
+    meta: { exportKey: 'bookmarked', exportHeader: 'Bookmarked' },
     header: () => <span>Bookmarked</span>,
     cell: (info) => <p>{info.getValue() ? 'YES' : 'NO'}</p>,
   }),
   columnHelper.display({
     id: 'actions',
+    meta: { exportable: false },
     header: () => <span>Actions</span>,
     cell: (info) => (
       <div class="flex flex-row items-start space-x-1">

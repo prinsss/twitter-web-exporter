@@ -1,12 +1,11 @@
-import { Signal } from '@preact/signals';
+import { Table } from '@tanstack/table-core';
 import { Modal } from '@/components/common';
-import { useSignalState, cx } from '@/utils';
-import { EXPORT_FORMAT, ExportFormatType, ProgressCallback, exportData } from '@/utils/exporter';
-import { Tweet, User } from '@/types';
+import { useSignalState, cx, useToggle } from '@/utils';
+import { DataType, EXPORT_FORMAT, ExportFormatType, exportData } from '@/utils/exporter';
 
 type ExportDataModalProps<T> = {
   title: string;
-  data: T[];
+  table: Table<T>;
   show?: boolean;
   onClose?: () => void;
 };
@@ -14,25 +13,50 @@ type ExportDataModalProps<T> = {
 /**
  * Modal for exporting data.
  */
-export function ExportDataModal<T>({ title, data, show, onClose }: ExportDataModalProps<T>) {
+export function ExportDataModal<T>({ title, table, show, onClose }: ExportDataModalProps<T>) {
   const [selectedFormat, setSelectedFormat] = useSignalState<ExportFormatType>(EXPORT_FORMAT.JSON);
   const [loading, setLoading] = useSignalState(false);
 
+  const [includeMetadata, toggleIncludeMetadata] = useToggle(false);
   const [currentProgress, setCurrentProgress] = useSignalState(0);
   const [totalProgress, setTotalProgress] = useSignalState(0);
 
-  const onProgress: ProgressCallback = (current, total) => {
-    setCurrentProgress(current);
-    setTotalProgress(total);
-  };
+  const selectedRows = table.getSelectedRowModel().rows;
 
   const onExport = async () => {
     setLoading(true);
+    setTotalProgress(selectedRows.length);
+
+    const allRecords: Array<DataType> = [];
+
+    for (const row of selectedRows) {
+      const allCells = row.getAllCells();
+      const record: DataType = {};
+
+      for (const cell of allCells) {
+        const value = cell.getValue();
+        const meta = cell.column.columnDef.meta;
+
+        if (meta?.exportable === false) {
+          continue;
+        }
+
+        const exportValue = meta?.exportValue ? meta.exportValue(row) : value;
+        record[meta?.exportKey || cell.column.id] = exportValue;
+      }
+
+      if (includeMetadata) {
+        record.metadata = row.original;
+      }
+
+      allRecords.push(record);
+      setCurrentProgress(allRecords.length);
+    }
+
     await exportData(
-      data as Tweet[] | User[],
+      allRecords,
       selectedFormat,
       `twitter-${title}-${Date.now()}.${selectedFormat.toLowerCase()}`,
-      onProgress,
     );
     setLoading(false);
   };
@@ -54,11 +78,18 @@ export function ExportDataModal<T>({ title, data, show, onClose }: ExportDataMod
         {/* Export options. */}
         <div class="flex items-center">
           <p class="mr-2 leading-8">Data length:</p>
-          <span class="font-mono leading-6 h-6 bg-base-200 px-2 rounded-md">{data.length}</span>
+          <span class="font-mono leading-6 h-6 bg-base-200 px-2 rounded-md">
+            {selectedRows.length}
+          </span>
         </div>
         <div class="flex items-center">
           <p class="mr-2 leading-8">Include all metadata:</p>
-          <input type="checkbox" checked class="checkbox checkbox-sm" />
+          <input
+            type="checkbox"
+            class="checkbox checkbox-sm"
+            checked={includeMetadata}
+            onChange={toggleIncludeMetadata}
+          />
         </div>
         <div class="flex">
           <p class="mr-2 leading-8">Export as:</p>
@@ -75,7 +106,7 @@ export function ExportDataModal<T>({ title, data, show, onClose }: ExportDataMod
             ))}
           </select>
         </div>
-        {data.length > 0 ? null : (
+        {selectedRows.length > 0 ? null : (
           <div class="flex items-center justify-center h-28 w-full">
             <p class="text-base-content text-opacity-50">No data selected.</p>
           </div>
@@ -88,7 +119,7 @@ export function ExportDataModal<T>({ title, data, show, onClose }: ExportDataMod
             max="100"
           />
           <span class="text-sm leading-none mt-2 text-base-content text-opacity-60">
-            {`${currentProgress}/${totalProgress || data.length}`}
+            {`${currentProgress}/${totalProgress || selectedRows.length}`}
           </span>
         </div>
       </div>

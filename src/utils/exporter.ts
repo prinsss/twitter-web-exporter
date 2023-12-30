@@ -20,6 +20,8 @@ export type ExportFormatType = (typeof EXPORT_FORMAT)[keyof typeof EXPORT_FORMAT
 
 export type ProgressCallback<T = unknown> = (current: number, total: number, value?: T) => void;
 
+export type DataType = Record<string, any>;
+
 /**
  * Save a text file to disk.
  */
@@ -37,25 +39,20 @@ export function saveFile(filename: string, content: string) {
 /**
  * Export data and download as a file.
  */
-export async function exportData(
-  data: Tweet[] | User[],
-  format: ExportFormatType,
-  filename: string,
-  onProgress?: ProgressCallback,
-) {
+export async function exportData(data: DataType[], format: ExportFormatType, filename: string) {
   try {
     let content = '';
     logger.info(`Exporting to ${format} file: ${filename}`);
 
     switch (format) {
       case EXPORT_FORMAT.JSON:
-        content = await jsonExporter(data, onProgress);
+        content = await jsonExporter(data);
         break;
       case EXPORT_FORMAT.HTML:
-        content = await htmlExporter(data, onProgress);
+        content = await htmlExporter(data);
         break;
       case EXPORT_FORMAT.CSV:
-        content = await csvExporter(data, onProgress);
+        content = await csvExporter(data);
         break;
     }
 
@@ -65,26 +62,18 @@ export async function exportData(
   }
 }
 
-export async function jsonExporter(data: Tweet[] | User[], onProgress?: ProgressCallback) {
-  const total = data.length;
-  onProgress?.(Math.floor(total / 2), total);
-  await new Promise((resolve) => setTimeout(resolve, 2000));
+export async function jsonExporter(data: DataType[]) {
   const content = JSON.stringify(data, undefined, '  ');
-  onProgress?.(total, total);
   return content;
 }
 
-export async function htmlExporter(data: Tweet[] | User[], onProgress?: ProgressCallback) {
-  const total = data.length;
+export async function htmlExporter(data: DataType[]) {
   const content = '<html></html>';
-  onProgress?.(total, total);
   return content;
 }
 
-export async function csvExporter(data: Tweet[] | User[], onProgress?: ProgressCallback) {
-  const total = data.length;
+export async function csvExporter(data: DataType[]) {
   const content = 'id,name';
-  onProgress?.(total, total);
   return content;
 }
 

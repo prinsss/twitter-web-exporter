@@ -31,7 +31,7 @@ declare module '@tanstack/table-core' {
 
   interface ColumnMeta<TData extends RowData, TValue> {
     exportable?: boolean;
-    exportId?: string;
+    exportKey?: string;
     exportHeader?: string;
     exportValue?: (row: Row<TData>) => any;
   }
@@ -147,7 +147,7 @@ export function ModuleUI<T>({ title, recordsSignal, isTweet }: ModuleUIProps<T>)
         {/* Extra modal for exporting data and media. */}
         <ExportDataModal
           title={title}
-          data={table.getSelectedRowModel().rows.map((row) => row.original)}
+          table={table}
           show={showExportDataModal}
           onClose={toggleShowExportDataModal}
         />
