@@ -11,13 +11,12 @@ import { IconSortAscending, IconSortDescending } from '@tabler/icons-preact';
 
 import { ExtensionPanel, Modal, SearchArea } from '@/components/common';
 import { flexRender, useReactTable } from '@/utils/react-table';
-import { useSignalState, useToggle, cx } from '@/utils';
-import { Tweet, User } from '@/types';
+import { useSignalState, useToggle } from '@/utils';
 
 import { columns as columnsTweet } from './columns-tweet';
 import { columns as columnsUser } from './columns-user';
 import { Pagination } from './pagination';
-import { EXPORT_FORMAT, ExportFormatType, exportData } from '@/utils/exporter';
+import { ExportDataModal } from './export-data';
 
 // For opening media preview modal in column definitions.
 declare module '@tanstack/table-core' {
@@ -41,12 +40,13 @@ type ModuleUIProps<T> = {
 export function ModuleUI<T>({ title, recordsSignal, isTweet }: ModuleUIProps<T>) {
   const data = recordsSignal.value;
 
-  const [showModal, toggleShowModal] = useToggle();
+  const [showModal, toggleShowModal] = useToggle(title === 'UserTweets');
+
+  const [showExportDataModal, toggleShowExportDataModal] = useToggle();
+  const [showExportMediaModal, toggleShowExportMediaModal] = useToggle();
+
   const [mediaPreview, setMediaPreview] = useSignalState('');
   const [rawDataPreview, setRawDataPreview] = useSignalState<T | null>(null);
-
-  const [loading, setLoading] = useSignalState(false);
-  const [selectedFormat, setSelectedFormat] = useSignalState<ExportFormatType>(EXPORT_FORMAT.JSON);
 
   const table = useReactTable<T>({
     data,
@@ -73,6 +73,7 @@ export function ModuleUI<T>({ title, recordsSignal, isTweet }: ModuleUIProps<T>)
     >
       <Modal title={title} show={showModal} onClose={toggleShowModal}>
         <SearchArea defaultValue={table.getState().globalFilter} onChange={table.setGlobalFilter} />
+        {/* Data view. */}
         <main class="max-w-full h-[600px] overflow-scroll bg-base-200 overscroll-none">
           <table class="table table-pin-rows table-border-bc table-padding-sm">
             <thead>
@@ -120,7 +121,7 @@ export function ModuleUI<T>({ title, recordsSignal, isTweet }: ModuleUIProps<T>)
         {/* Action buttons. */}
         <div class="flex mt-3 space-x-2">
           <button
-            class={cx('btn btn-neutral btn-ghost', loading && 'pointer-events-none')}
+            class="btn btn-neutral btn-ghost"
             onClick={() => {
               recordsSignal.value = [];
             }}
@@ -128,33 +129,20 @@ export function ModuleUI<T>({ title, recordsSignal, isTweet }: ModuleUIProps<T>)
             Clear
           </button>
           <span class="flex-grow" />
-          <select
-            class="select select-secondary w-32"
-            onChange={(e) => {
-              setSelectedFormat((e.target as HTMLSelectElement).value as ExportFormatType);
-            }}
-          >
-            {Object.values(EXPORT_FORMAT).map((type) => (
-              <option key={type} selected={type === selectedFormat}>
-                {type}
-              </option>
-            ))}
-          </select>
-          <button
-            class={cx('btn btn-primary', loading && 'btn-disabled')}
-            onClick={() =>
-              exportData(
-                data as Tweet[] | User[],
-                selectedFormat,
-                `twitter-${title}-${Date.now()}.${selectedFormat.toLowerCase()}`,
-                setLoading,
-              )
-            }
-          >
-            {loading && <span class="loading loading-spinner" />}
-            Export
+          <button class="btn btn-secondary" onClick={toggleShowExportMediaModal}>
+            Export Media
+          </button>
+          <button class="btn btn-primary" onClick={toggleShowExportDataModal}>
+            Export Data
           </button>
         </div>
+        {/* Extra modal for exporting data and media. */}
+        <ExportDataModal
+          title={title}
+          recordsSignal={recordsSignal}
+          show={showExportDataModal}
+          onClose={toggleShowExportDataModal}
+        />
         {/* Extra modal for previewing JSON data. */}
         <Modal
           title="JSON View"
