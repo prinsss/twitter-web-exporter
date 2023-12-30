@@ -1,3 +1,4 @@
+import { useEffect } from 'preact/hooks';
 import { Signal } from '@preact/signals';
 import {
   ColumnDef,
@@ -70,6 +71,13 @@ export function ModuleUI<T>({ title, recordsSignal, isTweet }: ModuleUIProps<T>)
       setRawDataPreview: (data) => setRawDataPreview(data),
     },
   });
+
+  // Select all rows by default.
+  useEffect(() => {
+    if (showModal && !table.getIsSomeRowsSelected()) {
+      table.toggleAllRowsSelected(true);
+    }
+  }, [showModal]);
 
   return (
     <ExtensionPanel
@@ -153,7 +161,7 @@ export function ModuleUI<T>({ title, recordsSignal, isTweet }: ModuleUIProps<T>)
         />
         <ExportMediaModal
           title={title}
-          data={table.getSelectedRowModel().rows.map((row) => row.original)}
+          table={table}
           show={showExportMediaModal}
           onClose={toggleShowExportMediaModal}
         />

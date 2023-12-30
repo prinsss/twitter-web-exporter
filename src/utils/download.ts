@@ -1,13 +1,10 @@
 import streamSaver from 'streamsaver';
 import createWriter from './zip-stream';
-import { FileLike, ProgressCallback } from './exporter';
 import logger from './logger';
 
-declare global {
-  interface Window {
-    ZIP: any;
-  }
-}
+export type FileLike = { filename: string; url: string };
+
+export type ProgressCallback<T = unknown> = (current: number, total: number, value?: T) => void;
 
 /**
  * Download multiple files from URL and save as a zip archive.
