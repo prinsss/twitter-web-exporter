@@ -51,9 +51,9 @@ export default defineConfig({
         grant: ['unsafeWindow'],
         'run-at': 'document-start',
         updateURL:
-          'https://raw.githubusercontent.com/prinsss/twitter-web-exporter/master/dist/twitter-web-exporter.user.js',
+          'https://github.com/prinsss/twitter-web-exporter/releases/latest/download/twitter-web-exporter.user.js',
         downloadURL:
-          'https://raw.githubusercontent.com/prinsss/twitter-web-exporter/master/dist/twitter-web-exporter.user.js',
+          'https://github.com/prinsss/twitter-web-exporter/releases/latest/download/twitter-web-exporter.user.js',
         require: [
           'https://cdn.jsdelivr.net/npm/dayjs@1.11.10/dayjs.min.js',
           'https://cdn.jsdelivr.net/npm/preact@10.19.3/dist/preact.min.js',

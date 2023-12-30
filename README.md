@@ -33,7 +33,7 @@
 ## Installation
 
 1. Install the browser extension [Tampermonkey](https://www.tampermonkey.net/) or [Violentmonkey](https://violentmonkey.github.io/)
-2. Click [here](https://raw.githubusercontent.com/prinsss/twitter-web-exporter/master/twitter-web-exporter.user.js) to install the user script
+2. Click [HERE](https://github.com/prinsss/twitter-web-exporter/releases/latest/download/twitter-web-exporter.user.js) to install the user script
 
 ## Usage
 
@@ -50,7 +50,7 @@ Then open the page that you want to export data from. The script will automatica
 
 The numbers of captured data will be displayed on the floating panel. Click the ↗️ Arrow button to open the data table view. You can preview the data captured here and select which items should be exported.
 
-<img src="https://github.com/prinsss/twitter-web-exporter/raw/main/docs/01-user-interface.png" alt="01-user-interface" width="640" />
+<img src="https://github.com/prinsss/twitter-web-exporter/raw/main/docs/01-user-interface.png" alt="01-user-interface" />
 
 Click "Export Data" and select the data type you want to export. Supported data formats are JSON, CSV and HTML.
 
@@ -60,7 +60,7 @@ Click "Export Media" to bulk download images and videos from tweets.
 
 All media files will be downloaded at its original size in a zip archive. Please set a reasonable value for the "Rate limit" option to avoid downloading too many files at once. The default value is 1000 which means the script will wait for 1 second after downloading each file.
 
-<img src="https://github.com/prinsss/twitter-web-exporter/raw/main/docs/02-export-media.png" alt="02-export-media.png" width="640" />
+<img src="https://github.com/prinsss/twitter-web-exporter/raw/main/docs/02-export-media.png" alt="02-export-media.png" />
 
 ## FAQ
 
