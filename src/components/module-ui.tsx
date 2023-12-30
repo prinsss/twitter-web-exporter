@@ -17,6 +17,7 @@ import { columns as columnsTweet } from './columns-tweet';
 import { columns as columnsUser } from './columns-user';
 import { Pagination } from './pagination';
 import { ExportDataModal } from './export-data';
+import { ExportMediaModal } from './export-media';
 
 // For opening media preview modal in column definitions.
 declare module '@tanstack/table-core' {
@@ -40,8 +41,7 @@ type ModuleUIProps<T> = {
 export function ModuleUI<T>({ title, recordsSignal, isTweet }: ModuleUIProps<T>) {
   const data = recordsSignal.value;
 
-  const [showModal, toggleShowModal] = useToggle(title === 'UserTweets');
-
+  const [showModal, toggleShowModal] = useToggle();
   const [showExportDataModal, toggleShowExportDataModal] = useToggle();
   const [showExportMediaModal, toggleShowExportMediaModal] = useToggle();
 
@@ -142,6 +142,12 @@ export function ModuleUI<T>({ title, recordsSignal, isTweet }: ModuleUIProps<T>)
           recordsSignal={recordsSignal}
           show={showExportDataModal}
           onClose={toggleShowExportDataModal}
+        />
+        <ExportMediaModal
+          title={title}
+          recordsSignal={recordsSignal}
+          show={showExportMediaModal}
+          onClose={toggleShowExportMediaModal}
         />
         {/* Extra modal for previewing JSON data. */}
         <Modal

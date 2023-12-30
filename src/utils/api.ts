@@ -212,3 +212,15 @@ export function formatTwitterImage(
 export function getProfileImageOriginalUrl(url: string): string {
   return url.replace(/_normal\.(jpe?g|png|gif)$/, '.$1');
 }
+
+export function getFileExtensionFromUrl(url: string): string {
+  // https://pbs.twimg.com/media/F1aT_M9aAAEgJwi.jpg
+  // https://pbs.twimg.com/media/F1aT_M9aAAEgJwi?format=jpg&name=orig
+  // https://video.twimg.com/ext_tw_video/1724535034051166208/pu/vid/avc1/1508x1080/xU8GJO6bXmUurBIf.mp4?tag=14
+  // https://pbs.twimg.com/card_img/1740118695274536960/Y1NUiWkZ?format=png&name=orig
+  // https://pbs.twimg.com/profile_images/1652878800311427073/j0-3owJd_normal.jpg
+  // https://pbs.twimg.com/profile_banners/4686835494/1698680296
+  const regex = /format=(\w+)|\.(\w+)$|\.(\w+)\?.+$/;
+  const match = regex.exec(url);
+  return match?.[1] ?? match?.[2] ?? match?.[3] ?? 'jpg';
+}

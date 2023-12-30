@@ -10,7 +10,7 @@ import { DEFAULT_APP_OPTIONS, options, THEMES } from './storage';
 
 export function Settings() {
   const currentTheme = useSignal(options.get('theme'));
-  const [showSettings, toggleSettings] = useToggle(true);
+  const [showSettings, toggleSettings] = useToggle(false);
 
   const styles = {
     subtitle: 'mb-2 text-base-content ml-4 opacity-50 font-semibold text-xs',
