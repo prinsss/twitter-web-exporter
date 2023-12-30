@@ -99,10 +99,22 @@ export interface Tweet {
   };
 }
 
+export interface RichTextTag {
+  from_index: number;
+  to_index: number;
+  richtext_types: ('Bold' | 'Italic')[];
+}
+
 export interface NoteTweet {
   id: string;
   text: string;
   entity_set: TweetEntities;
+  richtext: {
+    richtext_tags: RichTextTag[];
+  };
+  media: {
+    inline_media: unknown[];
+  };
 }
 
 export interface TweetEntities {

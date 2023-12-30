@@ -167,6 +167,10 @@ export function extractTweetMedia(tweet: Tweet): Media[] {
   return realTweet.legacy.entities.media ?? [];
 }
 
+export function extractTweetFullText(tweet: Tweet): string {
+  return tweet.note_tweet?.note_tweet_results.result.text ?? tweet.legacy.full_text;
+}
+
 /*
 |--------------------------------------------------------------------------
 | Media operations.

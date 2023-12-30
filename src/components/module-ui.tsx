@@ -1,6 +1,7 @@
 import { Signal } from '@preact/signals';
 import {
   ColumnDef,
+  Row,
   RowData,
   getCoreRowModel,
   getFilteredRowModel,
@@ -26,6 +27,13 @@ declare module '@tanstack/table-core' {
     setMediaPreview: (url: string) => void;
     rawDataPreview: TData | null;
     setRawDataPreview: (data: TData | null) => void;
+  }
+
+  interface ColumnMeta<TData extends RowData, TValue> {
+    exportable?: boolean;
+    exportId?: string;
+    exportHeader?: string;
+    exportValue?: (row: Row<TData>) => any;
   }
 }
 
@@ -157,7 +165,11 @@ export function ModuleUI<T>({ title, recordsSignal, isTweet }: ModuleUIProps<T>)
           onClose={() => setRawDataPreview(null)}
         >
           <main class="max-w-full max-h-[500px] overflow-scroll overscroll-none">
-            <pre class="text-xs leading-none">{JSON.stringify(rawDataPreview, null, 2)}</pre>
+            {typeof rawDataPreview === 'string' ? (
+              <p class="whitespace-pre-wrap">{rawDataPreview}</p>
+            ) : (
+              <pre class="text-xs leading-none">{JSON.stringify(rawDataPreview, null, 2)}</pre>
+            )}
           </main>
         </Modal>
         {/* Extra modal for previewing images and videos. */}

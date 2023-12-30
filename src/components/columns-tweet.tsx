@@ -10,6 +10,7 @@ import {
   getProfileImageOriginalUrl,
   extractTweetWithVisibility,
   extractQuotedTweet,
+  extractTweetFullText,
 } from '@/utils/api';
 
 const columnHelper = createColumnHelper<Tweet>();
@@ -74,15 +75,29 @@ export const columns = [
   columnHelper.accessor('legacy.full_text', {
     header: () => <span>Content</span>,
     cell: (info) => (
-      <p
-        class="w-60 whitespace-pre-wrap"
-        dangerouslySetInnerHTML={{
-          __html: strEntitiesToHTML(info.row.original.legacy.full_text, [
-            ...info.row.original.legacy.entities.urls,
-            ...(info.row.original.legacy.entities.media ?? []),
-          ]),
-        }}
-      />
+      <div>
+        <p
+          class="w-60 whitespace-pre-wrap"
+          dangerouslySetInnerHTML={{
+            __html: strEntitiesToHTML(info.row.original.legacy.full_text, [
+              ...info.row.original.legacy.entities.urls,
+              ...(info.row.original.legacy.entities.media ?? []),
+            ]),
+          }}
+        />
+        {info.row.original.note_tweet && (
+          <button
+            class="link"
+            onClick={() =>
+              info.table.options.meta?.setRawDataPreview(
+                extractTweetFullText(info.row.original) as any,
+              )
+            }
+          >
+            {'>>'} Show Full Text
+          </button>
+        )}
+      </div>
     ),
   }),
   columnHelper.accessor((row) => extractTweetMedia(row).length, {
