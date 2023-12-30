@@ -23,7 +23,7 @@ type ExportMediaModalProps<T> = {
  * Extract media from tweets and users.
  */
 export function extractMedia(data: Tweet[] | User[], includeRetweets: boolean): FileLike[] {
-  const gallery: { filename: string; url: string }[] = [];
+  const gallery = new Map<string, FileLike>();
 
   // TODO: Add options to customize the filename.
   for (const item of data) {
@@ -47,30 +47,34 @@ export function extractMedia(data: Tweet[] | User[], includeRetweets: boolean): 
         return { filename, url: url };
       });
 
-      gallery.push(...tweetMedia);
+      for (const media of tweetMedia) {
+        gallery.set(media.filename, media);
+      }
     }
 
     // For users, download their profile images and banners.
     if (item.__typename === 'User') {
       if (item.legacy.profile_image_url_https) {
         const ext = getFileExtensionFromUrl(item.legacy.profile_image_url_https);
-        gallery.push({
-          filename: `${item.legacy.screen_name}_profile_image.${ext}`,
+        const filename = `${item.legacy.screen_name}_profile_image.${ext}`;
+        gallery.set(filename, {
+          filename,
           url: getProfileImageOriginalUrl(item.legacy.profile_image_url_https),
         });
       }
 
       if (item.legacy.profile_banner_url) {
         const ext = getFileExtensionFromUrl(item.legacy.profile_banner_url);
-        gallery.push({
-          filename: `${item.legacy.screen_name}_profile_banner.${ext}`,
+        const filename = `${item.legacy.screen_name}_profile_banner.${ext}`;
+        gallery.set(filename, {
+          filename,
           url: item.legacy.profile_banner_url,
         });
       }
     }
   }
 
-  return gallery;
+  return Array.from(gallery.values());
 }
 
 /**
