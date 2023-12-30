@@ -14,6 +14,13 @@ export type ExportFormatType = (typeof EXPORT_FORMAT)[keyof typeof EXPORT_FORMAT
 export type DataType = Record<string, any>;
 
 /**
+ * Escape characters for CSV file.
+ */
+export function csvEscapeStr(str: string) {
+  return `"${str.replace(/\"/g, '""').replace(/\n/g, '\\n').replace(/\r/g, '\\r')}"`;
+}
+
+/**
  * Save a text file to disk.
  */
 export function saveFile(filename: string, content: string) {
@@ -54,16 +61,109 @@ export async function exportData(data: DataType[], format: ExportFormatType, fil
 }
 
 export async function jsonExporter(data: DataType[]) {
-  const content = JSON.stringify(data, undefined, '  ');
-  return content;
+  return JSON.stringify(data, undefined, '  ');
 }
 
 export async function htmlExporter(data: DataType[]) {
-  const content = '<html></html>';
-  return content;
+  const table = document.createElement('table');
+  const thead = document.createElement('thead');
+  const tbody = document.createElement('tbody');
+
+  const headers = Object.keys(data[0] ?? {});
+  const headerRow = document.createElement('tr');
+  for (const header of headers) {
+    const th = document.createElement('th');
+    th.textContent = header;
+    headerRow.appendChild(th);
+  }
+
+  thead.appendChild(headerRow);
+  table.appendChild(thead);
+  table.className = 'table table-striped';
+
+  for (const row of data) {
+    const tr = document.createElement('tr');
+    for (const header of headers) {
+      const td = document.createElement('td');
+      const value = row[header];
+
+      if (header === 'profile_image_url' || header === 'profile_banner_url') {
+        const img = document.createElement('img');
+        img.src = value;
+        img.width = 50;
+        td.innerHTML = '';
+        td.appendChild(img);
+      } else if (header === 'media' && value?.length > 0) {
+        for (const media of value) {
+          const img = document.createElement('img');
+          img.src = media.thumbnail;
+          img.width = 50;
+          const link = document.createElement('a');
+          link.href = media.original;
+          link.target = '_blank';
+          link.style.marginRight = '0.5em';
+          link.appendChild(img);
+          td.appendChild(link);
+        }
+      } else if (header === 'full_text' || header === 'description') {
+        const p = document.createElement('p');
+        p.innerHTML = value;
+        p.style.whiteSpace = 'pre-wrap';
+        td.appendChild(p);
+      } else if (header === 'metadata') {
+        const details = document.createElement('details');
+        const summary = document.createElement('summary');
+        summary.textContent = 'Expand';
+        details.appendChild(summary);
+        const pre = document.createElement('pre');
+        pre.textContent = JSON.stringify(value, undefined, '  ');
+        details.appendChild(pre);
+        td.appendChild(details);
+      } else {
+        td.textContent = typeof value === 'string' ? value : JSON.stringify(row[header]);
+      }
+
+      tr.appendChild(td);
+    }
+    tbody.appendChild(tr);
+  }
+
+  table.appendChild(tbody);
+
+  return `
+    <html>
+      <head>
+        <meta charset="utf-8">
+        <title>Exported Data ${new Date().toISOString()}</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+      </head>
+      <body>
+        ${table.outerHTML}
+      </body>
+    </html>
+  `;
 }
 
 export async function csvExporter(data: DataType[]) {
-  const content = 'id,name';
+  const headers = Object.keys(data[0] ?? {});
+  let content = headers.join(',') + '\n';
+
+  for (const row of data) {
+    const values = headers.map((header) => {
+      const value = row[header];
+      if (typeof value === 'string') {
+        return csvEscapeStr(value);
+      }
+
+      if (typeof value === 'object') {
+        return csvEscapeStr(JSON.stringify(value));
+      }
+
+      return value;
+    });
+    content += values.join(',');
+    content += '\n';
+  }
+
   return content;
 }

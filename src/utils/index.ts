@@ -17,13 +17,6 @@ export function safeJSONParse(text: string) {
 }
 
 /**
- * Escape characters for CSV file.
- */
-export function csvEscapeStr(str: string) {
-  return `"${str.replace(/\"/g, '""').replace(/\n/g, '\\n').replace(/\r/g, '\\r')}"`;
-}
-
-/**
  * Avoid importing `useSignal` from "@preact/signals" package.
  *
  * @see https://github.com/preactjs/signals/pull/415
