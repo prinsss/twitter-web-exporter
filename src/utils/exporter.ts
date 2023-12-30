@@ -18,7 +18,7 @@ export const EXPORT_FORMAT = {
 
 export type ExportFormatType = (typeof EXPORT_FORMAT)[keyof typeof EXPORT_FORMAT];
 
-export type ProgressCallback = (current: number, total: number) => void;
+export type ProgressCallback<T = unknown> = (current: number, total: number, value?: T) => void;
 
 /**
  * Save a text file to disk.
@@ -88,10 +88,12 @@ export async function csvExporter(data: Tweet[] | User[], onProgress?: ProgressC
   return content;
 }
 
+export type FileLike = { filename: string; url: string };
+
 /**
  * Extract media from tweets and users.
  */
-export function extractMedia(data: Tweet[] | User[]) {
+export function extractMedia(data: Tweet[] | User[]): FileLike[] {
   const gallery: { filename: string; url: string }[] = [];
 
   // TODO: options to customize the filename

@@ -1,8 +1,12 @@
 import { Signal, useComputed } from '@preact/signals';
+import { IconCircleCheck, IconCircleDashed } from '@tabler/icons-preact';
+
+import { FileLike, ProgressCallback, extractMedia } from '@/utils/exporter';
 import { Modal } from '@/components/common';
-import { useSignalState, cx } from '@/utils';
-import { ProgressCallback, extractMedia } from '@/utils/exporter';
 import { Tweet, User } from '@/types';
+import { useSignalState, cx, useSignal } from '@/utils';
+import { zipStreamDownload } from '@/utils/download';
+import logger from '@/utils/logger';
 
 type ExportMediaModalProps<T> = {
   title: string;
@@ -23,17 +27,36 @@ export function ExportMediaModal<T>({
   const mediaList = useComputed(() => extractMedia(recordsSignal.value as Tweet[] | User[]));
 
   const [loading, setLoading] = useSignalState(false);
+  const [rateLimit, setRateLimit] = useSignalState(1000);
+
   const [currentProgress, setCurrentProgress] = useSignalState(0);
   const [totalProgress, setTotalProgress] = useSignalState(0);
 
-  const onProgress: ProgressCallback = (current, total) => {
+  const taskStatusSignal = useSignal<Record<string, number>>({});
+
+  const onProgress: ProgressCallback<FileLike> = (current, total, value) => {
     setCurrentProgress(current);
     setTotalProgress(total);
+
+    if (value?.filename) {
+      const updated = { ...taskStatusSignal.value, [value.filename]: 100 };
+      taskStatusSignal.value = updated;
+    }
   };
 
   const onExport = async () => {
-    setLoading(true);
-    setLoading(false);
+    try {
+      setLoading(true);
+      await zipStreamDownload(
+        `twitter-${title}-${Date.now()}-media.zip`,
+        mediaList.value,
+        onProgress,
+      );
+      setLoading(false);
+    } catch (err) {
+      setLoading(false);
+      logger.error('Failed to export media. Open DevTools for more details.', err);
+    }
   };
 
   return (
@@ -52,23 +75,63 @@ export function ExportMediaModal<T>({
         </p>
         {/* Export options. */}
         <div class="flex items-center">
-          <p class="mr-2 leading-8">Media files to download:</p>
-          <span class="font-mono leading-6 h-6 bg-base-200 px-2 rounded-md">
-            {mediaList.value.length}
-          </span>
+          <p class="mr-2 leading-8">Download as zip archive:</p>
+          <input type="checkbox" checked class="checkbox checkbox-sm" disabled />
         </div>
         <div class="flex items-center">
-          <p class="mr-2 leading-8">Download as zip archive:</p>
-          <input type="checkbox" checked={false} class="checkbox checkbox-sm" disabled />
+          <p class="mr-2 leading-8">Rate limit (ms):</p>
+          <input
+            type="number"
+            class="input input-bordered input-sm w-32"
+            value={rateLimit}
+            onChange={(e) => {
+              const value = parseInt((e?.target as HTMLInputElement)?.value);
+              setRateLimit(value || 0);
+            }}
+          />
         </div>
         {/* Media list preview. */}
-        <div class="mt-2 flex flex-col max-h-48 bg-base-200 py-1 overflow-y-scroll rounded-box-half text-base-content text-opacity-80 font-mono text-sm overscroll-none [&>a]:px-2 [&>a]:py-0.5 [&>a:hover]:bg-base-300">
-          {mediaList.value.map((media, index) => (
-            <a href={media.url} target="_blank" rel="noopener noreferrer">
-              {index + 1}. {media.filename}
-            </a>
-          ))}
-          {!mediaList.value.length && <a>No media found.</a>}
+        <div class="my-3 max-h-60 overflow-scroll overscroll-none">
+          <table class="table table-xs table-zebra">
+            <thead>
+              <tr>
+                <th></th>
+                <th>#</th>
+                <th>File Name</th>
+                <th>URL</th>
+              </tr>
+            </thead>
+            <tbody>
+              {mediaList.value.map((media, index) => (
+                <tr>
+                  <td>
+                    {taskStatusSignal.value[media.filename] ? (
+                      <IconCircleCheck class="text-success" size={14} />
+                    ) : (
+                      <IconCircleDashed size={14} />
+                    )}
+                  </td>
+                  <th>{index + 1}</th>
+                  <td>{media.filename}</td>
+                  <td>
+                    <a
+                      class="link whitespace-nowrap"
+                      href={media.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {media.url}
+                    </a>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          {mediaList.value.length > 0 ? null : (
+            <div class="flex items-center justify-center h-28 w-full">
+              <p class="text-base-content text-opacity-50">No media available.</p>
+            </div>
+          )}
         </div>
         {/* Progress bar. */}
         <div class="flex flex-col mt-6">
