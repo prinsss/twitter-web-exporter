@@ -1,4 +1,4 @@
-import streamSaver from 'streamsaver';
+import { saveAs } from 'file-saver';
 import createWriter from './zip-stream';
 import logger from './logger';
 
@@ -21,8 +21,12 @@ export async function zipStreamDownload(
   onProgress?: ProgressCallback<FileLike>,
   rateLimit = 1000,
 ) {
+  // NOTE: StreamSaver.js fails on sites with strict Content-Security-Policy (CSP) such as Twitter,
+  // since it uses iframe and service worker to download files. Use file-saver instead here.
+  // See: https://github.com/jimmywarting/StreamSaver.js/issues/203
+
   // The data written to this stream will be streamed to the user's browser as a file download.
-  const writableOutputStream = streamSaver.createWriteStream(zipFilename);
+  // const writableOutputStream = streamSaver.createWriteStream(zipFilename);
 
   let current = 0;
   const total = files.length;
@@ -60,7 +64,21 @@ export async function zipStreamDownload(
     },
   });
 
+  const chunks: any[] = [];
+  const writableOutputStream = new WritableStream({
+    write(chunk) {
+      chunks.push(chunk);
+    },
+    close() {
+      logger.info('Zip stream closed.');
+    },
+  });
+
   // Download the zip archive.
   logger.info(`Exporting to ZIP file: ${zipFilename}`);
-  return readableZipStream.pipeTo(writableOutputStream);
+  await readableZipStream.pipeTo(writableOutputStream);
+
+  const arrayBuffer = await new Blob(chunks).arrayBuffer();
+  const blob = new Blob([arrayBuffer]);
+  saveAs(blob, zipFilename);
 }

@@ -61,7 +61,9 @@ export default defineConfig({
           'https://cdn.jsdelivr.net/npm/@preact/signals-core@1.5.1/dist/signals-core.min.js',
           'https://cdn.jsdelivr.net/npm/@preact/signals@1.2.2/dist/signals.min.js',
           'https://cdn.jsdelivr.net/npm/@tanstack/table-core@8.11.2/build/umd/index.production.js',
-          'https://cdn.jsdelivr.net/npm/streamsaver@2.0.6/StreamSaver.min.js',
+          // We bundle FileSaver.js in the script since the UMD build is broken.
+          // See: https://github.com/eligrey/FileSaver.js/issues/500
+          // 'https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js',
         ],
       },
       build: {
@@ -71,7 +73,6 @@ export default defineConfig({
           'preact/hooks': 'preactHooks',
           '@preact/signals': 'preactSignals',
           '@tanstack/table-core': 'TableCore',
-          streamsaver: 'streamSaver',
         },
       },
     }),

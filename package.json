@@ -19,13 +19,13 @@
     "@tabler/icons-preact": "2.44.0",
     "@tanstack/table-core": "8.11.2",
     "dayjs": "1.11.10",
-    "preact": "10.19.3",
-    "streamsaver": "2.0.6"
+    "file-saver": "2.0.5",
+    "preact": "10.19.3"
   },
   "devDependencies": {
     "@preact/preset-vite": "^2.7.0",
+    "@types/file-saver": "^2.0.7",
     "@types/node": "^20",
-    "@types/streamsaver": "^2.0.4",
     "autoprefixer": "^10.4.16",
     "daisyui": "^4.4.24",
     "postcss-prefix-selector": "^1.16.0",
