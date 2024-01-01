@@ -128,28 +128,30 @@ export function isTimelineEntryProfileConversation(
 */
 
 export function extractTweetUnion(tweet: TweetUnion): Tweet | null {
-  if (tweet?.__typename === 'Tweet') {
-    return tweet;
+  try {
+    if (tweet.__typename === 'Tweet') {
+      return tweet;
+    }
+
+    if (tweet.__typename === 'TweetWithVisibilityResults') {
+      return tweet.tweet;
+    }
+
+    if (tweet.__typename === 'TweetTombstone') {
+      logger.warn(`TweetTombstone received (Reason: ${tweet.tombstone?.text?.text})`, tweet);
+      return null;
+    }
+
+    if (tweet.__typename === 'TweetUnavailable') {
+      logger.warn('TweetUnavailable received (Reason: unknown)', tweet);
+      return null;
+    }
+
+    logger.errorWithBanner('Unknown tweet type received');
+  } catch (err) {
+    logger.errorWithBanner('Failed to extract tweet', err as Error);
   }
 
-  if (tweet?.__typename === 'TweetWithVisibilityResults') {
-    return tweet.tweet;
-  }
-
-  if (tweet?.__typename === 'TweetTombstone') {
-    logger.info(
-      'TweetTombstone received. The tweet may be deleted or from a protected account.',
-      tweet,
-    );
-    return null;
-  }
-
-  if (tweet?.__typename === 'TweetUnavailable') {
-    logger.info('TweetUnavailable received. The tweet may be NSFW.', tweet);
-    return null;
-  }
-
-  logger.error('Unknown tweet type received. Please report this issue.', tweet);
   return null;
 }
 

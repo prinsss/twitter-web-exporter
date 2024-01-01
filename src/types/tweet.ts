@@ -33,6 +33,10 @@ export interface TweetTombstone {
     __typename: 'TextTombstone';
     text: {
       rtl: boolean;
+      // "You’re unable to view this Post because this account owner limits who can view their Posts. Learn more"
+      // "This Post is from an account that no longer exists. Learn more"
+      // "This Post is from a suspended account. Learn more"
+      // "This Post was deleted by the Post author. Learn more"
       text: string;
       entities: unknown[];
     };

@@ -225,15 +225,11 @@ export const columns = [
     meta: {
       exportKey: 'quoted_status',
       exportHeader: 'Quote Source',
-      exportValue: (row) => {
-        const res = row.original.quoted_status_result?.result;
-        return res ? extractTweetUnion(res)?.rest_id : undefined;
-      },
+      exportValue: (row) => extractQuotedTweet(row.original)?.rest_id,
     },
     header: () => <span>Quote Source</span>,
     cell: (info) => {
-      const res = info.row.original.quoted_status_result?.result;
-      const source = res ? extractTweetUnion(res) : null;
+      const source = extractQuotedTweet(info.row.original);
       return (
         <p class="whitespace-pre">
           {source ? (
