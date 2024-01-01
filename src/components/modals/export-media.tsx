@@ -85,6 +85,8 @@ export function ExportMediaModal<T>({ title, table, show, onClose }: ExportMedia
   const [rateLimit, setRateLimit] = useSignalState(1000);
   const [includeRetweets, toggleIncludeRetweets] = useToggle(true);
 
+  const [copied, setCopied] = useSignalState(false);
+
   const [currentProgress, setCurrentProgress] = useSignalState(0);
   const [totalProgress, setTotalProgress] = useSignalState(0);
 
@@ -113,6 +115,17 @@ export function ExportMediaModal<T>({ title, table, show, onClose }: ExportMedia
     } catch (err) {
       setLoading(false);
       logger.error('Failed to export media. Open DevTools for more details.', err);
+    }
+  };
+
+  const onCopy = () => {
+    const text = mediaList.map((media) => `${media.url}\n  out=${media.filename}`).join('\n');
+    try {
+      navigator.clipboard.writeText(text);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      logger.error('Failed to copy media URLs. Open DevTools for more details.', err);
     }
   };
 
@@ -216,6 +229,9 @@ export function ExportMediaModal<T>({ title, table, show, onClose }: ExportMedia
         <span class="flex-grow" />
         <button class="btn" onClick={onClose}>
           Cancel
+        </button>
+        <button class="btn" onClick={onCopy}>
+          {copied ? 'Copied!' : 'Copy URLs'}
         </button>
         <button class={cx('btn btn-secondary', loading && 'btn-disabled')} onClick={onExport}>
           {loading && <span class="loading loading-spinner" />}
