@@ -11,6 +11,7 @@ import {
   TweetWithVisibilityResults,
   User,
 } from '@/types';
+import logger from './logger';
 
 /**
  * A generic function to extract data from the API response.
@@ -151,7 +152,13 @@ export function extractQuotedTweet(tweet: Tweet): Tweet | null {
 }
 
 export function extractTweetUserScreenName(tweet: Tweet): string {
-  return tweet.core.user_results.result.legacy.screen_name;
+  try {
+    return tweet.core.user_results.result.legacy.screen_name;
+  } catch (err) {
+    console.log(tweet);
+    logger.error('Failed to extract tweet user screen name', err, tweet);
+    return 'READ_ERROR';
+  }
 }
 
 export function extractTweetMedia(tweet: Tweet): Media[] {
