@@ -5,12 +5,14 @@ export interface TimelineTweet {
   itemType: 'TimelineTweet';
   __typename: 'TimelineTweet';
   tweet_results: {
-    result: TweetWithVisibilityResults | Tweet;
+    result: TweetUnion;
   };
   tweetDisplayType: 'Tweet' | 'SelfThread';
   hasModeratedReplies?: boolean;
   socialContext?: unknown;
 }
+
+export type TweetUnion = Tweet | TweetWithVisibilityResults | TweetTombstone | TweetUnavailable;
 
 export interface TweetWithVisibilityResults {
   __typename: 'TweetWithVisibilityResults';
@@ -21,6 +23,26 @@ export interface TweetWithVisibilityResults {
     }[];
   };
   tweet: Tweet;
+}
+
+// Deleted tweets or tweets from protected accounts.
+// See: https://github.com/JustAnotherArchivist/snscrape/issues/392
+export interface TweetTombstone {
+  __typename: 'TweetTombstone';
+  tombstone: {
+    __typename: 'TextTombstone';
+    text: {
+      rtl: boolean;
+      text: string;
+      entities: unknown[];
+    };
+  };
+}
+
+// Tweets that are unavailable for some reason. Maybe NSFW.
+// See: https://github.com/JustAnotherArchivist/snscrape/issues/433
+export interface TweetUnavailable {
+  __typename: 'TweetUnavailable';
 }
 
 export interface Tweet {
@@ -43,10 +65,10 @@ export interface Tweet {
   };
   is_translatable: boolean;
   quoted_status_result?: {
-    result: TweetWithVisibilityResults | Tweet;
+    result: TweetUnion;
   };
   quotedRefResult?: {
-    result: Partial<TweetWithVisibilityResults | Tweet>;
+    result: Partial<TweetUnion>;
   };
   views: {
     count: string;
@@ -94,7 +116,7 @@ export interface Tweet {
     user_id_str: string;
     id_str: string;
     retweeted_status_result?: {
-      result: TweetWithVisibilityResults | Tweet;
+      result: TweetUnion;
     };
   };
 }

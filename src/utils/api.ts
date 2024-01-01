@@ -8,7 +8,7 @@ import {
   TimelineTweet,
   TimelineUser,
   Tweet,
-  TweetWithVisibilityResults,
+  TweetUnion,
   User,
 } from '@/types';
 import logger from './logger';
@@ -28,7 +28,7 @@ export function extractDataFromResponse<
 >(
   response: XMLHttpRequest,
   extractInstructionsFromJson: (json: R) => TimelineInstructions,
-  extractDataFromTimelineEntry: (entry: TimelineEntry<P, TimelineTimelineItem<P>>) => T | undefined,
+  extractDataFromTimelineEntry: (entry: TimelineEntry<P, TimelineTimelineItem<P>>) => T | null,
 ): T[] {
   const json: R = JSON.parse(response.responseText);
   const instructions = extractInstructionsFromJson(json);
@@ -55,8 +55,8 @@ export function extractDataFromResponse<
  * Tweets with visibility limitation have an additional layer of nesting.
  * Extract the real tweet object from the wrapper.
  */
-export function extractTimelineTweet(itemContent: TimelineTweet): Tweet {
-  return extractTweetWithVisibility(itemContent.tweet_results.result);
+export function extractTimelineTweet(itemContent: TimelineTweet): Tweet | null {
+  return extractTweetUnion(itemContent.tweet_results.result);
 }
 
 /*
@@ -127,17 +127,35 @@ export function isTimelineEntryProfileConversation(
 |--------------------------------------------------------------------------
 */
 
-export function extractTweetWithVisibility(tweet: Tweet | TweetWithVisibilityResults): Tweet {
+export function extractTweetUnion(tweet: TweetUnion): Tweet | null {
+  if (tweet?.__typename === 'Tweet') {
+    return tweet;
+  }
+
   if (tweet?.__typename === 'TweetWithVisibilityResults') {
     return tweet.tweet;
   }
 
-  return tweet;
+  if (tweet?.__typename === 'TweetTombstone') {
+    logger.info(
+      'TweetTombstone received. The tweet may be deleted or from a protected account.',
+      tweet,
+    );
+    return null;
+  }
+
+  if (tweet?.__typename === 'TweetUnavailable') {
+    logger.info('TweetUnavailable received. The tweet may be NSFW.', tweet);
+    return null;
+  }
+
+  logger.error('Unknown tweet type received. Please report this issue.', tweet);
+  return null;
 }
 
 export function extractRetweetedTweet(tweet: Tweet): Tweet | null {
   if (tweet.legacy.retweeted_status_result?.result) {
-    return extractTweetWithVisibility(tweet.legacy.retweeted_status_result.result);
+    return extractTweetUnion(tweet.legacy.retweeted_status_result.result);
   }
 
   return null;
@@ -145,20 +163,14 @@ export function extractRetweetedTweet(tweet: Tweet): Tweet | null {
 
 export function extractQuotedTweet(tweet: Tweet): Tweet | null {
   if (tweet.quoted_status_result?.result) {
-    return extractTweetWithVisibility(tweet.quoted_status_result.result);
+    return extractTweetUnion(tweet.quoted_status_result.result);
   }
 
   return null;
 }
 
 export function extractTweetUserScreenName(tweet: Tweet): string {
-  try {
-    return tweet.core.user_results.result.legacy.screen_name;
-  } catch (err) {
-    console.log(tweet);
-    logger.error('Failed to extract tweet user screen name', err, tweet);
-    return 'READ_ERROR';
-  }
+  return tweet.core.user_results.result.legacy.screen_name;
 }
 
 export function extractTweetMedia(tweet: Tweet): Media[] {

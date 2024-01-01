@@ -49,7 +49,10 @@ export const TweetDetailInterceptor: Interceptor = (req, res) => {
     for (const entry of timelineAddEntriesInstructionEntries) {
       // The main tweet.
       if (isTimelineEntryTweet(entry)) {
-        newData.push(extractTimelineTweet(entry.content.itemContent));
+        const tweet = extractTimelineTweet(entry.content.itemContent);
+        if (tweet) {
+          newData.push(tweet);
+        }
       }
 
       // The conversation thread.
@@ -71,9 +74,9 @@ export const TweetDetailInterceptor: Interceptor = (req, res) => {
     ) as TimelineAddToModuleInstruction<TimelineTweet>;
 
     if (timelineAddToModuleInstruction) {
-      const tweetsInConversation = timelineAddToModuleInstruction.moduleItems.map((i) =>
-        extractTimelineTweet(i.item.itemContent),
-      );
+      const tweetsInConversation = timelineAddToModuleInstruction.moduleItems
+        .map((i) => extractTimelineTweet(i.item.itemContent))
+        .filter((t): t is Tweet => !!t);
 
       newData.push(...tweetsInConversation);
     }

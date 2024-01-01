@@ -52,9 +52,10 @@ export const UserTweetsInterceptor: Interceptor = (req, res) => {
     ) as TimelinePinEntryInstruction;
 
     if (timelinePinEntryInstruction) {
-      newData.push(
-        extractTimelineTweet(timelinePinEntryInstruction.entry.content.itemContent),
-      );
+      const tweet = extractTimelineTweet(timelinePinEntryInstruction.entry.content.itemContent);
+      if (tweet) {
+        newData.push(tweet);
+      }
     }
 
     // Normal tweets.
@@ -65,14 +66,17 @@ export const UserTweetsInterceptor: Interceptor = (req, res) => {
     for (const entry of timelineAddEntriesInstruction.entries) {
       // Extract normal tweets.
       if (isTimelineEntryTweet(entry)) {
-        newData.push(extractTimelineTweet(entry.content.itemContent));
+        const tweet = extractTimelineTweet(entry.content.itemContent);
+        if (tweet) {
+          newData.push(tweet);
+        }
       }
 
       // Extract conversations.
       if (isTimelineEntryProfileConversation(entry)) {
-        const tweetsInConversation = entry.content.items.map((i) =>
-          extractTimelineTweet(i.item.itemContent),
-        );
+        const tweetsInConversation = entry.content.items
+          .map((i) => extractTimelineTweet(i.item.itemContent))
+          .filter((t): t is Tweet => !!t);
 
         newData.push(...tweetsInConversation);
       }

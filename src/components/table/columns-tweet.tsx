@@ -8,7 +8,7 @@ import {
   formatTwitterImage,
   getMediaOriginalUrl,
   getProfileImageOriginalUrl,
-  extractTweetWithVisibility,
+  extractTweetUnion,
   extractQuotedTweet,
   extractTweetFullText,
 } from '@/utils/api';
@@ -227,13 +227,13 @@ export const columns = [
       exportHeader: 'Quote Source',
       exportValue: (row) => {
         const res = row.original.quoted_status_result?.result;
-        return res ? extractTweetWithVisibility(res)?.rest_id : undefined;
+        return res ? extractTweetUnion(res)?.rest_id : undefined;
       },
     },
     header: () => <span>Quote Source</span>,
     cell: (info) => {
       const res = info.row.original.quoted_status_result?.result;
-      const source = res ? extractTweetWithVisibility(res) : null;
+      const source = res ? extractTweetUnion(res) : null;
       return (
         <p class="whitespace-pre">
           {source ? (
