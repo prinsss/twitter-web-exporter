@@ -33,6 +33,10 @@ export default defineConfig({
               return selector.replace(/:root/, prefix);
             }
 
+            if (selector.match(/html/)) {
+              return selector.replace(/html/, prefix);
+            }
+
             return prefixedSelector;
           },
         }),
