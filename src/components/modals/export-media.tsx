@@ -1,8 +1,8 @@
 import { Table } from '@tanstack/table-core';
-import { IconCircleCheck, IconCircleDashed, IconInfoCircle } from '@tabler/icons-preact';
+import { IconCircleCheck, IconCircleDashed, IconHelp, IconInfoCircle } from '@tabler/icons-preact';
 
-import { extractMedia } from '@/utils/media';
 import { FileLike, ProgressCallback, zipStreamDownload } from '@/utils/download';
+import { DEFAULT_FILENAME_PATTERN, FILENAME_PATTERN_TOOLTIP, extractMedia } from '@/utils/media';
 import { Modal } from '@/components/common';
 import { Tweet, User } from '@/types';
 import { useSignalState, cx, useSignal, useToggle } from '@/utils/common';
@@ -11,6 +11,7 @@ import logger from '@/utils/logger';
 type ExportMediaModalProps<T> = {
   title: string;
   table: Table<T>;
+  isTweet?: boolean;
   show?: boolean;
   onClose?: () => void;
 };
@@ -18,21 +19,28 @@ type ExportMediaModalProps<T> = {
 /**
  * Modal for exporting media.
  */
-export function ExportMediaModal<T>({ title, table, show, onClose }: ExportMediaModalProps<T>) {
+export function ExportMediaModal<T>({
+  title,
+  table,
+  isTweet,
+  show,
+  onClose,
+}: ExportMediaModalProps<T>) {
   const [loading, setLoading] = useSignalState(false);
-  const [rateLimit, setRateLimit] = useSignalState(1000);
-  const [includeRetweets, toggleIncludeRetweets] = useToggle(true);
-
   const [copied, setCopied] = useSignalState(false);
+
+  const [rateLimit, setRateLimit] = useSignalState(1000);
+  const [filenamePattern, setFilenamePattern] = useSignalState(DEFAULT_FILENAME_PATTERN);
+  const [includeRetweets, toggleIncludeRetweets] = useToggle(true);
 
   const [currentProgress, setCurrentProgress] = useSignalState(0);
   const [totalProgress, setTotalProgress] = useSignalState(0);
-
   const taskStatusSignal = useSignal<Record<string, number>>({});
 
   const mediaList = extractMedia(
     table.getSelectedRowModel().rows.map((row) => row.original) as Tweet[] | User[],
     includeRetweets,
+    filenamePattern,
   );
 
   const onProgress: ProgressCallback<FileLike> = (current, total, value) => {
@@ -89,26 +97,50 @@ export function ExportMediaModal<T>({ title, table, show, onClose }: ExportMedia
           </span>
         </div>
         {/* Export options. */}
-        <div class="flex items-center">
-          <p class="mr-2 leading-8">Rate limit (ms):</p>
-          <input
-            type="number"
-            class="input input-bordered input-sm w-32"
-            value={rateLimit}
-            onChange={(e) => {
-              const value = parseInt((e?.target as HTMLInputElement)?.value);
-              setRateLimit(value || 0);
-            }}
-          />
-        </div>
-        <div class="flex items-center">
-          <p class="mr-2 leading-8">Include retweets:</p>
-          <input
-            type="checkbox"
-            class="checkbox checkbox-sm"
-            checked={includeRetweets}
-            onChange={toggleIncludeRetweets}
-          />
+        {isTweet && (
+          <div class="flex items-center h-9">
+            <div class="mr-2 leading-8 flex items-center">
+              <span>Filename template </span>
+              <div
+                class="tooltip tooltip-bottom ml-0.5 before:whitespace-pre-line before:max-w-max"
+                data-tip={FILENAME_PATTERN_TOOLTIP}
+              >
+                <IconHelp size={20} />
+              </div>
+              <span>:</span>
+            </div>
+            <input
+              type="text"
+              class="input input-bordered input-sm flex-grow"
+              value={filenamePattern}
+              onChange={(e) => {
+                setFilenamePattern((e?.target as HTMLInputElement)?.value);
+              }}
+            />
+          </div>
+        )}
+        <div class="flex h-9 justify-between">
+          <div class="flex items-center h-9 w-1/2">
+            <p class="mr-2 leading-8">Rate limit (ms):</p>
+            <input
+              type="number"
+              class="input input-bordered input-sm w-32"
+              value={rateLimit}
+              onChange={(e) => {
+                const value = parseInt((e?.target as HTMLInputElement)?.value);
+                setRateLimit(value || 0);
+              }}
+            />
+          </div>
+          <div class="flex items-center h-9 w-1/2">
+            <p class="mr-2 leading-8">Include retweets:</p>
+            <input
+              type="checkbox"
+              class="checkbox checkbox-sm"
+              checked={includeRetweets}
+              onChange={toggleIncludeRetweets}
+            />
+          </div>
         </div>
         {/* Media list preview. */}
         <div class="my-3 max-h-60 overflow-scroll overscroll-none">
@@ -161,7 +193,7 @@ export function ExportMediaModal<T>({ title, table, show, onClose }: ExportMedia
             max="100"
           />
           <span class="text-sm leading-none mt-2 text-base-content text-opacity-60">
-            {`${currentProgress}/${totalProgress || mediaList.length}`}
+            {`${currentProgress}/${mediaList.length}`}
           </span>
         </div>
       </div>

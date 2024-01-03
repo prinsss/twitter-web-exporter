@@ -200,6 +200,11 @@ export function extractTweetFullText(tweet: Tweet): string {
 |--------------------------------------------------------------------------
 */
 
+export function getMediaIndex(tweet: Tweet, media: Media): number {
+  const key = media.media_key;
+  return extractTweetMedia(tweet).findIndex((value) => value.media_key === key);
+}
+
 export function getMediaOriginalUrl(media: Media): string {
   // For videos, use the highest bitrate variant.
   if (media.type === 'video' || media.type === 'animated_gif') {

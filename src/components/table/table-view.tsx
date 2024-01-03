@@ -153,6 +153,7 @@ export function TableView<T>({ title, recordsSignal, isTweet }: TableViewProps<T
       <ExportMediaModal
         title={title}
         table={table}
+        isTweet={isTweet}
         show={showExportMediaModal}
         onClose={toggleShowExportMediaModal}
       />
