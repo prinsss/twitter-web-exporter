@@ -75,8 +75,8 @@ export interface Tweet {
     result: Partial<TweetUnion>;
   };
   views: {
-    count: string;
-    state: string;
+    count?: string;
+    state: 'Enabled' | 'EnabledWithCount';
   };
   source: string;
   // Used for long tweets.

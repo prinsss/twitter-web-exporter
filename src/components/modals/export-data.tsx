@@ -29,6 +29,7 @@ export function ExportDataModal<T>({ title, table, show, onClose }: ExportDataMo
 
     const allRecords: Array<DataType> = [];
 
+    // Prepare data for exporting by iterating through all selected rows in the table.
     for (const row of selectedRows) {
       const allCells = row.getAllCells();
       const record: DataType = {};
@@ -41,7 +42,14 @@ export function ExportDataModal<T>({ title, table, show, onClose }: ExportDataMo
           continue;
         }
 
-        const exportValue = meta?.exportValue ? meta.exportValue(row) : value;
+        // Get export value of the cell by calling column definition if available.
+        let exportValue = meta?.exportValue ? meta.exportValue(row) : value;
+
+        // Avoid exporting undefined values and use null instead.
+        if (exportValue === undefined) {
+          exportValue = null;
+        }
+
         record[meta?.exportKey || cell.column.id] = exportValue;
       }
 
@@ -53,6 +61,7 @@ export function ExportDataModal<T>({ title, table, show, onClose }: ExportDataMo
       setCurrentProgress(allRecords.length);
     }
 
+    // Convert data to selected format and download it.
     await exportData(
       allRecords,
       selectedFormat,
@@ -119,7 +128,7 @@ export function ExportDataModal<T>({ title, table, show, onClose }: ExportDataMo
             max="100"
           />
           <span class="text-sm leading-none mt-2 text-base-content text-opacity-60">
-            {`${currentProgress}/${totalProgress || selectedRows.length}`}
+            {`${currentProgress}/${selectedRows.length}`}
           </span>
         </div>
       </div>

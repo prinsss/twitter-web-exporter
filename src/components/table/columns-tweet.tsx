@@ -272,7 +272,8 @@ export const columns = [
     meta: {
       exportKey: 'views_count',
       exportHeader: 'Views',
-      exportValue: (row) => +row.original.views.count,
+      exportValue: (row) =>
+        typeof row.original.views.count === 'undefined' ? null : +row.original.views.count,
     },
     header: () => <span>Views</span>,
     cell: (info) => <p>{info.getValue() ?? 'N/A'}</p>,
