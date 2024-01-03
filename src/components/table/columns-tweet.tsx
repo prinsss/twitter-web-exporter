@@ -1,5 +1,5 @@
 import { createColumnHelper } from '@tanstack/table-core';
-import { formatDateTime, parseTwitterDateTime, strEntitiesToHTML } from '@/utils';
+import { formatDateTime, parseTwitterDateTime, strEntitiesToHTML } from '@/utils/common';
 import { Tweet } from '@/types';
 import {
   extractRetweetedTweet,

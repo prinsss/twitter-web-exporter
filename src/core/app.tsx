@@ -4,7 +4,7 @@ import { IconX } from '@tabler/icons-preact';
 
 import { ErrorBoundary } from '@/components/error-boundary';
 import { CatIcon } from '@/components/common';
-import { cx, useSignal } from '@/utils';
+import { cx, useSignal } from '@/utils/common';
 import logger from '@/utils/logger';
 
 import extensionManager, { Extension } from './extensions';

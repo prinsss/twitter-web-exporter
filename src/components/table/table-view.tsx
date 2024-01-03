@@ -15,7 +15,7 @@ import { Modal, SearchArea } from '@/components/common';
 import { ExportDataModal } from '@/components/modals/export-data';
 import { ExportMediaModal } from '@/components/modals/export-media';
 import { flexRender, useReactTable } from '@/utils/react-table';
-import { useSignalState, useToggle } from '@/utils';
+import { useSignalState, useToggle } from '@/utils/common';
 
 import { columns as columnsTweet } from './columns-tweet';
 import { columns as columnsUser } from './columns-user';

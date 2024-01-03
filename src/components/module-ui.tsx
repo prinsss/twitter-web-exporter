@@ -1,7 +1,7 @@
 import { Signal } from '@preact/signals';
 import { ExtensionPanel, Modal } from '@/components/common';
 import { TableView } from '@/components/table/table-view';
-import { useToggle } from '@/utils';
+import { useToggle } from '@/utils/common';
 
 type ModuleUIProps<T> = {
   title: string;

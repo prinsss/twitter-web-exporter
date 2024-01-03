@@ -1,7 +1,7 @@
 import { JSX } from 'preact';
 import { useRef } from 'preact/hooks';
 import { IconArrowUpRight, IconSearch, IconX } from '@tabler/icons-preact';
-import { cx } from '@/utils';
+import { cx } from '@/utils/common';
 import { ErrorBoundary } from './error-boundary';
 
 type ExtensionPanelProps = {

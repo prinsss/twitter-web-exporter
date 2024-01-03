@@ -1,6 +1,6 @@
 import { Table } from '@tanstack/table-core';
 import { Modal } from '@/components/common';
-import { useSignalState, cx, useToggle } from '@/utils';
+import { useSignalState, cx, useToggle } from '@/utils/common';
 import { DataType, EXPORT_FORMAT, ExportFormatType, exportData } from '@/utils/exporter';
 
 type ExportDataModalProps<T> = {

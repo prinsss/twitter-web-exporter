@@ -3,7 +3,7 @@ import { IconSettings, IconBrandGithubFilled } from '@tabler/icons-preact';
 
 import packageJson from '@/../package.json';
 import { Modal } from '@/components/common';
-import { capitalizeFirstLetter, cx, useSignal, useToggle } from '@/utils';
+import { capitalizeFirstLetter, cx, useSignal, useToggle } from '@/utils/common';
 
 import extensionManager from './extensions';
 import { DEFAULT_APP_OPTIONS, options, THEMES } from './storage';
