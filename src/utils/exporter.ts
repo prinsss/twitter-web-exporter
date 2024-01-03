@@ -93,22 +93,25 @@ export async function htmlExporter(data: DataType[]) {
         img.width = 50;
         td.innerHTML = '';
         td.appendChild(img);
-      } else if (header === 'media' && value?.length > 0) {
-        for (const media of value) {
-          const img = document.createElement('img');
-          img.src = media.thumbnail;
-          img.width = 50;
-          const link = document.createElement('a');
-          link.href = media.original;
-          link.target = '_blank';
-          link.style.marginRight = '0.5em';
-          link.appendChild(img);
-          td.appendChild(link);
+      } else if (header === 'media') {
+        if (value?.length > 0) {
+          for (const media of value) {
+            const img = document.createElement('img');
+            img.src = media.thumbnail;
+            img.width = 50;
+            const link = document.createElement('a');
+            link.href = media.original;
+            link.target = '_blank';
+            link.style.marginRight = '0.5em';
+            link.appendChild(img);
+            td.appendChild(link);
+          }
         }
       } else if (header === 'full_text' || header === 'description') {
         const p = document.createElement('p');
         p.innerHTML = value;
         p.style.whiteSpace = 'pre-wrap';
+        p.style.maxWidth = '640px';
         td.appendChild(p);
       } else if (header === 'metadata') {
         const details = document.createElement('details');
