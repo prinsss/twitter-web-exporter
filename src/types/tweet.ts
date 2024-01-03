@@ -7,9 +7,15 @@ export interface TimelineTweet {
   tweet_results: {
     result: TweetUnion;
   };
-  tweetDisplayType: 'Tweet' | 'SelfThread';
+  tweetDisplayType: 'Tweet' | 'SelfThread' | 'MediaGrid';
   hasModeratedReplies?: boolean;
   socialContext?: unknown;
+  highlights?: {
+    textHighlights: Array<{
+      startIndex: number;
+      endIndex: number;
+    }>;
+  };
 }
 
 export type TweetUnion = Tweet | TweetWithVisibilityResults | TweetTombstone | TweetUnavailable;

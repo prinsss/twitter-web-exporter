@@ -29,7 +29,7 @@ export interface TimelineTerminateTimelineInstruction {
 }
 
 export interface TimelineEntry<
-  T = TimelineTweet | TimelineUser,
+  T = ItemContentUnion,
   C = TimelineTimelineItem<T> | TimelineTimelineModule<T> | TimelineTimelineCursor,
 > {
   content: C;
@@ -42,18 +42,20 @@ export interface TimelinePinEntryInstruction {
   entry: TimelineEntry<TimelineTweet, TimelineTimelineItem<TimelineTweet>>;
 }
 
-export interface TimelineAddEntriesInstruction<T = TimelineTweet | TimelineUser> {
+export interface TimelineAddEntriesInstruction<T = ItemContentUnion> {
   type: 'TimelineAddEntries';
   entries: TimelineEntry<T>[];
 }
 
-export interface TimelineAddToModuleInstruction<T = TimelineTweet | TimelineUser> {
+export interface TimelineAddToModuleInstruction<T = ItemContentUnion> {
   type: 'TimelineAddToModule';
-  // "conversationthread-{cid}"
+  // "conversationthread-{id}"
+  // "profile-grid-{id}"
   moduleEntryId: string;
   prepend: boolean;
   moduleItems: {
     // "conversationthread-{id}-tweet-{tid}"
+    // "profile-grid-{id}-tweet-{tid}"
     entryId: string;
     item: {
       clientEventInfo: unknown;
@@ -64,7 +66,7 @@ export interface TimelineAddToModuleInstruction<T = TimelineTweet | TimelineUser
 
 // TimelineEntry.entryId: "tweet-{id}"
 // TimelineEntry.entryId: "user-{id}"
-export interface TimelineTimelineItem<T = TimelineTweet | TimelineUser> {
+export interface TimelineTimelineItem<T = ItemContentUnion> {
   entryType: 'TimelineTimelineItem';
   __typename: 'TimelineTimelineItem';
   itemContent: T;
@@ -80,11 +82,24 @@ export interface TimelineTimelineCursor {
   cursorType: 'Top' | 'Bottom' | 'ShowMore' | 'ShowMoreThreads';
 }
 
+export interface TimelineTwitterList {
+  __typename: 'TimelineTwitterList';
+  itemType: 'TimelineTwitterList';
+  displayType: 'ListWithSubscribe';
+  list: unknown;
+}
+
+export type ItemContentUnion =
+  | TimelineTweet
+  | TimelineUser
+  | TimelineTimelineCursor
+  | TimelineTwitterList;
+
 // TimelineEntry.entryId: "who-to-follow-{id}"
 // TimelineEntry.entryId: "profile-conversation-{id}"
 // TimelineEntry.entryId: "conversationthread-{id}"
 // TimelineEntry.entryId: "tweetdetailrelatedtweets-{id}"
-export interface TimelineTimelineModule<T = TimelineTweet | TimelineUser | TimelineTimelineCursor> {
+export interface TimelineTimelineModule<T = ItemContentUnion> {
   entryType: 'TimelineTimelineModule';
   __typename: 'TimelineTimelineModule';
   clientEventInfo: unknown;
