@@ -1,5 +1,5 @@
 import { Table } from '@tanstack/table-core';
-import { IconCircleCheck, IconCircleDashed } from '@tabler/icons-preact';
+import { IconCircleCheck, IconCircleDashed, IconInfoCircle } from '@tabler/icons-preact';
 import { Modal } from '@/components/common';
 import { Tweet, User } from '@/types';
 import { useSignalState, cx, useSignal, useToggle } from '@/utils';
@@ -138,16 +138,19 @@ export function ExportMediaModal<T>({ title, table, show, onClose }: ExportMedia
     >
       {/* Modal content. */}
       <div class="px-4 text-base">
-        <p class="text-base-content text-opacity-60 mb-2 leading-5 text-sm">
+        <p class="text-base-content text-opacity-60 leading-5 text-sm">
           Download and save media files from captured data. This may take a while depending on the
           amount of data. Media that will be downloaded includes: profile images, profile banners
           (for users), images, videos (for tweets).
         </p>
-        {/* Export options. */}
-        <div class="flex items-center">
-          <p class="mr-2 leading-8">Download as zip archive:</p>
-          <input type="checkbox" checked class="checkbox checkbox-sm" disabled />
+        <div role="alert" class="alert text-sm py-2 mt-2 mb-2">
+          <IconInfoCircle size={24} />
+          <span>
+            For more than 100 media or large files, it is recommended to copy the URLs and download
+            them with an external download manager such as aria2.
+          </span>
         </div>
+        {/* Export options. */}
         <div class="flex items-center">
           <p class="mr-2 leading-8">Rate limit (ms):</p>
           <input
