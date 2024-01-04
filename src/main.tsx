@@ -9,6 +9,7 @@ import LikesModule from './modules/likes';
 import ListMembersModule from './modules/list-members';
 import ListSubscribersModule from './modules/list-subscribers';
 import RuntimeLogsModule from './modules/runtime-logs';
+import SearchTimelineModule from './modules/search-timeline';
 import TweetDetailModule from './modules/tweet-detail';
 import UserMediaModule from './modules/user-media';
 import UserTweetsModule from './modules/user-tweets';
@@ -24,6 +25,7 @@ extensions.add(LikesModule);
 extensions.add(UserTweetsModule);
 extensions.add(UserMediaModule);
 extensions.add(TweetDetailModule);
+extensions.add(SearchTimelineModule);
 extensions.add(RuntimeLogsModule);
 extensions.start();
 

@@ -1,6 +1,8 @@
 import { TimelineTweet } from './tweet';
+import { TimelineTwitterList } from './list';
 import { TimelineUser } from './user';
 
+export * from './list';
 export * from './tweet';
 export * from './user';
 
@@ -82,16 +84,21 @@ export interface TimelineTimelineCursor {
   cursorType: 'Top' | 'Bottom' | 'ShowMore' | 'ShowMoreThreads';
 }
 
-export interface TimelineTwitterList {
-  __typename: 'TimelineTwitterList';
-  itemType: 'TimelineTwitterList';
-  displayType: 'ListWithSubscribe';
-  list: unknown;
+export interface TimelinePrompt {
+  itemType: 'TimelinePrompt';
+  __typename: 'TimelinePrompt';
+}
+
+export interface TimelineMessagePrompt {
+  itemType: 'TimelineMessagePrompt';
+  __typename: 'TimelineMessagePrompt';
 }
 
 export type ItemContentUnion =
   | TimelineTweet
   | TimelineUser
+  | TimelinePrompt
+  | TimelineMessagePrompt
   | TimelineTimelineCursor
   | TimelineTwitterList;
 
@@ -99,20 +106,33 @@ export type ItemContentUnion =
 // TimelineEntry.entryId: "profile-conversation-{id}"
 // TimelineEntry.entryId: "conversationthread-{id}"
 // TimelineEntry.entryId: "tweetdetailrelatedtweets-{id}"
+// TimelineEntry.entryId: "profile-grid-{id}"
+// TimelineEntry.entryId: "search-grid-{id}"
+// TimelineEntry.entryId: "list-search-{id}"
 export interface TimelineTimelineModule<T = ItemContentUnion> {
   entryType: 'TimelineTimelineModule';
   __typename: 'TimelineTimelineModule';
   clientEventInfo: unknown;
-  displayType: 'Vertical' | 'VerticalConversation' | string;
+  displayType:
+    | 'Vertical'
+    | 'VerticalConversation'
+    | 'VerticalGrid'
+    | 'ListWithPin'
+    | 'ListWithSubscribe'
+    | string;
   items: {
     // "who-to-follow-{id}-user-{uid}"
     // "profile-conversation-{id}-tweet-{tid}"
     // "conversationthread-{id}-tweet-{tid}"
     // "conversationthread-{id}-cursor-showmore-{cid}"
     // "tweetdetailrelatedtweets-{id}-tweet-{tid}"
+    // "profile-grid-{id}-tweet-{tid}"
+    // "search-grid-{id}-tweet-{tid}"
+    // "list-search-{id}-list-{lid}"
     entryId: string;
     item: {
       clientEventInfo: unknown;
+      feedbackInfo: unknown;
       itemContent: T;
     };
   }[];

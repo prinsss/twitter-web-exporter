@@ -1,4 +1,5 @@
 import {
+  ItemContentUnion,
   Media,
   TimelineAddEntriesInstruction,
   TimelineEntry,
@@ -6,6 +7,7 @@ import {
   TimelineTimelineItem,
   TimelineTimelineModule,
   TimelineTweet,
+  TimelineTwitterList,
   TimelineUser,
   Tweet,
   TweetUnion,
@@ -67,7 +69,7 @@ export function extractTimelineTweet(itemContent: TimelineTweet): Tweet | null {
 |--------------------------------------------------------------------------
 */
 
-export function isTimelineEntryItem<T extends TimelineTweet | TimelineUser>(
+export function isTimelineEntryItem<T extends ItemContentUnion>(
   entry: TimelineEntry,
 ): entry is TimelineEntry<T, TimelineTimelineItem<T>> {
   return entry.content.entryType === 'TimelineTimelineItem';
@@ -93,7 +95,7 @@ export function isTimelineEntryUser(
   );
 }
 
-export function isTimelineEntryModule<T extends TimelineTweet | TimelineUser>(
+export function isTimelineEntryModule<T extends ItemContentUnion>(
   entry: TimelineEntry,
 ): entry is TimelineEntry<T, TimelineTimelineModule<T>> {
   return entry.content.entryType === 'TimelineTimelineModule';
@@ -115,6 +117,26 @@ export function isTimelineEntryProfileConversation(
   return (
     isTimelineEntryModule<TimelineTweet>(entry) &&
     entry.entryId.startsWith('profile-conversation-') &&
+    Array.isArray(entry.content.items)
+  );
+}
+
+export function isTimelineEntrySearchGrid(
+  entry: TimelineEntry,
+): entry is TimelineEntry<TimelineTweet, TimelineTimelineModule<TimelineTweet>> {
+  return (
+    isTimelineEntryModule<TimelineTweet>(entry) &&
+    entry.entryId.startsWith('search-grid-') &&
+    Array.isArray(entry.content.items)
+  );
+}
+
+export function isTimelineEntryListSearch(
+  entry: TimelineEntry,
+): entry is TimelineEntry<TimelineTwitterList, TimelineTimelineModule<TimelineTwitterList>> {
+  return (
+    isTimelineEntryModule<TimelineTwitterList>(entry) &&
+    entry.entryId.startsWith('list-search-') &&
     Array.isArray(entry.content.items)
   );
 }
