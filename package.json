@@ -11,6 +11,9 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "prepare": "husky install",
+    "lint": "eslint --ignore-pattern dist --ext .ts,.tsx .",
+    "commitlint": "commitlint --edit",
     "changelog": "git-cliff -o CHANGELOG.md",
     "preview": "vite preview"
   },
@@ -24,12 +27,20 @@
     "preact": "10.19.3"
   },
   "devDependencies": {
+    "@commitlint/cli": "^18.4.4",
+    "@commitlint/config-conventional": "^18.4.4",
     "@preact/preset-vite": "^2.7.0",
     "@types/file-saver": "^2.0.7",
     "@types/node": "^20",
+    "@typescript-eslint/eslint-plugin": "^6.17.0",
+    "@typescript-eslint/parser": "^6.17.0",
     "autoprefixer": "^10.4.16",
     "daisyui": "^4.4.24",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.1.2",
     "git-cliff": "^1.4.0",
+    "husky": "^8.0.3",
     "postcss-prefix-selector": "^1.16.0",
     "postcss-rem-to-pixel-next": "^5.0.3",
     "tailwindcss": "^3.4.0",
