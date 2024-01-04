@@ -11,6 +11,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "changelog": "git-cliff -o CHANGELOG.md",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -28,6 +29,7 @@
     "@types/node": "^20",
     "autoprefixer": "^10.4.16",
     "daisyui": "^4.4.24",
+    "git-cliff": "^1.4.0",
     "postcss-prefix-selector": "^1.16.0",
     "postcss-rem-to-pixel-next": "^5.0.3",
     "tailwindcss": "^3.4.0",
