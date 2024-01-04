@@ -135,7 +135,7 @@ export const columns = [
         {extractTweetMedia(info.row.original).map((media) => (
           <div
             key={media.media_key}
-            class="flex-shrink-0 block cursor-pointer relative w-12 h-12 rounded"
+            class="flex-shrink-0 block cursor-pointer relative w-12 h-12 rounded bg-base-300 overflow-hidden"
             onClick={() => info.table.options.meta?.setMediaPreview(getMediaOriginalUrl(media))}
           >
             <img
