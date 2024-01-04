@@ -21,15 +21,16 @@
 
 ## Features
 
-- 🚚 Export tweets, replies and likes of any user as JSON/CSV/HTML.
-- 🔖 Export your bookmarks. (without the max 800 limit!)
-- 💞 Export following, followers list of any user.
-- 👥 Export list members and subscribers.
-- 📦 Download images and videos from tweets in bulk at original size.
-- 🚀 No developer account or API key required.
-- 🛠️ Ship as a UserScript and everything is done in your browser.
-- 💾 Your data never leaves your computer.
-- 💚 Completely free and open-source.
+- 🚚 Export tweets, replies and likes of any user as JSON/CSV/HTML
+- 🔖 Export your bookmarks (without the max 800 limit!)
+- 💞 Export following, followers list of any user
+- 👥 Export list members and subscribers
+- 🔍 Export search results
+- 📦 Download images and videos from tweets in bulk at original size
+- 🚀 No developer account or API key required
+- 🛠️ Ship as a UserScript and everything is done in your browser
+- 💾 Your data never leaves your computer
+- 💚 Completely free and open-source
 
 ## Installation
 
@@ -42,8 +43,9 @@ Once the script is installed, you can find a floating panel on the left side of 
 
 Then open the page that you want to export data from. The script will automatically capture on the following pages:
 
-- User profile page (tweets, replies, likes)
+- User profile page (tweets, replies, media, likes)
 - Bookmark page
+- Search results page
 - User following/followers page
 - List members/subscribers page
 
