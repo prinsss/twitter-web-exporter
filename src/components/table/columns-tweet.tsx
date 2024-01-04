@@ -1,5 +1,10 @@
 import { createColumnHelper } from '@tanstack/table-core';
-import { formatDateTime, parseTwitterDateTime, strEntitiesToHTML } from '@/utils/common';
+import {
+  formatDateTime,
+  formatVideoDuration,
+  parseTwitterDateTime,
+  strEntitiesToHTML,
+} from '@/utils/common';
 import { Tweet } from '@/types';
 import {
   extractRetweetedTweet,
@@ -8,7 +13,6 @@ import {
   formatTwitterImage,
   getMediaOriginalUrl,
   getProfileImageOriginalUrl,
-  extractTweetUnion,
   extractQuotedTweet,
   extractTweetFullText,
 } from '@/utils/api';
@@ -130,14 +134,22 @@ export const columns = [
       <div class="flex flex-row items-start space-x-1 w-max">
         {extractTweetMedia(info.row.original).map((media) => (
           <div
-            class="flex-shrink-0 block cursor-pointer"
+            key={media.media_key}
+            class="flex-shrink-0 block cursor-pointer relative w-12 h-12 rounded"
             onClick={() => info.table.options.meta?.setMediaPreview(getMediaOriginalUrl(media))}
           >
             <img
-              key={media.media_key}
-              class="w-12 h-12 rounded"
+              class="w-full h-full object-cover"
               src={formatTwitterImage(media.media_url_https, 'thumb')}
             />
+            {/* Show video duration or GIF. */}
+            {media.type !== 'photo' && (
+              <div class="absolute bottom-0.5 left-0.5 h-4 w-max px-0.5 text-xs text-white bg-black bg-opacity-30 leading-4 text-center rounded">
+                {media.type === 'video'
+                  ? formatVideoDuration(media.video_info?.duration_millis)
+                  : 'GIF'}
+              </div>
+            )}
           </div>
         ))}
         {extractTweetMedia(info.row.original).length ? null : 'N/A'}

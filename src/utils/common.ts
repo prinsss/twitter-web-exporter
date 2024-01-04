@@ -33,7 +33,7 @@ export function useSignalState<T>(value: T) {
 
   const updateSignal = (newValue: T) => {
     signal.value = newValue;
-  }
+  };
 
   return [signal.value, updateSignal, signal] as const;
 }
@@ -126,4 +126,16 @@ export function formatDateTime(date: string | number | dayjs.Dayjs) {
 
   // Display in local time zone.
   return date.format('YYYY-MM-DD HH:mm:ss');
+}
+
+export function formatVideoDuration(durationInMs?: number): string {
+  if (typeof durationInMs !== 'number' || Number.isNaN(durationInMs)) {
+    return 'N/A';
+  }
+
+  const durationInSeconds = Math.floor(durationInMs / 1000);
+  const minutes = Math.floor(durationInSeconds / 60);
+  const seconds = durationInSeconds % 60;
+
+  return `${minutes}:${seconds.toString().padStart(2, '0')}`;
 }
