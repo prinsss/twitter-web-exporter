@@ -30,10 +30,12 @@ declare module '@tanstack/table-core' {
     setRawDataPreview: (data: TData | null) => void;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   interface ColumnMeta<TData extends RowData, TValue> {
     exportable?: boolean;
     exportKey?: string;
     exportHeader?: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     exportValue?: (row: Row<TData>) => any;
   }
 }

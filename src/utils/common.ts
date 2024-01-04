@@ -58,10 +58,11 @@ export function useToggle(defaultValue = false) {
  * @example
  * cx('foo', 'bar', false && 'baz') // => 'foo bar'
  */
-export function cx(...classNames: any[]) {
+export function cx(...classNames: (string | boolean | undefined)[]) {
   return classNames.filter(Boolean).join(' ');
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function isEqual(obj1: any, obj2: any) {
   return JSON.stringify(obj1) === JSON.stringify(obj2);
 }

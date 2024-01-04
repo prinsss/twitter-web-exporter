@@ -102,6 +102,7 @@ export class ExtensionManager {
    * This need to be done before any XHR request is made.
    */
   private installHttpHooks() {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     const manager = this;
 
     unsafeWindow.XMLHttpRequest.prototype.open = function (method: string, url: string) {
@@ -128,6 +129,7 @@ export class ExtensionManager {
       });
 
       // @ts-expect-error it's fine.
+      // eslint-disable-next-line prefer-rest-params
       xhrOpen.apply(this, arguments);
     };
 

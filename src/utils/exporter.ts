@@ -11,13 +11,14 @@ export const EXPORT_FORMAT = {
 
 export type ExportFormatType = (typeof EXPORT_FORMAT)[keyof typeof EXPORT_FORMAT];
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type DataType = Record<string, any>;
 
 /**
  * Escape characters for CSV file.
  */
 export function csvEscapeStr(str: string) {
-  return `"${str.replace(/\"/g, '""').replace(/\n/g, '\\n').replace(/\r/g, '\\r')}"`;
+  return `"${str.replace(/"/g, '""').replace(/\n/g, '\\n').replace(/\r/g, '\\r')}"`;
 }
 
 /**

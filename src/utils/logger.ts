@@ -8,6 +8,9 @@ export interface LogLine {
 
 export const logLinesSignal = signal<LogLine[]>([]);
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type LogExtraArgs = any[];
+
 /**
  * Global logger that writes logs to both screen and console.
  */
@@ -16,22 +19,22 @@ class Logger {
   private buffer: LogLine[] = [];
   private bufferTimer: number | null = null;
 
-  public info(line: string, ...args: any[]) {
+  public info(line: string, ...args: LogExtraArgs) {
     console.info('[twitter-web-exporter]', line, ...args);
     this.writeBuffer({ type: 'info', line, index: this.index++ });
   }
 
-  public warn(line: string, ...args: any[]) {
+  public warn(line: string, ...args: LogExtraArgs) {
     console.warn('[twitter-web-exporter]', line, ...args);
     this.writeBuffer({ type: 'warn', line, index: this.index++ });
   }
 
-  public error(line: string, ...args: any[]) {
+  public error(line: string, ...args: LogExtraArgs) {
     console.error('[twitter-web-exporter]', line, ...args);
     this.writeBuffer({ type: 'error', line, index: this.index++ });
   }
 
-  public errorWithBanner(msg: string, err?: Error, ...args: any[]) {
+  public errorWithBanner(msg: string, err?: Error, ...args: LogExtraArgs) {
     this.error(
       `${msg} (Message: ${err?.message ?? 'none'})\n` +
         '  This may be a problem caused by Twitter updates.\n  Please file an issue on GitHub:\n' +
@@ -40,7 +43,7 @@ class Logger {
     );
   }
 
-  public debug(...args: any[]) {
+  public debug(...args: LogExtraArgs) {
     console.debug('[twitter-web-exporter]', ...args);
   }
 

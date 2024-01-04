@@ -1,3 +1,4 @@
+/* eslint-disable no-var, @typescript-eslint/ban-ts-comment */
 // @ts-nocheck
 /**
  * This file zip-stream.ts is copied from StreamSaver.js.

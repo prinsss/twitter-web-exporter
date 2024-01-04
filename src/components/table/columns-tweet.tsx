@@ -106,7 +106,7 @@ export const columns = [
             class="link"
             onClick={() =>
               info.table.options.meta?.setRawDataPreview(
-                extractTweetFullText(info.row.original) as any,
+                extractTweetFullText(info.row.original) as unknown as Tweet,
               )
             }
           >

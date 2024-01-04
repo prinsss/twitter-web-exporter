@@ -7,11 +7,7 @@ import {
   TimelineTweet,
   Tweet,
 } from '@/types';
-import {
-  extractTimelineTweet,
-  isTimelineEntryProfileGrid,
-  isTimelineEntryTweet,
-} from '@/utils/api';
+import { extractTimelineTweet, isTimelineEntryProfileGrid } from '@/utils/api';
 import logger from '@/utils/logger';
 
 // The global store for "UserMedia".

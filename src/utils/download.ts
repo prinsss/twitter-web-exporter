@@ -34,6 +34,7 @@ export async function zipStreamDownload(
 
   // Add files to zip archive stream.
   const readableZipStream: ReadableStream = createWriter({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     async pull(ctrl: any) {
       const fileInfo = fileIterator.next();
       if (fileInfo.done) {
@@ -64,6 +65,7 @@ export async function zipStreamDownload(
     },
   });
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const chunks: any[] = [];
   const writableOutputStream = new WritableStream({
     write(chunk) {
