@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.7](https://github.com/prinsss/twitter-web-exporter/compare/v1.0.6..v1.0.7) - 2024-01-04
+
+### ⛰️  Features
+
+- Show media type and video duration in table - ([5683d6f](https://github.com/prinsss/twitter-web-exporter/commit/5683d6f244dea2c1742ba76cda0cffdb4be31aa4))
+
+### 🐛 Bug Fixes
+
+- Missing tweets in UserMedia - ([34f5b69](https://github.com/prinsss/twitter-web-exporter/commit/34f5b69b19d935fc477a9bfa8e1a5ec40391d7c9))
+
+### 📚 Documentation
+
+- Update README - ([89bf712](https://github.com/prinsss/twitter-web-exporter/commit/89bf7121c8fde4f4c99fed4348e564bbc94c127c))
+- Add CHANGELOG - ([4b1a8f4](https://github.com/prinsss/twitter-web-exporter/commit/4b1a8f463bca3d16e4fa7814f0a65fe7c8b3341b))
+
 ## [1.0.6](https://github.com/prinsss/twitter-web-exporter/compare/v1.0.5..v1.0.6) - 2024-01-04
 
 ### ⛰️  Features
