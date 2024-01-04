@@ -121,6 +121,16 @@ export function isTimelineEntryProfileConversation(
   );
 }
 
+export function isTimelineEntryProfileGrid(
+  entry: TimelineEntry,
+): entry is TimelineEntry<TimelineTweet, TimelineTimelineModule<TimelineTweet>> {
+  return (
+    isTimelineEntryModule<TimelineTweet>(entry) &&
+    entry.entryId.startsWith('profile-grid-') &&
+    Array.isArray(entry.content.items)
+  );
+}
+
 export function isTimelineEntrySearchGrid(
   entry: TimelineEntry,
 ): entry is TimelineEntry<TimelineTweet, TimelineTimelineModule<TimelineTweet>> {
