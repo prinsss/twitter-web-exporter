@@ -75,6 +75,7 @@ export const UserMediaInterceptor: Interceptor = (req, res) => {
 
     logger.info(`UserMedia: ${newData.length} items received`);
   } catch (err) {
+    logger.debug(req.method, req.url, res.status, res.responseText);
     logger.errorWithBanner('UserMedia: Failed to parse API response', err as Error);
   }
 };

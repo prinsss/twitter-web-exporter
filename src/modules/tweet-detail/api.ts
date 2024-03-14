@@ -86,6 +86,7 @@ export const TweetDetailInterceptor: Interceptor = (req, res) => {
 
     logger.info(`TweetDetail: ${newData.length} items received`);
   } catch (err) {
+    logger.debug(req.method, req.url, res.status, res.responseText);
     logger.errorWithBanner('TweetDetail: Failed to parse API response', err as Error);
   }
 };

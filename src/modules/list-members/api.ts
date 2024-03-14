@@ -39,6 +39,7 @@ export const ListMembersInterceptor: Interceptor = (req, res) => {
 
     logger.info(`ListMembers: ${newData.length} items received`);
   } catch (err) {
+    logger.debug(req.method, req.url, res.status, res.responseText);
     logger.errorWithBanner('ListMembers: Failed to parse API response', err as Error);
   }
 };

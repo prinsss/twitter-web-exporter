@@ -38,6 +38,7 @@ export const BookmarksInterceptor: Interceptor = (req, res) => {
 
     logger.info(`Bookmarks: ${newData.length} items received`);
   } catch (err) {
+    logger.debug(req.method, req.url, res.status, res.responseText);
     logger.errorWithBanner('Bookmarks: Failed to parse API response', err as Error);
   }
 };

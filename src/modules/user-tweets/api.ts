@@ -87,6 +87,7 @@ export const UserTweetsInterceptor: Interceptor = (req, res) => {
 
     logger.info(`UserTweets: ${newData.length} items received`);
   } catch (err) {
+    logger.debug(req.method, req.url, res.status, res.responseText);
     logger.errorWithBanner('UserTweets: Failed to parse API response', err as Error);
   }
 };
