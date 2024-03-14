@@ -77,7 +77,7 @@ export function Modal({
 
   return (
     <dialog class="modal modal-open" open>
-      <div class={cx('modal-box p-3', className)}>
+      <div class={cx('modal-box p-3 flex flex-col', className)}>
         <header class="flex items-center h-9 mb-2">
           <div
             onClick={onClose}

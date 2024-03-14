@@ -83,7 +83,7 @@ export function ExportMediaModal<T>({
       onClose={onClose}
     >
       {/* Modal content. */}
-      <div class="px-4 text-base">
+      <div class="px-4 text-base overflow-y-scroll overscroll-none">
         <p class="text-base-content text-opacity-60 leading-5 text-sm">
           Download and save media files from captured data. This may take a while depending on the
           amount of data. Media that will be downloaded includes: profile images, profile banners
@@ -143,7 +143,7 @@ export function ExportMediaModal<T>({
           </div>
         </div>
         {/* Media list preview. */}
-        <div class="my-3 max-h-60 overflow-scroll overscroll-none">
+        <div class="my-3 overflow-x-scroll">
           <table class="table table-xs table-zebra">
             <thead>
               <tr>
@@ -192,13 +192,13 @@ export function ExportMediaModal<T>({
             value={(currentProgress / (totalProgress || 1)) * 100}
             max="100"
           />
-          <span class="text-sm leading-none mt-2 text-base-content text-opacity-60">
+          <span class="text-sm h-2 leading-none mt-2 text-base-content text-opacity-60">
             {`${currentProgress}/${mediaList.length}`}
           </span>
         </div>
       </div>
       {/* Action buttons. */}
-      <div class="flex space-x-2">
+      <div class="flex space-x-2 mt-2">
         <span class="flex-grow" />
         <button class="btn" onClick={onClose}>
           Cancel

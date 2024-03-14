@@ -85,7 +85,7 @@ export function TableView<T>({ title, recordsSignal, isTweet }: TableViewProps<T
     <>
       <SearchArea defaultValue={table.getState().globalFilter} onChange={table.setGlobalFilter} />
       {/* Data view. */}
-      <main class="max-w-full h-[600px] overflow-scroll bg-base-200 overscroll-none">
+      <main class="max-w-full grow overflow-scroll bg-base-200 overscroll-none">
         <table class="table table-pin-rows table-border-bc table-padding-sm">
           <thead>
             {table.getHeaderGroups().map((headerGroup) => (
