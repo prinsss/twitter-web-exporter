@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.8](https://github.com/prinsss/twitter-web-exporter/compare/v1.0.7..v1.0.8) - 2024-03-14
+
+### ⛰️  Features
+
+- Add more debug logs - ([8bb6722](https://github.com/prinsss/twitter-web-exporter/commit/8bb6722c54c2643f568443f9a4361a262c3b202f))
+- Add background color for media thumbnail - ([92ad416](https://github.com/prinsss/twitter-web-exporter/commit/92ad4162160d75da768e88311a4d73829f3024e1))
+
+### 🐛 Bug Fixes
+
+- Better responsive design - ([0b5340d](https://github.com/prinsss/twitter-web-exporter/commit/0b5340d95ba96f16fa092d20791e53c19edc4536))
+- Parse error when tweet visibility is limited - ([7b707d9](https://github.com/prinsss/twitter-web-exporter/commit/7b707d952762d5e420728c1d3a2e4e91a241d1e6))
+
+### 🎨 Styling
+
+- Fix eslint errors - ([1c97af5](https://github.com/prinsss/twitter-web-exporter/commit/1c97af5dbf80dcaca11dd7bd2b283fbd3ae9bece))
+
+### ⚙️ Miscellaneous Tasks
+
+- Add eslint commitlint husky - ([a18c6ea](https://github.com/prinsss/twitter-web-exporter/commit/a18c6ea9be76435ba3ad1c03f29cdf9688a9dc61))
+
 ## [1.0.7](https://github.com/prinsss/twitter-web-exporter/compare/v1.0.6..v1.0.7) - 2024-01-04
 
 ### ⛰️  Features
