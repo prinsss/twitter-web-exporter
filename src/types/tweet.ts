@@ -5,7 +5,9 @@ export interface TimelineTweet {
   itemType: 'TimelineTweet';
   __typename: 'TimelineTweet';
   tweet_results: {
-    result: TweetUnion;
+    // In rare cases, for example when a tweet has its visibility limited by Twitter,
+    // this field may not be present.
+    result?: TweetUnion;
   };
   tweetDisplayType: 'Tweet' | 'SelfThread' | 'MediaGrid';
   hasModeratedReplies?: boolean;

@@ -58,7 +58,17 @@ export function extractDataFromResponse<
  * Extract the real tweet object from the wrapper.
  */
 export function extractTimelineTweet(itemContent: TimelineTweet): Tweet | null {
-  return extractTweetUnion(itemContent.tweet_results.result);
+  const tweetUnion = itemContent.tweet_results.result;
+
+  if (!tweetUnion) {
+    logger.warn(
+      "TimelineTweet is empty. This could happen when the tweet's visibility is limited by Twitter.",
+      itemContent,
+    );
+    return null;
+  }
+
+  return extractTweetUnion(tweetUnion);
 }
 
 /*
@@ -179,8 +189,10 @@ export function extractTweetUnion(tweet: TweetUnion): Tweet | null {
       return null;
     }
 
+    logger.debug(tweet);
     logger.errorWithBanner('Unknown tweet type received');
   } catch (err) {
+    logger.debug(tweet);
     logger.errorWithBanner('Failed to extract tweet', err as Error);
   }
 
