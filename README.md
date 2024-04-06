@@ -113,6 +113,9 @@ A: You don't need a developer account for accessing the Twitter API. You don't n
 **Q: The script does not work!** <br>
 A: A platform upgrade will possibly breaks the script's functionality. Please file an [issue](https://github.com/prinsss/twitter-web-exporter/issues) if you encountered any problem.
 
+**Q: It's not working on Firefox!** <br>
+A: You should enable Tampermonkey `Add Tampermonkey to the HTML's CSP` experimental feature to make the script work on Firefox, follow this [issue](https://github.com/prinsss/twitter-web-exporter/issues/8#issuecomment-2041025363)
+
 ## License
 
 [MIT](LICENSE)
