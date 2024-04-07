@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.9](https://github.com/prinsss/twitter-web-exporter/compare/v1.0.8..v1.0.9) - 2024-04-07
+
+### ⛰️  Features
+
+- Add URL field to exported files #6 - ([4eba0b4](https://github.com/prinsss/twitter-web-exporter/commit/4eba0b47ac2cbe19dfefb4a5de2a0a6d857db3ad))
+- Support custom date time format #8 - ([1fc98ff](https://github.com/prinsss/twitter-web-exporter/commit/1fc98ff4ab9fcbe2c79ed8cb54da3654286d2d29))
+
 ## [1.0.8](https://github.com/prinsss/twitter-web-exporter/compare/v1.0.7..v1.0.8) - 2024-03-14
 
 ### ⛰️  Features
