@@ -1,6 +1,7 @@
 import { createColumnHelper } from '@tanstack/table-core';
 import { formatDateTime, parseTwitterDateTime, strEntitiesToHTML } from '@/utils/common';
 import { getProfileImageOriginalUrl } from '@/utils/api';
+import { options } from '@/core/storage';
 import { User } from '@/types';
 
 const columnHelper = createColumnHelper<User>();
@@ -143,9 +144,15 @@ export const columns = [
     meta: {
       exportKey: 'created_at',
       exportHeader: 'Created At',
-      exportValue: (row) => row.original.legacy.created_at,
+      exportValue: (row) =>
+        formatDateTime(
+          parseTwitterDateTime(row.original.legacy.created_at),
+          options.get('dateTimeFormat'),
+        ),
     },
     header: () => <span>Created At</span>,
-    cell: (info) => <p class="w-24">{formatDateTime(info.getValue())}</p>,
+    cell: (info) => (
+      <p class="w-24">{formatDateTime(info.getValue(), options.get('dateTimeFormat'))}</p>
+    ),
   }),
 ];

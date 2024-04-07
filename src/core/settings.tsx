@@ -1,5 +1,5 @@
 import { Fragment } from 'preact';
-import { IconSettings, IconBrandGithubFilled } from '@tabler/icons-preact';
+import { IconSettings, IconBrandGithubFilled, IconHelp } from '@tabler/icons-preact';
 
 import packageJson from '@/../package.json';
 import { Modal } from '@/components/common';
@@ -58,6 +58,30 @@ export function Settings() {
               checked={options.get('debug')}
               onChange={(e) => {
                 options.set('debug', (e.target as HTMLInputElement)?.checked);
+              }}
+            />
+          </label>
+          <label class={styles.item}>
+            <div class="flex items-center">
+              <span class="label-text">Date Time Format</span>
+              <a
+                href="https://day.js.org/docs/en/display/format"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="tooltip tooltip-bottom ml-0.5 before:whitespace-pre-line before:max-w-max"
+                data-tip={
+                  'Click for more information.\nThis will take effect on both\n previewer and exported files.'
+                }
+              >
+                <IconHelp size={20} />
+              </a>
+            </div>
+            <input
+              type="text"
+              class="input input-bordered input-xs w-48"
+              value={options.get('dateTimeFormat')}
+              onChange={(e) => {
+                options.set('dateTimeFormat', (e.target as HTMLInputElement)?.value);
               }}
             />
           </label>

@@ -5,6 +5,7 @@ import {
   parseTwitterDateTime,
   strEntitiesToHTML,
 } from '@/utils/common';
+import { options } from '@/core/storage';
 import { Tweet } from '@/types';
 import {
   extractRetweetedTweet,
@@ -68,7 +69,11 @@ export const columns = [
     meta: {
       exportKey: 'created_at',
       exportHeader: 'Date',
-      exportValue: (row) => row.original.legacy.created_at,
+      exportValue: (row) =>
+        formatDateTime(
+          parseTwitterDateTime(row.original.legacy.created_at),
+          options.get('dateTimeFormat'),
+        ),
     },
     header: () => <span>Date</span>,
     cell: (info) => (
@@ -78,7 +83,7 @@ export const columns = [
           target="_blank"
           href={`https://twitter.com/i/status/${info.row.original.legacy.id_str}`}
         >
-          {formatDateTime(info.getValue())}
+          {formatDateTime(info.getValue(), options.get('dateTimeFormat'))}
         </a>
       </p>
     ),

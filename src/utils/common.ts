@@ -120,13 +120,13 @@ export function parseTwitterDateTime(str: string) {
   return dayjs(trimmed, 'MMM DD HH:mm:ss ZZ YYYY', 'en');
 }
 
-export function formatDateTime(date: string | number | dayjs.Dayjs) {
+export function formatDateTime(date: string | number | dayjs.Dayjs, format?: string) {
   if (typeof date === 'number' || typeof date === 'string') {
     date = dayjs(date);
   }
 
   // Display in local time zone.
-  return date.format('YYYY-MM-DD HH:mm:ss');
+  return date.format(format);
 }
 
 export function formatVideoDuration(durationInMs?: number): string {
