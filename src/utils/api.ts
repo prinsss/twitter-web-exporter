@@ -298,3 +298,15 @@ export function getFileExtensionFromUrl(url: string): string {
   const match = regex.exec(url);
   return match?.[1] ?? match?.[2] ?? match?.[3] ?? 'jpg';
 }
+
+export function getTweetURL(tweet: Tweet): string {
+  return `https://twitter.com/${extractTweetUserScreenName(tweet)}/status/${tweet.legacy.id_str}`;
+}
+
+export function getUserURL(user: User): string {
+  return `https://twitter.com/${user.legacy.screen_name}`;
+}
+
+export function getInReplyToTweetURL(tweet: Tweet): string {
+  return `https://twitter.com/${tweet.legacy.in_reply_to_screen_name}/status/${tweet.legacy.in_reply_to_status_id_str}`;
+}

@@ -123,6 +123,12 @@ export async function htmlExporter(data: DataType[]) {
         pre.textContent = JSON.stringify(value, undefined, '  ');
         details.appendChild(pre);
         td.appendChild(details);
+      } else if (header === 'url') {
+        const link = document.createElement('a');
+        link.href = value;
+        link.target = '_blank';
+        link.textContent = value;
+        td.appendChild(link);
       } else {
         td.textContent = typeof value === 'string' ? value : JSON.stringify(row[header]);
       }

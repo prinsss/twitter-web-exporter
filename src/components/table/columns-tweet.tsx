@@ -1,4 +1,5 @@
 import { createColumnHelper } from '@tanstack/table-core';
+import { IconLink } from '@tabler/icons-preact';
 import {
   formatDateTime,
   formatVideoDuration,
@@ -16,6 +17,9 @@ import {
   getProfileImageOriginalUrl,
   extractQuotedTweet,
   extractTweetFullText,
+  getTweetURL,
+  getUserURL,
+  getInReplyToTweetURL,
 } from '@/utils/api';
 
 const columnHelper = createColumnHelper<Tweet>();
@@ -78,11 +82,7 @@ export const columns = [
     header: () => <span>Date</span>,
     cell: (info) => (
       <p class="w-24">
-        <a
-          class="link"
-          target="_blank"
-          href={`https://twitter.com/i/status/${info.row.original.legacy.id_str}`}
-        >
+        <a class="link" target="_blank" href={getTweetURL(info.row.original)}>
           {formatDateTime(info.getValue(), options.get('dateTimeFormat'))}
         </a>
       </p>
@@ -166,7 +166,11 @@ export const columns = [
     header: () => <span>Screen Name</span>,
     cell: (info) => (
       <p class="whitespace-pre">
-        <a class="link" target="_blank" href={`https://twitter.com/${info.getValue()}`}>
+        <a
+          class="link"
+          target="_blank"
+          href={getUserURL(info.row.original.core.user_results.result)}
+        >
           @{info.getValue()}
         </a>
       </p>
@@ -201,11 +205,7 @@ export const columns = [
     cell: (info) => (
       <p class="whitespace-pre">
         {info.row.original.legacy.in_reply_to_status_id_str ? (
-          <a
-            class="link"
-            target="_blank"
-            href={`https://twitter.com/i/status/${info.row.original.legacy.in_reply_to_status_id_str}`}
-          >
+          <a class="link" target="_blank" href={getInReplyToTweetURL(info.row.original)}>
             @{info.getValue()}
           </a>
         ) : (
@@ -227,7 +227,7 @@ export const columns = [
       return (
         <p class="whitespace-pre">
           {source ? (
-            <a class="link" target="_blank" href={`https://twitter.com/i/status/${source.rest_id}`}>
+            <a class="link" target="_blank" href={getTweetURL(source)}>
               @{info.getValue()}
             </a>
           ) : (
@@ -250,7 +250,7 @@ export const columns = [
       return (
         <p class="whitespace-pre">
           {source ? (
-            <a class="link" target="_blank" href={`https://twitter.com/i/status/${source.rest_id}`}>
+            <a class="link" target="_blank" href={getTweetURL(source)}>
               @{info.getValue()}
             </a>
           ) : (
@@ -309,6 +309,20 @@ export const columns = [
     meta: { exportKey: 'bookmarked', exportHeader: 'Bookmarked' },
     header: () => <span>Bookmarked</span>,
     cell: (info) => <p>{info.getValue() ? 'YES' : 'NO'}</p>,
+  }),
+  columnHelper.display({
+    id: 'url',
+    meta: {
+      exportKey: 'url',
+      exportHeader: 'URL',
+      exportValue: (row) => getTweetURL(row.original),
+    },
+    header: () => <span>URL</span>,
+    cell: (info) => (
+      <a href={getTweetURL(info.row.original)} target="_blank">
+        <IconLink />
+      </a>
+    ),
   }),
   columnHelper.display({
     id: 'actions',

@@ -1,6 +1,7 @@
 import { createColumnHelper } from '@tanstack/table-core';
+import { IconLink } from '@tabler/icons-preact';
 import { formatDateTime, parseTwitterDateTime, strEntitiesToHTML } from '@/utils/common';
-import { getProfileImageOriginalUrl } from '@/utils/api';
+import { getProfileImageOriginalUrl, getUserURL } from '@/utils/api';
 import { options } from '@/core/storage';
 import { User } from '@/types';
 
@@ -43,7 +44,7 @@ export const columns = [
     header: () => <span>Screen Name</span>,
     cell: (info) => (
       <p class="whitespace-pre">
-        <a class="link" target="_blank" href={`https://twitter.com/${info.getValue()}`}>
+        <a class="link" target="_blank" href={getUserURL(info.row.original)}>
           @{info.getValue()}
         </a>
       </p>
@@ -153,6 +154,20 @@ export const columns = [
     header: () => <span>Created At</span>,
     cell: (info) => (
       <p class="w-24">{formatDateTime(info.getValue(), options.get('dateTimeFormat'))}</p>
+    ),
+  }),
+  columnHelper.display({
+    id: 'url',
+    meta: {
+      exportKey: 'url',
+      exportHeader: 'URL',
+      exportValue: (row) => getUserURL(row.original),
+    },
+    header: () => <span>URL</span>,
+    cell: (info) => (
+      <a href={getUserURL(info.row.original)} target="_blank">
+        <IconLink />
+      </a>
     ),
   }),
 ];
