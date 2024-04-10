@@ -24,9 +24,11 @@ export function csvEscapeStr(str: string) {
 /**
  * Save a text file to disk.
  */
-export function saveFile(filename: string, content: string) {
+export function saveFile(filename: string, content: string, prependBOM: boolean = false) {
   const link = document.createElement('a');
-  const blob = new Blob([content], { type: 'text/plain' });
+  const blob = new Blob(prependBOM ? [new Uint8Array([0xef, 0xbb, 0xbf]), content] : [content], {
+    type: 'text/plain;charset=utf-8',
+  });
   const url = URL.createObjectURL(blob);
 
   link.href = url;
@@ -41,6 +43,7 @@ export function saveFile(filename: string, content: string) {
 export async function exportData(data: DataType[], format: ExportFormatType, filename: string) {
   try {
     let content = '';
+    let prependBOM = false;
     logger.info(`Exporting to ${format} file: ${filename}`);
 
     switch (format) {
@@ -51,11 +54,11 @@ export async function exportData(data: DataType[], format: ExportFormatType, fil
         content = await htmlExporter(data);
         break;
       case EXPORT_FORMAT.CSV:
+        prependBOM = true;
         content = await csvExporter(data);
         break;
     }
-
-    saveFile(filename, content);
+    saveFile(filename, content, prependBOM);
   } catch (err) {
     logger.errorWithBanner('Failed to export file', err as Error);
   }
