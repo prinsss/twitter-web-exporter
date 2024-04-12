@@ -2,7 +2,7 @@ import { Table } from '@tanstack/table-core';
 import { IconCircleCheck, IconCircleDashed, IconInfoCircle } from '@tabler/icons-preact';
 
 import { FileLike, ProgressCallback, zipStreamDownload } from '@/utils/download';
-import { DEFAULT_FILENAME_PATTERN, FILENAME_PATTERN_TOOLTIP, extractMedia } from '@/utils/media';
+import { DEFAULT_FILENAME_PATTERN, extractMedia, patterns } from '@/utils/media';
 import { Modal } from '@/components/common';
 import { TranslationKey, useTranslation } from '@/i18n';
 import { Tweet, User } from '@/types';
@@ -106,7 +106,9 @@ export function ExportMediaModal<T>({
             <p class="mr-2 leading-8">{t('Filename template:')}</p>
             <div
               class="flex-grow tooltip tooltip-bottom before:whitespace-pre-line before:max-w-max"
-              data-tip={FILENAME_PATTERN_TOOLTIP}
+              data-tip={Object.entries(patterns)
+                .map(([key, value]) => `{${key}} - ${t(value.description as TranslationKey)}`)
+                .reduce((acc, cur) => acc + cur + '\n', '')}
             >
               <input
                 type="text"

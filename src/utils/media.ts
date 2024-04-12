@@ -55,10 +55,6 @@ export const patterns: Record<string, { description: string; extractor: PatternE
 
 export const DEFAULT_FILENAME_PATTERN = '{screen_name}_{id}_{type}_{num}_{date}.{ext}';
 
-export const FILENAME_PATTERN_TOOLTIP = Object.entries(patterns)
-  .map(([key, value]) => `{${key}} - ${value.description}`)
-  .reduce((acc, cur) => acc + cur + '\n', '');
-
 /**
  * Extract media from tweets and users.
  */
