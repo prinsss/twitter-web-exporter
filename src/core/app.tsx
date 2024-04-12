@@ -4,6 +4,7 @@ import { IconX } from '@tabler/icons-preact';
 
 import { ErrorBoundary } from '@/components/error-boundary';
 import { CatIcon } from '@/components/common';
+import { useTranslation } from '@/i18n';
 import { cx, useSignal } from '@/utils/common';
 import logger from '@/utils/logger';
 
@@ -12,6 +13,8 @@ import { Settings } from './settings';
 import { options } from './storage';
 
 export function App() {
+  const { t } = useTranslation();
+
   const extensions = useSignal<Extension[]>([]);
   const currentTheme = useSignal(options.get('theme'));
   const showControlPanel = useSignal(options.get('showControlPanel'));
@@ -69,7 +72,7 @@ export function App() {
           </div>
         </header>
         <p class="text-sm text-base-content text-opacity-70 mb-1 leading-none">
-          Refresh or clear to start new captures.
+          {t('Refresh or clear to start new captures.')}
         </p>
         <div class="divider mt-0 mb-0"></div>
         {/* Extensions UI. */}

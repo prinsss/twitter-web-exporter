@@ -12,6 +12,7 @@ export interface AppOptions {
   showControlPanel?: boolean;
   disabledExtensions?: string[];
   dateTimeFormat?: string;
+  language?: string;
   version?: string;
 }
 
@@ -21,6 +22,7 @@ export const DEFAULT_APP_OPTIONS: AppOptions = {
   showControlPanel: true,
   disabledExtensions: [],
   dateTimeFormat: 'YYYY-MM-DD HH:mm:ss Z',
+  language: '',
   version: packageJson.version,
 };
 

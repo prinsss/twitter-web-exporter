@@ -24,6 +24,7 @@
     "@tanstack/table-core": "8.11.2",
     "dayjs": "1.11.10",
     "file-saver": "2.0.5",
+    "i18next": "23.11.1",
     "preact": "10.19.3"
   },
   "devDependencies": {
@@ -46,6 +47,7 @@
     "tailwindcss": "^3.4.0",
     "typescript": "^5.3.3",
     "vite": "^5.0.10",
+    "vite-plugin-i18next-loader": "^2.0.12",
     "vite-plugin-monkey": "^3.5.1"
   }
 }

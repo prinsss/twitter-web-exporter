@@ -3,6 +3,7 @@ import { fileURLToPath, URL } from 'node:url';
 
 import preact from '@preact/preset-vite';
 import monkey from 'vite-plugin-monkey';
+import i18nextLoader from 'vite-plugin-i18next-loader';
 
 import tailwindcss from 'tailwindcss';
 import autoprefixer from 'autoprefixer';
@@ -45,6 +46,7 @@ export default defineConfig({
   },
   plugins: [
     preact(),
+    i18nextLoader({ paths: ['./src/i18n/locales'], namespaceResolution: 'basename' }),
     monkey({
       entry: 'src/main.tsx',
       userscript: {
@@ -60,6 +62,7 @@ export default defineConfig({
           'https://github.com/prinsss/twitter-web-exporter/releases/latest/download/twitter-web-exporter.user.js',
         require: [
           'https://cdn.jsdelivr.net/npm/dayjs@1.11.10/dayjs.min.js',
+          'https://cdn.jsdelivr.net/npm/i18next@23.11.1/i18next.min.js',
           'https://cdn.jsdelivr.net/npm/preact@10.19.3/dist/preact.min.js',
           'https://cdn.jsdelivr.net/npm/preact@10.19.3/hooks/dist/hooks.umd.js',
           'https://cdn.jsdelivr.net/npm/@preact/signals-core@1.5.1/dist/signals-core.min.js',
@@ -73,6 +76,7 @@ export default defineConfig({
       build: {
         externalGlobals: {
           dayjs: 'dayjs',
+          i18next: 'i18next',
           preact: 'preact',
           'preact/hooks': 'preactHooks',
           '@preact/signals': 'preactSignals',

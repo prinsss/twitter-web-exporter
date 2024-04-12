@@ -3,12 +3,15 @@ import { IconSettings, IconBrandGithubFilled, IconHelp } from '@tabler/icons-pre
 
 import packageJson from '@/../package.json';
 import { Modal } from '@/components/common';
+import { useTranslation, detectBrowserLanguage, LANGUAGES_CONFIG, TranslationKey } from '@/i18n';
 import { capitalizeFirstLetter, cx, useSignal, useToggle } from '@/utils/common';
 
 import extensionManager from './extensions';
 import { DEFAULT_APP_OPTIONS, options, THEMES } from './storage';
 
 export function Settings() {
+  const { t, i18n } = useTranslation();
+
   const currentTheme = useSignal(options.get('theme'));
   const [showSettings, toggleSettings] = useToggle(false);
 
@@ -31,10 +34,10 @@ export function Settings() {
       {/* Settings modal. */}
       <Modal title="Settings" show={showSettings} onClose={toggleSettings} class="max-w-lg">
         {/* Common settings. */}
-        <p class={styles.subtitle}>General</p>
+        <p class={styles.subtitle}>{t('General')}</p>
         <div class={cx(styles.block, 'flex-col')}>
           <label class={styles.item}>
-            <span class="label-text">Theme</span>
+            <span class="label-text">{t('Theme')}</span>
             <select
               class="select select-xs"
               onChange={(e) => {
@@ -51,7 +54,28 @@ export function Settings() {
             </select>
           </label>
           <label class={styles.item}>
-            <span class="label-text">Debug</span>
+            <span class="label-text">{t('Language')}</span>
+            <select
+              class="select select-xs"
+              onChange={(e) => {
+                const language = (e.target as HTMLSelectElement)?.value ?? detectBrowserLanguage();
+                i18n.changeLanguage(language);
+                options.set('language', language);
+              }}
+            >
+              {Object.entries(LANGUAGES_CONFIG).map(([langTag, langConf]) => (
+                <option
+                  key={langTag}
+                  value={langTag}
+                  selected={options.get('language') === langTag}
+                >
+                  {langConf.nameEn} - {langConf.name}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label class={styles.item}>
+            <span class="label-text">{t('Debug')}</span>
             <input
               type="checkbox"
               class="toggle toggle-primary"
@@ -63,15 +87,15 @@ export function Settings() {
           </label>
           <label class={styles.item}>
             <div class="flex items-center">
-              <span class="label-text">Date Time Format</span>
+              <span class="label-text">{t('Date Time Format')}</span>
               <a
                 href="https://day.js.org/docs/en/display/format"
                 target="_blank"
                 rel="noopener noreferrer"
-                class="tooltip tooltip-bottom ml-0.5 before:whitespace-pre-line before:max-w-max"
-                data-tip={
-                  'Click for more information.\nThis will take effect on both\n previewer and exported files.'
-                }
+                class="tooltip tooltip-bottom ml-0.5 before:max-w-40"
+                data-tip={t(
+                  'Click for more information. This will take effect on both previewer and exported files.',
+                )}
               >
                 <IconHelp size={20} />
               </a>
@@ -87,11 +111,13 @@ export function Settings() {
           </label>
         </div>
         {/* Enable or disable modules. */}
-        <p class={styles.subtitle}>Modules</p>
+        <p class={styles.subtitle}>{t('Modules')}</p>
         <div class={cx(styles.block, 'flex-col')}>
           {extensionManager.getExtensions().map((extension) => (
             <label class={styles.item} key={extension.name}>
-              <span>{extension.name}</span>
+              <span>
+                {t(extension.name.replace('Module', '') as TranslationKey)} {t('Module')}
+              </span>
               <input
                 type="checkbox"
                 class="toggle toggle-secondary"
@@ -106,9 +132,11 @@ export function Settings() {
           ))}
         </div>
         {/* Information about this script. */}
-        <p class={styles.subtitle}>About</p>
+        <p class={styles.subtitle}>{t('About')}</p>
         <div class={styles.block}>
-          <span class="label-text">Version {packageJson.version}</span>
+          <span class="label-text">
+            {t('Version')} {packageJson.version}
+          </span>
           <a class="btn btn-xs btn-ghost" target="_blank" href={packageJson.homepage}>
             <IconBrandGithubFilled class="[&>path]:stroke-0" />
             GitHub
