@@ -5,6 +5,7 @@ import {
   IconChevronRight,
   IconChevronRightPipe,
 } from '@tabler/icons-preact';
+import { useTranslation } from '@/i18n';
 
 type PaginationProps = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -12,11 +13,12 @@ type PaginationProps = {
 };
 
 export const Pagination = ({ table }: PaginationProps) => {
+  const { t } = useTranslation();
   const state = table.getState().pagination;
 
   return (
     <div className="mt-3 flex items-center gap-2">
-      <span>Rows per page:</span>
+      <span>{t('Rows per page:')}</span>
       <select
         value={state.pageSize}
         onChange={(e) => {
@@ -32,12 +34,14 @@ export const Pagination = ({ table }: PaginationProps) => {
       </select>
       <span class="flex-grow" />
       <span>
-        {state.pageSize * state.pageIndex + 1}
-        {' - '}
-        {Math.min(state.pageSize * (state.pageIndex + 1), table.getFilteredRowModel().rows.length)}
-        {' of '}
-        {table.getFilteredRowModel().rows.length}
-        {' items'}
+        {t('A - B of N items', {
+          from: state.pageSize * state.pageIndex + 1,
+          to: Math.min(
+            state.pageSize * (state.pageIndex + 1),
+            table.getFilteredRowModel().rows.length,
+          ),
+          total: table.getFilteredRowModel().rows.length,
+        })}
       </span>
       {/* Jump to specific page. */}
       <input

@@ -7,6 +7,7 @@ import {
   strEntitiesToHTML,
 } from '@/utils/common';
 import { options } from '@/core/storage';
+import { Trans } from '@/i18n';
 import { Tweet } from '@/types';
 import {
   extractRetweetedTweet,
@@ -65,7 +66,7 @@ export const columns = [
   }),
   columnHelper.accessor('rest_id', {
     meta: { exportKey: 'id', exportHeader: 'ID' },
-    header: () => <span>ID</span>,
+    header: () => <Trans i18nKey="ID" />,
     cell: (info) => <p class="w-20 break-all font-mono text-xs">{info.getValue()}</p>,
   }),
   columnHelper.accessor((row) => +parseTwitterDateTime(row.legacy.created_at), {
@@ -79,7 +80,7 @@ export const columns = [
           options.get('dateTimeFormat'),
         ),
     },
-    header: () => <span>Date</span>,
+    header: () => <Trans i18nKey="Date" />,
     cell: (info) => (
       <p class="w-24">
         <a class="link" target="_blank" href={getTweetURL(info.row.original)}>
@@ -94,7 +95,7 @@ export const columns = [
       exportHeader: 'Content',
       exportValue: (row) => extractTweetFullText(row.original),
     },
-    header: () => <span>Content</span>,
+    header: () => <Trans i18nKey="Content" />,
     cell: (info) => (
       <div>
         <p
@@ -134,7 +135,7 @@ export const columns = [
           original: getMediaOriginalUrl(media),
         })),
     },
-    header: () => <span>Media</span>,
+    header: () => <Trans i18nKey="Media" />,
     cell: (info) => (
       <div class="flex flex-row items-start space-x-1 w-max">
         {extractTweetMedia(info.row.original).map((media) => (
@@ -163,7 +164,7 @@ export const columns = [
   }),
   columnHelper.accessor('core.user_results.result.legacy.screen_name', {
     meta: { exportKey: 'screen_name', exportHeader: 'Screen Name' },
-    header: () => <span>Screen Name</span>,
+    header: () => <Trans i18nKey="Screen Name" />,
     cell: (info) => (
       <p class="whitespace-pre">
         <a
@@ -178,12 +179,12 @@ export const columns = [
   }),
   columnHelper.accessor('core.user_results.result.legacy.name', {
     meta: { exportKey: 'name', exportHeader: 'Profile Name' },
-    header: () => <span>Profile Name</span>,
+    header: () => <Trans i18nKey="Profile Name" />,
     cell: (info) => <p class="w-32">{info.getValue()}</p>,
   }),
   columnHelper.accessor('core.user_results.result.legacy.profile_image_url_https', {
     meta: { exportKey: 'profile_image_url', exportHeader: 'Profile Image' },
-    header: () => <span>Profile Image</span>,
+    header: () => <Trans i18nKey="Profile Image" />,
     cell: (info) => (
       <div
         class="cursor-pointer"
@@ -201,7 +202,7 @@ export const columns = [
       exportHeader: 'Replying To',
       exportValue: (row) => row.original.legacy.in_reply_to_status_id_str,
     },
-    header: () => <span>Replying To</span>,
+    header: () => <Trans i18nKey="Replying To" />,
     cell: (info) => (
       <p class="whitespace-pre">
         {info.row.original.legacy.in_reply_to_status_id_str ? (
@@ -221,7 +222,7 @@ export const columns = [
       exportHeader: 'RT Source',
       exportValue: (row) => extractRetweetedTweet(row.original)?.rest_id,
     },
-    header: () => <span>RT Source</span>,
+    header: () => <Trans i18nKey="RT Source" />,
     cell: (info) => {
       const source = extractRetweetedTweet(info.row.original);
       return (
@@ -244,7 +245,7 @@ export const columns = [
       exportHeader: 'Quote Source',
       exportValue: (row) => extractQuotedTweet(row.original)?.rest_id,
     },
-    header: () => <span>Quote Source</span>,
+    header: () => <Trans i18nKey="Quote Source" />,
     cell: (info) => {
       const source = extractQuotedTweet(info.row.original);
       return (
@@ -262,27 +263,27 @@ export const columns = [
   }),
   columnHelper.accessor('legacy.favorite_count', {
     meta: { exportKey: 'favorite_count', exportHeader: 'Favorites' },
-    header: () => <span>Favorites</span>,
+    header: () => <Trans i18nKey="Favorites" />,
     cell: (info) => <p>{info.getValue()}</p>,
   }),
   columnHelper.accessor('legacy.retweet_count', {
     meta: { exportKey: 'retweet_count', exportHeader: 'Retweets' },
-    header: () => <span>Retweets</span>,
+    header: () => <Trans i18nKey="Retweets" />,
     cell: (info) => <p>{info.getValue()}</p>,
   }),
   columnHelper.accessor('legacy.bookmark_count', {
     meta: { exportKey: 'bookmark_count', exportHeader: 'Bookmarks' },
-    header: () => <span>Bookmarks</span>,
+    header: () => <Trans i18nKey="Bookmarks" />,
     cell: (info) => <p>{info.getValue()}</p>,
   }),
   columnHelper.accessor('legacy.quote_count', {
     meta: { exportKey: 'quote_count', exportHeader: 'Quotes' },
-    header: () => <span>Quotes</span>,
+    header: () => <Trans i18nKey="Quotes" />,
     cell: (info) => <p>{info.getValue()}</p>,
   }),
   columnHelper.accessor('legacy.reply_count', {
     meta: { exportKey: 'reply_count', exportHeader: 'Replies' },
-    header: () => <span>Replies</span>,
+    header: () => <Trans i18nKey="Replies" />,
     cell: (info) => <p>{info.getValue()}</p>,
   }),
   columnHelper.accessor('views.count', {
@@ -292,22 +293,22 @@ export const columns = [
       exportValue: (row) =>
         typeof row.original.views.count === 'undefined' ? null : +row.original.views.count,
     },
-    header: () => <span>Views</span>,
+    header: () => <Trans i18nKey="Views" />,
     cell: (info) => <p>{info.getValue() ?? 'N/A'}</p>,
   }),
   columnHelper.accessor('legacy.favorited', {
     meta: { exportKey: 'favorited', exportHeader: 'Favorited' },
-    header: () => <span>Favorited</span>,
+    header: () => <Trans i18nKey="Favorited" />,
     cell: (info) => <p>{info.getValue() ? 'YES' : 'NO'}</p>,
   }),
   columnHelper.accessor('legacy.retweeted', {
     meta: { exportKey: 'retweeted', exportHeader: 'Retweeted' },
-    header: () => <span>Retweeted</span>,
+    header: () => <Trans i18nKey="Retweeted" />,
     cell: (info) => <p>{info.getValue() ? 'YES' : 'NO'}</p>,
   }),
   columnHelper.accessor('legacy.bookmarked', {
     meta: { exportKey: 'bookmarked', exportHeader: 'Bookmarked' },
-    header: () => <span>Bookmarked</span>,
+    header: () => <Trans i18nKey="Bookmarked" />,
     cell: (info) => <p>{info.getValue() ? 'YES' : 'NO'}</p>,
   }),
   columnHelper.display({
@@ -317,7 +318,7 @@ export const columns = [
       exportHeader: 'URL',
       exportValue: (row) => getTweetURL(row.original),
     },
-    header: () => <span>URL</span>,
+    header: () => <Trans i18nKey="URL" />,
     cell: (info) => (
       <a href={getTweetURL(info.row.original)} target="_blank">
         <IconLink />
@@ -327,14 +328,14 @@ export const columns = [
   columnHelper.display({
     id: 'actions',
     meta: { exportable: false },
-    header: () => <span>Actions</span>,
+    header: () => <Trans i18nKey="Actions" />,
     cell: (info) => (
       <div class="flex flex-row items-start space-x-1">
         <button
           onClick={() => info.table.options.meta?.setRawDataPreview(info.row.original)}
           class="btn btn-xs btn-neutral whitespace-nowrap"
         >
-          Details
+          <Trans i18nKey="Details" />
         </button>
       </div>
     ),

@@ -3,6 +3,7 @@ import { IconLink } from '@tabler/icons-preact';
 import { formatDateTime, parseTwitterDateTime, strEntitiesToHTML } from '@/utils/common';
 import { getProfileImageOriginalUrl, getUserURL } from '@/utils/api';
 import { options } from '@/core/storage';
+import { Trans } from '@/i18n';
 import { User } from '@/types';
 
 const columnHelper = createColumnHelper<User>();
@@ -36,12 +37,12 @@ export const columns = [
   }),
   columnHelper.accessor('rest_id', {
     meta: { exportKey: 'id', exportHeader: 'ID' },
-    header: () => <span>ID</span>,
+    header: () => <Trans i18nKey="ID" />,
     cell: (info) => <p class="w-20 break-all font-mono text-xs">{info.getValue()}</p>,
   }),
   columnHelper.accessor('legacy.screen_name', {
     meta: { exportKey: 'screen_name', exportHeader: 'Screen Name' },
-    header: () => <span>Screen Name</span>,
+    header: () => <Trans i18nKey="Screen Name" />,
     cell: (info) => (
       <p class="whitespace-pre">
         <a class="link" target="_blank" href={getUserURL(info.row.original)}>
@@ -52,12 +53,12 @@ export const columns = [
   }),
   columnHelper.accessor('legacy.name', {
     meta: { exportKey: 'name', exportHeader: 'Profile Name' },
-    header: () => <span>Profile Name</span>,
+    header: () => <Trans i18nKey="Profile Name" />,
     cell: (info) => <p class="w-32">{info.getValue()}</p>,
   }),
   columnHelper.accessor('legacy.description', {
     meta: { exportKey: 'description', exportHeader: 'Description' },
-    header: () => <span>Description</span>,
+    header: () => <Trans i18nKey="Description" />,
     cell: (info) => (
       <p
         class="w-52"
@@ -72,7 +73,7 @@ export const columns = [
   }),
   columnHelper.accessor('legacy.profile_image_url_https', {
     meta: { exportKey: 'profile_image_url', exportHeader: 'Profile Image' },
-    header: () => <span>Profile Image</span>,
+    header: () => <Trans i18nKey="Profile Image" />,
     cell: (info) => (
       <div
         class="cursor-pointer"
@@ -86,7 +87,7 @@ export const columns = [
   }),
   columnHelper.accessor('legacy.profile_banner_url', {
     meta: { exportKey: 'profile_banner_url', exportHeader: 'Profile Banner' },
-    header: () => <span>Profile Banner</span>,
+    header: () => <Trans i18nKey="Profile Banner" />,
     cell: (info) => (
       <div
         class="cursor-pointer w-36 h-12"
@@ -102,42 +103,42 @@ export const columns = [
   }),
   columnHelper.accessor('legacy.followers_count', {
     meta: { exportKey: 'followers_count', exportHeader: 'Followers' },
-    header: () => <span>Followers</span>,
+    header: () => <Trans i18nKey="Followers" />,
     cell: (info) => <p>{info.getValue()}</p>,
   }),
   columnHelper.accessor('legacy.statuses_count', {
     meta: { exportKey: 'statuses_count', exportHeader: 'Statuses' },
-    header: () => <span>Statuses</span>,
+    header: () => <Trans i18nKey="Statuses" />,
     cell: (info) => <p>{info.getValue()}</p>,
   }),
   columnHelper.accessor('legacy.favourites_count', {
     meta: { exportKey: 'favourites_count', exportHeader: 'Favourites' },
-    header: () => <span>Favourites</span>,
+    header: () => <Trans i18nKey="Favourites" />,
     cell: (info) => <p>{info.getValue()}</p>,
   }),
   columnHelper.accessor('legacy.listed_count', {
     meta: { exportKey: 'listed_count', exportHeader: 'Listed' },
-    header: () => <span>Listed</span>,
+    header: () => <Trans i18nKey="Listed" />,
     cell: (info) => <p>{info.getValue()}</p>,
   }),
   columnHelper.accessor('legacy.verified_type', {
     meta: { exportKey: 'verified_type', exportHeader: 'Verified Type' },
-    header: () => <span>Verified Type</span>,
+    header: () => <Trans i18nKey="Verified Type" />,
     cell: (info) => <p>{info.getValue() ?? 'N/A'}</p>,
   }),
   columnHelper.accessor('is_blue_verified', {
     meta: { exportKey: 'is_blue_verified', exportHeader: 'Blue Verified' },
-    header: () => <span>Blue Verified</span>,
+    header: () => <Trans i18nKey="Blue Verified" />,
     cell: (info) => <p>{info.getValue() ? 'YES' : 'NO'}</p>,
   }),
   columnHelper.accessor('legacy.following', {
     meta: { exportKey: 'following', exportHeader: 'Following' },
-    header: () => <span>Following</span>,
+    header: () => <Trans i18nKey="Following" />,
     cell: (info) => <p>{info.getValue() ? 'YES' : 'NO'}</p>,
   }),
   columnHelper.accessor('legacy.followed_by', {
     meta: { exportKey: 'followed_by', exportHeader: 'Follows You' },
-    header: () => <span>Follows You</span>,
+    header: () => <Trans i18nKey="Follows You" />,
     cell: (info) => <p>{info.getValue() ? 'YES' : 'NO'}</p>,
   }),
   columnHelper.accessor((row) => +parseTwitterDateTime(row.legacy.created_at), {
@@ -151,7 +152,7 @@ export const columns = [
           options.get('dateTimeFormat'),
         ),
     },
-    header: () => <span>Created At</span>,
+    header: () => <Trans i18nKey="Created At" />,
     cell: (info) => (
       <p class="w-24">{formatDateTime(info.getValue(), options.get('dateTimeFormat'))}</p>
     ),
@@ -163,7 +164,7 @@ export const columns = [
       exportHeader: 'URL',
       exportValue: (row) => getUserURL(row.original),
     },
-    header: () => <span>URL</span>,
+    header: () => <Trans i18nKey="URL" />,
     cell: (info) => (
       <a href={getUserURL(info.row.original)} target="_blank">
         <IconLink />

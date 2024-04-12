@@ -17,16 +17,23 @@ export function ModuleUI<T>({ title, recordsSignal, isTweet }: ModuleUIProps<T>)
   const { t } = useTranslation();
   const [showModal, toggleShowModal] = useToggle();
 
+  const translatedTitle = t(title as TranslationKey);
+
   return (
     <ExtensionPanel
-      title={t(title as TranslationKey)}
+      title={translatedTitle}
       description={`${t('Captured:')} ${recordsSignal.value.length}`}
       active={recordsSignal.value.length > 0}
       onClick={toggleShowModal}
       indicatorColor={isTweet ? 'bg-primary' : 'bg-secondary'}
     >
-      <Modal title={title} show={showModal} onClose={toggleShowModal}>
-        <TableView title={title} show={showModal} recordsSignal={recordsSignal} isTweet={isTweet} />
+      <Modal title={translatedTitle} show={showModal} onClose={toggleShowModal}>
+        <TableView
+          title={translatedTitle}
+          show={showModal}
+          recordsSignal={recordsSignal}
+          isTweet={isTweet}
+        />
       </Modal>
     </ExtensionPanel>
   );

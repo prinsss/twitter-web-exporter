@@ -1,9 +1,10 @@
 import { Table } from '@tanstack/table-core';
-import { IconCircleCheck, IconCircleDashed, IconHelp, IconInfoCircle } from '@tabler/icons-preact';
+import { IconCircleCheck, IconCircleDashed, IconInfoCircle } from '@tabler/icons-preact';
 
 import { FileLike, ProgressCallback, zipStreamDownload } from '@/utils/download';
 import { DEFAULT_FILENAME_PATTERN, FILENAME_PATTERN_TOOLTIP, extractMedia } from '@/utils/media';
 import { Modal } from '@/components/common';
+import { TranslationKey, useTranslation } from '@/i18n';
 import { Tweet, User } from '@/types';
 import { useSignalState, cx, useSignal, useToggle } from '@/utils/common';
 import logger from '@/utils/logger';
@@ -26,6 +27,8 @@ export function ExportMediaModal<T>({
   show,
   onClose,
 }: ExportMediaModalProps<T>) {
+  const { t } = useTranslation('exporter');
+
   const [loading, setLoading] = useSignalState(false);
   const [copied, setCopied] = useSignalState(false);
 
@@ -60,7 +63,7 @@ export function ExportMediaModal<T>({
       setLoading(false);
     } catch (err) {
       setLoading(false);
-      logger.error('Failed to export media. Open DevTools for more details.', err);
+      logger.error(t('Failed to export media. Open DevTools for more details.'), err);
     }
   };
 
@@ -71,57 +74,54 @@ export function ExportMediaModal<T>({
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
-      logger.error('Failed to copy media URLs. Open DevTools for more details.', err);
+      logger.error(t('Failed to copy media URLs. Open DevTools for more details.'), err);
     }
   };
 
   return (
     <Modal
       class="max-w-sm md:max-w-screen-sm sm:max-w-screen-sm"
-      title={`${title} Media`}
+      title={`${t(title as TranslationKey, title, { ns: 'common' })} ${t('Media')}`}
       show={show}
       onClose={onClose}
     >
       {/* Modal content. */}
       <div class="px-4 text-base overflow-y-scroll overscroll-none">
         <p class="text-base-content text-opacity-60 leading-5 text-sm">
-          Download and save media files from captured data. This may take a while depending on the
-          amount of data. Media that will be downloaded includes: profile images, profile banners
-          (for users), images, videos (for tweets).
+          {t(
+            'Download and save media files from captured data. This may take a while depending on the amount of data. Media that will be downloaded includes: profile images, profile banners (for users), images, videos (for tweets).',
+          )}
         </p>
         <div role="alert" class="alert text-sm py-2 mt-2 mb-2">
           <IconInfoCircle size={24} />
           <span>
-            For more than 100 media or large files, it is recommended to copy the URLs and download
-            them with an external download manager such as aria2.
+            {t(
+              'For more than 100 media or large files, it is recommended to copy the URLs and download them with an external download manager such as aria2.',
+            )}
           </span>
         </div>
         {/* Export options. */}
         {isTweet && (
           <div class="flex items-center h-9">
-            <div class="mr-2 leading-8 flex items-center">
-              <span>Filename template </span>
-              <div
-                class="tooltip tooltip-bottom ml-0.5 before:whitespace-pre-line before:max-w-max"
-                data-tip={FILENAME_PATTERN_TOOLTIP}
-              >
-                <IconHelp size={20} />
-              </div>
-              <span>:</span>
+            <p class="mr-2 leading-8">{t('Filename template:')}</p>
+            <div
+              class="flex-grow tooltip tooltip-bottom before:whitespace-pre-line before:max-w-max"
+              data-tip={FILENAME_PATTERN_TOOLTIP}
+            >
+              <input
+                type="text"
+                class="input input-bordered input-sm w-full"
+                value={filenamePattern}
+                onChange={(e) => {
+                  setFilenamePattern((e?.target as HTMLInputElement)?.value);
+                }}
+              />
             </div>
-            <input
-              type="text"
-              class="input input-bordered input-sm flex-grow"
-              value={filenamePattern}
-              onChange={(e) => {
-                setFilenamePattern((e?.target as HTMLInputElement)?.value);
-              }}
-            />
           </div>
         )}
         <div class="flex h-9 justify-between">
           <div class="flex items-center h-9 w-1/2">
-            <p class="mr-2 leading-8">Rate limit (ms):</p>
+            <p class="mr-2 leading-8">{t('Rate limit (ms):')}</p>
             <input
               type="number"
               class="input input-bordered input-sm w-32"
@@ -133,7 +133,7 @@ export function ExportMediaModal<T>({
             />
           </div>
           <div class="flex items-center h-9 w-1/2">
-            <p class="mr-2 leading-8">Include retweets:</p>
+            <p class="mr-2 leading-8">{t('Include retweets:')}</p>
             <input
               type="checkbox"
               class="checkbox checkbox-sm"
@@ -149,8 +149,8 @@ export function ExportMediaModal<T>({
               <tr>
                 <th></th>
                 <th>#</th>
-                <th>File Name</th>
-                <th>URL</th>
+                <th>{t('File Name')}</th>
+                <th>{t('Download URL')}</th>
               </tr>
             </thead>
             <tbody>
@@ -181,7 +181,7 @@ export function ExportMediaModal<T>({
           </table>
           {mediaList.length > 0 ? null : (
             <div class="flex items-center justify-center h-28 w-full">
-              <p class="text-base-content text-opacity-50">No media selected.</p>
+              <p class="text-base-content text-opacity-50">{t('No media selected.')}</p>
             </div>
           )}
         </div>
@@ -201,14 +201,14 @@ export function ExportMediaModal<T>({
       <div class="flex space-x-2 mt-2">
         <span class="flex-grow" />
         <button class="btn" onClick={onClose}>
-          Cancel
+          {t('Cancel')}
         </button>
         <button class="btn" onClick={onCopy}>
-          {copied ? 'Copied!' : 'Copy URLs'}
+          {copied ? t('Copied!') : t('Copy URLs')}
         </button>
         <button class={cx('btn btn-secondary', loading && 'btn-disabled')} onClick={onExport}>
           {loading && <span class="loading loading-spinner" />}
-          Start Export
+          {t('Start Export')}
         </button>
       </div>
     </Modal>

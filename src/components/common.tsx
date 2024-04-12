@@ -1,6 +1,7 @@
 import { JSX } from 'preact';
 import { useRef } from 'preact/hooks';
 import { IconArrowUpRight, IconSearch, IconX } from '@tabler/icons-preact';
+import { useTranslation } from '@/i18n';
 import { cx } from '@/utils/common';
 import { ErrorBoundary } from './error-boundary';
 
@@ -105,6 +106,7 @@ type SearchAreaProps = {
  * Common template for global table filter.
  */
 export function SearchArea({ defaultValue, onChange }: SearchAreaProps) {
+  const { t } = useTranslation();
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   return (
@@ -113,7 +115,7 @@ export function SearchArea({ defaultValue, onChange }: SearchAreaProps) {
         ref={inputRef}
         type="text"
         class="input input-bordered input-sm join-item"
-        placeholder="Search..."
+        placeholder={t('Search...')}
         defaultValue={defaultValue}
         onKeyDown={(e) => {
           if (e.key === 'Enter') {

@@ -14,6 +14,7 @@ import { IconSortAscending, IconSortDescending } from '@tabler/icons-preact';
 import { Modal, SearchArea } from '@/components/common';
 import { ExportDataModal } from '@/components/modals/export-data';
 import { ExportMediaModal } from '@/components/modals/export-media';
+import { useTranslation } from '@/i18n';
 import { flexRender, useReactTable } from '@/utils/react-table';
 import { useSignalState, useToggle } from '@/utils/common';
 
@@ -51,6 +52,7 @@ type TableViewProps<T> = {
  * Common table view.
  */
 export function TableView<T>({ title, recordsSignal, isTweet }: TableViewProps<T>) {
+  const { t } = useTranslation();
   const data = recordsSignal.value;
 
   const [showExportDataModal, toggleShowExportDataModal] = useToggle();
@@ -135,14 +137,14 @@ export function TableView<T>({ title, recordsSignal, isTweet }: TableViewProps<T
             recordsSignal.value = [];
           }}
         >
-          Clear
+          {t('Clear')}
         </button>
         <span class="flex-grow" />
         <button class="btn btn-secondary" onClick={toggleShowExportMediaModal}>
-          Export Media
+          {t('Export Media')}
         </button>
         <button class="btn btn-primary" onClick={toggleShowExportDataModal}>
-          Export Data
+          {t('Export Data')}
         </button>
       </div>
       {/* Extra modal for exporting data and media. */}
@@ -161,7 +163,7 @@ export function TableView<T>({ title, recordsSignal, isTweet }: TableViewProps<T
       />
       {/* Extra modal for previewing JSON data. */}
       <Modal
-        title="JSON View"
+        title={t('JSON View')}
         class="max-w-xl"
         show={!!rawDataPreview}
         onClose={() => setRawDataPreview(null)}
@@ -176,7 +178,7 @@ export function TableView<T>({ title, recordsSignal, isTweet }: TableViewProps<T
       </Modal>
       {/* Extra modal for previewing images and videos. */}
       <Modal
-        title="Media View"
+        title={t('Media View')}
         class="max-w-xl"
         show={!!mediaPreview}
         onClose={() => setMediaPreview('')}

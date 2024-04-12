@@ -1,5 +1,6 @@
 import { Table } from '@tanstack/table-core';
 import { Modal } from '@/components/common';
+import { TranslationKey, useTranslation } from '@/i18n';
 import { useSignalState, cx, useToggle } from '@/utils/common';
 import { DataType, EXPORT_FORMAT, ExportFormatType, exportData } from '@/utils/exporter';
 
@@ -14,6 +15,8 @@ type ExportDataModalProps<T> = {
  * Modal for exporting data.
  */
 export function ExportDataModal<T>({ title, table, show, onClose }: ExportDataModalProps<T>) {
+  const { t } = useTranslation('exporter');
+
   const [selectedFormat, setSelectedFormat] = useSignalState<ExportFormatType>(EXPORT_FORMAT.JSON);
   const [loading, setLoading] = useSignalState(false);
 
@@ -73,26 +76,26 @@ export function ExportDataModal<T>({ title, table, show, onClose }: ExportDataMo
   return (
     <Modal
       class="max-w-sm md:max-w-screen-sm sm:max-w-screen-sm"
-      title={`${title} Data`}
+      title={`${t(title as TranslationKey, title, { ns: 'common' })} ${t('Data')}`}
       show={show}
       onClose={onClose}
     >
       {/* Modal content. */}
       <div class="px-4 text-base">
         <p class="text-base-content text-opacity-60 mb-2 leading-5 text-sm">
-          Export captured data as JSON/HTML/CSV file. This may take a while depending on the amount
-          of data. The exported file does not include media files such as images and videos but only
-          the URLs.
+          {t(
+            'Export captured data as JSON/HTML/CSV file. This may take a while depending on the amount of data. The exported file does not include media files such as images and videos but only the URLs.',
+          )}
         </p>
         {/* Export options. */}
         <div class="flex items-center">
-          <p class="mr-2 leading-8">Data length:</p>
+          <p class="mr-2 leading-8">{t('Data length:')}</p>
           <span class="font-mono leading-6 h-6 bg-base-200 px-2 rounded-md">
             {selectedRows.length}
           </span>
         </div>
         <div class="flex items-center">
-          <p class="mr-2 leading-8">Include all metadata:</p>
+          <p class="mr-2 leading-8">{t('Include all metadata:')}</p>
           <input
             type="checkbox"
             class="checkbox checkbox-sm"
@@ -101,7 +104,7 @@ export function ExportDataModal<T>({ title, table, show, onClose }: ExportDataMo
           />
         </div>
         <div class="flex">
-          <p class="mr-2 leading-8">Export as:</p>
+          <p class="mr-2 leading-8">{t('Export as:')}</p>
           <select
             class="select select-bordered select-sm w-32"
             onChange={(e) => {
@@ -117,7 +120,7 @@ export function ExportDataModal<T>({ title, table, show, onClose }: ExportDataMo
         </div>
         {selectedRows.length > 0 ? null : (
           <div class="flex items-center justify-center h-28 w-full">
-            <p class="text-base-content text-opacity-50">No data selected.</p>
+            <p class="text-base-content text-opacity-50">{t('No data selected.')}</p>
           </div>
         )}
         {/* Progress bar. */}
@@ -136,11 +139,11 @@ export function ExportDataModal<T>({ title, table, show, onClose }: ExportDataMo
       <div class="flex space-x-2">
         <span class="flex-grow" />
         <button class="btn" onClick={onClose}>
-          Cancel
+          {t('Cancel')}
         </button>
         <button class={cx('btn btn-primary', loading && 'btn-disabled')} onClick={onExport}>
           {loading && <span class="loading loading-spinner" />}
-          Start Export
+          {t('Start Export')}
         </button>
       </div>
     </Modal>
