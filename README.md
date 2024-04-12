@@ -19,6 +19,11 @@
   </a>
 </p>
 
+<p align="center">
+  English |
+  <a href="https://github.com/prinsss/twitter-web-exporter/blob/main/docs/README.zh-Hans.md">简体中文</a>
+</p>
+
 ## Features
 
 - 🚚 Export tweets, replies and likes of any user as JSON/CSV/HTML
