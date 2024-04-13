@@ -30,6 +30,7 @@
 - 🔖 Export your bookmarks (without the max 800 limit!)
 - 💞 Export following, followers list of any user
 - 👥 Export list members and subscribers
+- 🌪️ Export tweets from home timeline and list timeline
 - 🔍 Export search results
 - 📦 Download images and videos from tweets in bulk at original size
 - 🚀 No developer account or API key required
