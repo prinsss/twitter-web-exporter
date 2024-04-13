@@ -82,6 +82,20 @@ export class AppOptionsManager {
       ...safeJSONParse(localStorage.getItem(LOCAL_STORAGE_KEY) || '{}'),
     };
 
+    const oldVersion = this.appOptions.version ?? '';
+    const newVersion = DEFAULT_APP_OPTIONS.version ?? '';
+
+    // Migrate from v1.0 to v1.1.
+    if (newVersion.startsWith('1.1') && oldVersion.startsWith('1.0')) {
+      this.appOptions.disabledExtensions = [
+        ...(this.appOptions.disabledExtensions ?? []),
+        'HomeTimelineModule',
+        'ListTimelineModule',
+      ];
+      logger.info(`App options migrated from v${oldVersion} to v${newVersion}`);
+      setTimeout(() => this.saveAppOptions(), 0);
+    }
+
     this.previous = { ...this.appOptions };
     logger.info('App options loaded', this.appOptions);
     this.signal.value++;
