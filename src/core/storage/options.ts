@@ -20,7 +20,12 @@ export const DEFAULT_APP_OPTIONS: AppOptions = {
   theme: 'system',
   debug: false,
   showControlPanel: true,
-  disabledExtensions: [],
+  disabledExtensions: [
+    'HomeTimelineModule',
+    'ListTimelineModule',
+    'ListSubscribersModule',
+    'ListMembersModule',
+  ],
   dateTimeFormat: 'YYYY-MM-DD HH:mm:ss Z',
   language: '',
   version: packageJson.version,
