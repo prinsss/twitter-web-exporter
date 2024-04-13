@@ -91,6 +91,9 @@ There is also a limitation on downloading media files. Currently, the script dow
 **Q. How do you get the data?** <br>
 A. The script itself does not send any request to Twitter API. It installs an network interceptor to capture the response of GraphQL request that initiated by the Twitter web app. The script then parses the response and extracts data from it.
 
+**Q. The script captures nothing!** <br>
+A. See [Content-Security-Policy (CSP) Issues #19](https://github.com/prinsss/twitter-web-exporter/issues/19).
+
 **Q. The exported data is incomplete.** <br>
 A. The script can only export data that is loaded by the Twitter web app. Since the data is lazy-loaded, you need to keep scrolling down to load more data. For long lists, you may need to scroll down to the bottom of the page to make sure that all data is loaded before exporting.
 

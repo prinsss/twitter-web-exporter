@@ -91,6 +91,9 @@
 **问：你是如何获取数据的？** <br>
 答：此脚本本身不会向 Twitter API 发起任何请求。它会安装一个 HTTP 网络拦截器，来捕获 Twitter Web App 发起的 GraphQL 请求的响应，然后解析响应并从中提取数据。
 
+**问：脚本抓取不到任何数据！** <br>
+答：参见 [Content-Security-Policy (CSP) Issues #19](https://github.com/prinsss/twitter-web-exporter/issues/19)。
+
 **问：为什么导出的数据不完整？** <br>
 答：脚本只能导出由 Twitter Web App 加载好的数据。由于数据是懒加载的，你需要不断向下滚动以加载更多数据。对于长列表，可能需要滚动到页面底部，确保所有数据加载完毕后再导出。
 
