@@ -110,18 +110,6 @@ export class ExtensionManager {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const manager = this;
 
-    // Check for current running context.
-    // The `window.__SCRIPTS_LOADED__` is injected by the Twitter website.
-    // See: https://violentmonkey.github.io/posts/inject-into-context/
-    if (!('__SCRIPTS_LOADED__' in globalObject)) {
-      logger.error(
-        'Error: Wrong execution context detected.\n  ' +
-          'This script needs to be injected into "page" context rather than "content" context.\n  ' +
-          'The XMLHttpRequest hook will not work properly.\n  ' +
-          'See: https://github.com/prinsss/twitter-web-exporter/issues/19',
-      );
-    }
-
     globalObject.XMLHttpRequest.prototype.open = function (method: string, url: string) {
       if (manager.debugEnabled) {
         logger.debug(`XHR initialized`, { method, url });
@@ -151,5 +139,19 @@ export class ExtensionManager {
     };
 
     logger.info('Hooked into XMLHttpRequest');
+
+    // Check for current execution context.
+    // The `webpackChunk_twitter_responsive_web` is injected by the Twitter website.
+    // See: https://violentmonkey.github.io/posts/inject-into-context/
+    setTimeout(() => {
+      if (!('webpackChunk_twitter_responsive_web' in globalObject)) {
+        logger.error(
+          'Error: Wrong execution context detected.\n  ' +
+            'This script needs to be injected into "page" context rather than "content" context.\n  ' +
+            'The XMLHttpRequest hook will not work properly.\n  ' +
+            'See: https://github.com/prinsss/twitter-web-exporter/issues/19',
+        );
+      }
+    }, 1000);
   }
 }
