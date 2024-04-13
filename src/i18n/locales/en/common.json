@@ -17,6 +17,7 @@
   "Captured:": "Captured:",
   "Rows per page:": "Rows per page:",
   "A - B of N items": "{{from}} - {{to}} of {{total}} items",
+  "No data available.": "No data available.",
   "Clear": "Clear",
   "Export Media": "Export Media",
   "Export Data": "Export Data",

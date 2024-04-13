@@ -17,6 +17,7 @@
   "Captured:": "已捕获:",
   "Rows per page:": "每页显示行数:",
   "A - B of N items": "第 {{from}} - {{to}} 项，共 {{total}} 项",
+  "No data available.": "没有数据。",
   "Clear": "清除",
   "Export Media": "导出媒体文件",
   "Export Data": "导出数据",

@@ -123,7 +123,7 @@ export function TableView<T>({ title, recordsSignal, isTweet }: TableViewProps<T
         {/* Empty view. */}
         {table.getRowModel().rows.length > 0 ? null : (
           <div class="flex items-center justify-center h-52 w-full">
-            <p class="text-base-content text-opacity-50">No data available.</p>
+            <p class="text-base-content text-opacity-50">{t('No data available.')}</p>
           </div>
         )}
       </main>
