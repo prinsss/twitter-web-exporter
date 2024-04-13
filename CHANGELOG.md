@@ -2,6 +2,31 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.0](https://github.com/prinsss/twitter-web-exporter/compare/v1.0.10..v1.1.0) - 2024-04-13
+
+### ⛰️  Features
+
+- Migration from v1.0 to v1.1 - ([db5c124](https://github.com/prinsss/twitter-web-exporter/commit/db5c124df65f3e7b83624b78f0b8431fadcb6345))
+- Disable some extensions by default - ([8014b9e](https://github.com/prinsss/twitter-web-exporter/commit/8014b9e023a411ffd7c386d7a7a86652582b7916))
+- Add ListTimelineModule - ([f2df917](https://github.com/prinsss/twitter-web-exporter/commit/f2df91715f732d23c11b3f66c1eabf7e50690e94))
+- Add HomeTimelineModule - ([cbba59e](https://github.com/prinsss/twitter-web-exporter/commit/cbba59e8eae00246661579c2967ccdcf7281d640))
+- Add warning when wrong execution context detected - ([fd58190](https://github.com/prinsss/twitter-web-exporter/commit/fd58190360ec395fe0c6993195268835c396d2dd))
+- I18n for exporters - ([c8c79c3](https://github.com/prinsss/twitter-web-exporter/commit/c8c79c3815d112fc1b459647937e8faec4c1ed17))
+- I18n #17 - ([da76cba](https://github.com/prinsss/twitter-web-exporter/commit/da76cbae6753477bf63e092edf642087a37e70bc))
+
+### 🐛 Bug Fixes
+
+- Detect script execution context - ([f5d7688](https://github.com/prinsss/twitter-web-exporter/commit/f5d768854d1f934fbd7bf67d8926b653307dea94))
+- Add missing translation text - ([d2f67a8](https://github.com/prinsss/twitter-web-exporter/commit/d2f67a8978b31c53e23aaab8b1c5b0482eb8f900))
+- I18n for media filename template - ([38069a3](https://github.com/prinsss/twitter-web-exporter/commit/38069a300a09c94e5c41cef1c00654fc495cbcb9))
+
+### 📚 Documentation
+
+- Update README - ([1a5d5e8](https://github.com/prinsss/twitter-web-exporter/commit/1a5d5e883e4aad1b1484837fb096bb4162db500a))
+- Update README - ([8d95445](https://github.com/prinsss/twitter-web-exporter/commit/8d95445ca9fe71b8f6ee00731fc21f1c83dbf4ee))
+- I18n for userscript description - ([fc3e336](https://github.com/prinsss/twitter-web-exporter/commit/fc3e3368a74d83112c6b6bed8a7418a943273fdf))
+- Add zh-Hans version of README - ([8c020bd](https://github.com/prinsss/twitter-web-exporter/commit/8c020bda4b77dcfa27e71149724fb3598be2f5f7))
+
 ## [1.0.10](https://github.com/prinsss/twitter-web-exporter/compare/v1.0.9..v1.0.10) - 2024-04-10
 
 ### 🐛 Bug Fixes
