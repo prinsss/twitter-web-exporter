@@ -1,22 +1,24 @@
 import { useEffect } from 'preact/hooks';
-import { Signal } from '@preact/signals';
-import {
-  ColumnDef,
-  Row,
-  RowData,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-} from '@tanstack/table-core';
-import { IconSortAscending, IconSortDescending } from '@tabler/icons-preact';
 
 import { Modal, SearchArea } from '@/components/common';
 import { ExportDataModal } from '@/components/modals/export-data';
 import { ExportMediaModal } from '@/components/modals/export-media';
+import { useCapturedRecords, useClearCaptures } from '@/core/database/hooks';
+import { Extension, ExtensionType } from '@/core/extensions';
 import { useTranslation } from '@/i18n';
-import { flexRender, useReactTable } from '@/utils/react-table';
+import { Tweet, User } from '@/types';
 import { useSignalState, useToggle } from '@/utils/common';
+import { flexRender, useReactTable } from '@/utils/react-table';
+import { IconSortAscending, IconSortDescending } from '@tabler/icons-preact';
+import {
+  ColumnDef,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  Row,
+  RowData,
+} from '@tanstack/table-core';
 
 import { columns as columnsTweet } from './columns-tweet';
 import { columns as columnsUser } from './columns-user';
@@ -41,29 +43,40 @@ declare module '@tanstack/table-core' {
   }
 }
 
-type TableViewProps<T> = {
+type TableViewProps = {
   title: string;
-  show: boolean;
-  recordsSignal: Signal<T[]>;
-  isTweet?: boolean;
+  extension: Extension;
 };
+
+type InferDataType<T> = T extends ExtensionType.TWEET ? Tweet : User;
 
 /**
  * Common table view.
  */
-export function TableView<T>({ title, recordsSignal, isTweet }: TableViewProps<T>) {
+export function TableView({ title, extension }: TableViewProps) {
   const { t } = useTranslation();
-  const data = recordsSignal.value;
 
+  // Infer data type (Tweet or User) from extension type.
+  type DataType = InferDataType<typeof extension.type>;
+
+  // Query records from the database.
+  const { name, type } = extension;
+  const records = useCapturedRecords(name, type);
+  const clearCapturedData = useClearCaptures(name);
+
+  // Control modal visibility for exporting data and media.
   const [showExportDataModal, toggleShowExportDataModal] = useToggle();
   const [showExportMediaModal, toggleShowExportMediaModal] = useToggle();
 
+  // Control modal visibility for previewing media and JSON data.
   const [mediaPreview, setMediaPreview] = useSignalState('');
-  const [rawDataPreview, setRawDataPreview] = useSignalState<T | null>(null);
+  const [rawDataPreview, setRawDataPreview] = useSignalState<DataType | null>(null);
 
-  const table = useReactTable<T>({
-    data,
-    columns: (isTweet ? columnsTweet : columnsUser) as ColumnDef<T, unknown>[],
+  // Initialize the table instance.
+  // TODO: implement server-side pagination, sorting, and filtering.
+  const table = useReactTable<DataType>({
+    data: records ?? [],
+    columns: (type === ExtensionType.TWEET ? columnsTweet : columnsUser) as ColumnDef<DataType>[],
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -77,6 +90,7 @@ export function TableView<T>({ title, recordsSignal, isTweet }: TableViewProps<T
   });
 
   // Select all rows by default.
+  // FIXME:
   useEffect(() => {
     if (!table.getIsSomeRowsSelected()) {
       table.toggleAllRowsSelected(true);
@@ -131,12 +145,7 @@ export function TableView<T>({ title, recordsSignal, isTweet }: TableViewProps<T
       <Pagination table={table} />
       {/* Action buttons. */}
       <div class="flex mt-3 space-x-2">
-        <button
-          class="btn btn-neutral btn-ghost"
-          onClick={() => {
-            recordsSignal.value = [];
-          }}
-        >
+        <button class="btn btn-neutral btn-ghost" onClick={clearCapturedData}>
           {t('Clear')}
         </button>
         <span class="flex-grow" />
@@ -157,7 +166,7 @@ export function TableView<T>({ title, recordsSignal, isTweet }: TableViewProps<T
       <ExportMediaModal
         title={title}
         table={table}
-        isTweet={isTweet}
+        isTweet={type === ExtensionType.TWEET}
         show={showExportMediaModal}
         onClose={toggleShowExportMediaModal}
       />
