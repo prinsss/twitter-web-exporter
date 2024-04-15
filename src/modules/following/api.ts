@@ -1,13 +1,8 @@
-import { signal } from '@preact/signals';
 import { Interceptor } from '@/core/extensions';
+import { db } from '@/core/database';
 import { TimelineInstructions, User } from '@/types';
 import { extractDataFromResponse } from '@/utils/api';
 import logger from '@/utils/logger';
-
-/**
- * The global store for "Following".
- */
-export const followingSignal = signal<User[]>([]);
 
 interface FollowingResponse {
   data: {
@@ -25,7 +20,7 @@ interface FollowingResponse {
 }
 
 // https://twitter.com/i/api/graphql/iSicc7LrzWGBgDPL0tM_TQ/Following
-export const FollowingInterceptor: Interceptor = (req, res) => {
+export const FollowingInterceptor: Interceptor = (req, res, ext) => {
   if (!/\/graphql\/.+\/Following/.test(req.url)) {
     return;
   }
@@ -37,8 +32,8 @@ export const FollowingInterceptor: Interceptor = (req, res) => {
       (entry) => entry.content.itemContent.user_results.result,
     );
 
-    // Add captured data to the global store.
-    followingSignal.value = [...followingSignal.value, ...newData];
+    // Add captured data to the database.
+    db.extAddUsers(ext.name, newData);
 
     logger.info(`Following: ${newData.length} items received`);
   } catch (err) {

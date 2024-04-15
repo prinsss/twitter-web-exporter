@@ -1,13 +1,8 @@
-import { signal } from '@preact/signals';
 import { Interceptor } from '@/core/extensions';
+import { db } from '@/core/database';
 import { TimelineInstructions, Tweet } from '@/types';
 import { extractDataFromResponse, extractTimelineTweet } from '@/utils/api';
 import logger from '@/utils/logger';
-
-/**
- * The global store for "Bookmarks".
- */
-export const bookmarksSignal = signal<Tweet[]>([]);
 
 interface BookmarksResponse {
   data: {
@@ -21,7 +16,7 @@ interface BookmarksResponse {
 }
 
 // https://twitter.com/i/api/graphql/j5KExFXtSWj8HjRui17ydA/Bookmarks
-export const BookmarksInterceptor: Interceptor = (req, res) => {
+export const BookmarksInterceptor: Interceptor = (req, res, ext) => {
   if (!/\/graphql\/.+\/Bookmarks/.test(req.url)) {
     return;
   }
@@ -33,8 +28,8 @@ export const BookmarksInterceptor: Interceptor = (req, res) => {
       (entry) => extractTimelineTweet(entry.content.itemContent),
     );
 
-    // Add captured data to the global store.
-    bookmarksSignal.value = [...bookmarksSignal.value, ...newData];
+    // Add captured data to the database.
+    db.extAddTweets(ext.name, newData);
 
     logger.info(`Bookmarks: ${newData.length} items received`);
   } catch (err) {

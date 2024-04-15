@@ -1,5 +1,5 @@
-import { signal } from '@preact/signals';
 import { Interceptor } from '@/core/extensions';
+import { db } from '@/core/database';
 import {
   TimelineAddEntriesInstruction,
   TimelineAddToModuleInstruction,
@@ -14,11 +14,6 @@ import {
 } from '@/utils/api';
 import logger from '@/utils/logger';
 
-/**
- * The global store for "TweetDetail".
- */
-export const tweetDetailSignal = signal<Tweet[]>([]);
-
 interface TweetDetailResponse {
   data: {
     threaded_conversation_with_injections_v2: {
@@ -28,7 +23,7 @@ interface TweetDetailResponse {
 }
 
 // https://twitter.com/i/api/graphql/8sK2MBRZY9z-fgmdNpR3LA/TweetDetail
-export const TweetDetailInterceptor: Interceptor = (req, res) => {
+export const TweetDetailInterceptor: Interceptor = (req, res, ext) => {
   if (!/\/graphql\/.+\/TweetDetail/.test(req.url)) {
     return;
   }
@@ -81,8 +76,8 @@ export const TweetDetailInterceptor: Interceptor = (req, res) => {
       newData.push(...tweetsInConversation);
     }
 
-    // Add captured tweets to the global store.
-    tweetDetailSignal.value = [...tweetDetailSignal.value, ...newData];
+    // Add captured tweets to the database.
+    db.extAddTweets(ext.name, newData);
 
     logger.info(`TweetDetail: ${newData.length} items received`);
   } catch (err) {

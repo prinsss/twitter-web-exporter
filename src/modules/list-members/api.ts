@@ -1,13 +1,8 @@
-import { signal } from '@preact/signals';
 import { Interceptor } from '@/core/extensions';
+import { db } from '@/core/database';
 import { TimelineInstructions, User } from '@/types';
 import { extractDataFromResponse } from '@/utils/api';
 import logger from '@/utils/logger';
-
-/**
- * The global store for "ListMembers".
- */
-export const listMembersSignal = signal<User[]>([]);
 
 interface ListMembersResponse {
   data: {
@@ -22,7 +17,7 @@ interface ListMembersResponse {
 }
 
 // https://twitter.com/i/api/graphql/-5VwQkb7axZIxFkFS44iWw/ListMembers
-export const ListMembersInterceptor: Interceptor = (req, res) => {
+export const ListMembersInterceptor: Interceptor = (req, res, ext) => {
   if (!/\/graphql\/.+\/ListMembers/.test(req.url)) {
     return;
   }
@@ -34,8 +29,8 @@ export const ListMembersInterceptor: Interceptor = (req, res) => {
       (entry) => entry.content.itemContent.user_results.result,
     );
 
-    // Add captured data to the global store.
-    listMembersSignal.value = [...listMembersSignal.value, ...newData];
+    // Add captured data to the database.
+    db.extAddUsers(ext.name, newData);
 
     logger.info(`ListMembers: ${newData.length} items received`);
   } catch (err) {

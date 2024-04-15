@@ -1,5 +1,5 @@
-import { signal } from '@preact/signals';
 import { Interceptor } from '@/core/extensions';
+import { db } from '@/core/database';
 import {
   TimelineAddEntriesInstruction,
   TimelineAddToModuleInstruction,
@@ -9,9 +9,6 @@ import {
 } from '@/types';
 import { extractTimelineTweet, isTimelineEntryProfileGrid } from '@/utils/api';
 import logger from '@/utils/logger';
-
-// The global store for "UserMedia".
-export const userMediaSignal = signal<Tweet[]>([]);
 
 interface UserMediaResponse {
   data: {
@@ -30,7 +27,7 @@ interface UserMediaResponse {
 }
 
 // https://twitter.com/i/api/graphql/oMVVrI5kt3kOpyHHTTKf5Q/UserMedia
-export const UserMediaInterceptor: Interceptor = (req, res) => {
+export const UserMediaInterceptor: Interceptor = (req, res, ext) => {
   if (!/\/graphql\/.+\/UserMedia/.test(req.url)) {
     return;
   }
@@ -70,8 +67,8 @@ export const UserMediaInterceptor: Interceptor = (req, res) => {
       newData.push(...tweetsInProfileGrid);
     }
 
-    // Add captured tweets to the global store.
-    userMediaSignal.value = [...userMediaSignal.value, ...newData];
+    // Add captured tweets to the database.
+    db.extAddTweets(ext.name, newData);
 
     logger.info(`UserMedia: ${newData.length} items received`);
   } catch (err) {

@@ -1,20 +1,17 @@
-import { ModuleUI } from '@/components/module-ui';
-import { Extension } from '@/core/extensions';
-import { Tweet } from '@/types';
-import { UserTweetsInterceptor, userTweetsSignal } from './api';
-
-function UserTweetsPanel() {
-  return <ModuleUI<Tweet> title="UserTweets" recordsSignal={userTweetsSignal} isTweet />;
-}
+import { CommonModuleUI } from '@/components/module-ui';
+import { Extension, ExtensionType } from '@/core/extensions';
+import { UserTweetsInterceptor } from './api';
 
 export default class UserTweetsModule extends Extension {
   name = 'UserTweetsModule';
+
+  type = ExtensionType.TWEET;
 
   intercept() {
     return UserTweetsInterceptor;
   }
 
   render() {
-    return UserTweetsPanel;
+    return CommonModuleUI;
   }
 }
