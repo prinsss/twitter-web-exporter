@@ -7,7 +7,7 @@ import { useTranslation, detectBrowserLanguage, LANGUAGES_CONFIG, TranslationKey
 import { capitalizeFirstLetter, cx, useSignal, useToggle } from '@/utils/common';
 
 import extensionManager from './extensions';
-import { DEFAULT_APP_OPTIONS, options, THEMES } from './storage';
+import { DEFAULT_APP_OPTIONS, options, THEMES } from './options';
 
 export function Settings() {
   const { t, i18n } = useTranslation();

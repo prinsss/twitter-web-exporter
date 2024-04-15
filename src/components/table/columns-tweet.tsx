@@ -6,7 +6,7 @@ import {
   parseTwitterDateTime,
   strEntitiesToHTML,
 } from '@/utils/common';
-import { options } from '@/core/storage';
+import { options } from '@/core/options';
 import { Trans } from '@/i18n';
 import { Tweet } from '@/types';
 import {

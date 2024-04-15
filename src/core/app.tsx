@@ -10,7 +10,7 @@ import logger from '@/utils/logger';
 
 import extensionManager, { Extension } from './extensions';
 import { Settings } from './settings';
-import { options } from './storage';
+import { options } from './options';
 
 export function App() {
   const { t } = useTranslation();

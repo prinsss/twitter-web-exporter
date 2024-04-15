@@ -1,5 +1,5 @@
 import { unsafeWindow } from '$';
-import { options } from '@/core/storage';
+import { options } from '@/core/options';
 import logger from '@/utils/logger';
 import { Signal } from '@preact/signals';
 import { Extension, ExtensionConstructor } from './extension';
