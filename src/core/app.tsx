@@ -82,7 +82,7 @@ export function App() {
             if (ext.enabled && Component) {
               return (
                 <ErrorBoundary>
-                  <Component key={ext.name} />
+                  <Component key={ext.name} extension={ext} />
                 </ErrorBoundary>
               );
             }

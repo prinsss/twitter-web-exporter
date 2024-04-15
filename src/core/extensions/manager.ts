@@ -2,7 +2,7 @@ import { unsafeWindow } from '$';
 import { options } from '@/core/storage';
 import logger from '@/utils/logger';
 import { Signal } from '@preact/signals';
-import { Extension, ExtensionConstructor, Interceptor } from './extension';
+import { Extension, ExtensionConstructor } from './extension';
 
 /**
  * Global object reference. In some cases, the `unsafeWindow` is not available.
@@ -115,22 +115,22 @@ export class ExtensionManager {
         logger.debug(`XHR initialized`, { method, url });
       }
 
-      // Get current enabled interceptors.
-      const interceptors = manager
-        .getExtensions()
-        .filter((ext) => ext.enabled)
-        .map((ext) => ext.intercept())
-        .filter((int): int is Interceptor => typeof int === 'function');
-
       // When the request is done, we call all registered interceptors.
       this.addEventListener('load', () => {
         if (manager.debugEnabled) {
-          logger.debug(`XHR finished`, { method, url, interceptors });
+          logger.debug(`XHR finished`, { method, url });
         }
 
-        interceptors.forEach((func) => {
-          func({ method, url }, this);
-        });
+        // Run current enabled interceptors.
+        manager
+          .getExtensions()
+          .filter((ext) => ext.enabled)
+          .forEach((ext) => {
+            const func = ext.intercept();
+            if (func) {
+              func({ method, url }, this, ext);
+            }
+          });
       });
 
       // @ts-expect-error it's fine.
