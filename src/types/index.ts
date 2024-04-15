@@ -1,5 +1,5 @@
-import { TimelineTweet } from './tweet';
 import { TimelineTwitterList } from './list';
+import { TimelineTweet } from './tweet';
 import { TimelineUser } from './user';
 
 export * from './list';
@@ -143,4 +143,20 @@ export interface TimelineTimelineModule<T = ItemContentUnion> {
       enableDeduplication: boolean;
     };
   };
+}
+
+/**
+ * Represents a piece of data captured by an extension.
+ */
+export interface Capture {
+  /** Unique identifier for the capture. */
+  id: string;
+  /** Name of extension that captured the data. */
+  extension: string;
+  /** Type of data captured. Possible values: `tweet`, `user`. */
+  type: string;
+  /** The index of the captured item. Use this to query actual data from the database. */
+  data_key: string;
+  /** Timestamp when the data was captured. */
+  created_at: number;
 }

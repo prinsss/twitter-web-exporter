@@ -1,3 +1,250 @@
+import Dexie, { KeyPaths } from 'dexie';
+
+import packageJson from '@/../package.json';
+import { Capture, Tweet, User } from '@/types';
+import { extractTweetMedia } from '@/utils/api';
+import { parseTwitterDateTime } from '@/utils/common';
+import logger from '@/utils/logger';
+import { ExtensionType } from '../extensions';
+
+const DB_NAME = packageJson.name;
+const DB_VERSION = 1;
+
 export class DatabaseManager {
-  // TODO
+  private db: Dexie;
+
+  constructor() {
+    this.db = new Dexie(DB_NAME);
+    this.init();
+  }
+
+  /*
+  |--------------------------------------------------------------------------
+  | Type-Safe Table Accessors
+  |--------------------------------------------------------------------------
+  */
+
+  private tweets() {
+    return this.db.table<Tweet>('tweets');
+  }
+
+  private users() {
+    return this.db.table<User>('users');
+  }
+
+  private captures() {
+    return this.db.table<Capture>('captures');
+  }
+
+  /*
+  |--------------------------------------------------------------------------
+  | Read Methods for Extensions
+  |--------------------------------------------------------------------------
+  */
+
+  async extGetCaptures(extName: string) {
+    return this.captures().where('extension').equals(extName).toArray().catch(this.logError);
+  }
+
+  async extGetCaptureCount(extName: string) {
+    return this.captures().where('extension').equals(extName).count().catch(this.logError);
+  }
+
+  async extGetCapturedTweets(extName: string) {
+    const captures = await this.extGetCaptures(extName);
+    if (!captures) {
+      return [];
+    }
+    const tweetIds = captures.map((capture) => capture.data_key);
+    return this.tweets().where('rest_id').anyOf(tweetIds).toArray().catch(this.logError);
+  }
+
+  async extGetCapturedUsers(extName: string) {
+    const captures = await this.extGetCaptures(extName);
+    if (!captures) {
+      return [];
+    }
+    const userIds = captures.map((capture) => capture.data_key);
+    return this.users().where('rest_id').anyOf(userIds).toArray().catch(this.logError);
+  }
+
+  /*
+  |--------------------------------------------------------------------------
+  | Write Methods for Extensions
+  |--------------------------------------------------------------------------
+  */
+
+  async extAddTweets(extName: string, tweets: Tweet[]) {
+    await this.upsertTweets(tweets);
+    await this.upsertCaptures(
+      tweets.map((tweet) => ({
+        id: `${extName}-${tweet.rest_id}`,
+        extension: extName,
+        type: ExtensionType.TWEET,
+        data_key: tweet.rest_id,
+        created_at: Date.now(),
+      })),
+    );
+  }
+
+  async extAddUsers(extName: string, users: User[]) {
+    await this.upsertUsers(users);
+    await this.upsertCaptures(
+      users.map((user) => ({
+        id: `${extName}-${user.rest_id}`,
+        extension: extName,
+        type: ExtensionType.USER,
+        data_key: user.rest_id,
+        created_at: Date.now(),
+      })),
+    );
+  }
+
+  /*
+  |--------------------------------------------------------------------------
+  | Delete Methods for Extensions
+  |--------------------------------------------------------------------------
+  */
+
+  async extClearCaptures(extName: string) {
+    const captures = await this.extGetCaptures(extName);
+    if (!captures) {
+      return;
+    }
+    return this.captures().bulkDelete(captures.map((capture) => capture.id));
+  }
+
+  /*
+  |--------------------------------------------------------------------------
+  | Common Methods
+  |--------------------------------------------------------------------------
+  */
+
+  async upsertTweets(tweets: Tweet[]) {
+    return this.db
+      .transaction('rw', this.tweets(), () => {
+        const data: Tweet[] = tweets.map((tweet) => ({
+          ...tweet,
+          twe_private_fields: {
+            created_at: +parseTwitterDateTime(tweet.legacy.created_at),
+            updated_at: Date.now(),
+            media_count: extractTweetMedia(tweet).length,
+          },
+        }));
+
+        return this.tweets().bulkPut(data);
+      })
+      .catch(this.logError);
+  }
+
+  async upsertUsers(users: User[]) {
+    return this.db
+      .transaction('rw', this.users(), () => {
+        const data: User[] = users.map((user) => ({
+          ...user,
+          twe_private_fields: {
+            created_at: +parseTwitterDateTime(user.legacy.created_at),
+            updated_at: Date.now(),
+          },
+        }));
+
+        return this.users().bulkPut(data);
+      })
+      .catch(this.logError);
+  }
+
+  async upsertCaptures(captures: Capture[]) {
+    return this.db
+      .transaction('rw', this.captures(), () => {
+        return this.captures().bulkPut(captures).catch(this.logError);
+      })
+      .catch(this.logError);
+  }
+
+  async deleteAllTweets() {
+    return this.tweets().clear().catch(this.logError);
+  }
+
+  async deleteAllUsers() {
+    return this.users().clear().catch(this.logError);
+  }
+
+  async deleteAllCaptures() {
+    return this.captures().clear().catch(this.logError);
+  }
+
+  /*
+  |--------------------------------------------------------------------------
+  | Migrations
+  |--------------------------------------------------------------------------
+  */
+
+  async init() {
+    // Indexes for the "tweets" table.
+    const tweetIndexPaths: KeyPaths<Tweet>[] = [
+      'rest_id',
+      'twe_private_fields.created_at',
+      'twe_private_fields.updated_at',
+      'twe_private_fields.media_count',
+      'core.user_results.result.legacy.screen_name',
+      'legacy.favorite_count',
+      'legacy.retweet_count',
+      'legacy.bookmark_count',
+      'legacy.quote_count',
+      'legacy.reply_count',
+      'views.count',
+      'legacy.favorited',
+      'legacy.retweeted',
+      'legacy.bookmarked',
+    ];
+
+    // Indexes for the "users" table.
+    const userIndexPaths: KeyPaths<User>[] = [
+      'rest_id',
+      'twe_private_fields.created_at',
+      'twe_private_fields.updated_at',
+      'legacy.screen_name',
+      'legacy.followers_count',
+      'legacy.statuses_count',
+      'legacy.favourites_count',
+      'legacy.listed_count',
+      'legacy.verified_type',
+      'is_blue_verified',
+      'legacy.following',
+      'legacy.followed_by',
+    ];
+
+    // Indexes for the "captures" table.
+    const captureIndexPaths: KeyPaths<Capture>[] = ['id', 'extension', 'type', 'created_at'];
+
+    // Take care of database schemas and versioning.
+    // See: https://dexie.org/docs/Tutorial/Design#database-versioning
+    try {
+      this.db
+        .version(DB_VERSION)
+        .stores({
+          tweets: tweetIndexPaths.join(','),
+          users: userIndexPaths.join(','),
+          captures: captureIndexPaths.join(','),
+        })
+        .upgrade(async () => {
+          logger.info('Database upgraded');
+        });
+
+      await this.db.open();
+      logger.info('Database connected');
+    } catch (error) {
+      this.logError(error);
+    }
+  }
+
+  /*
+  |--------------------------------------------------------------------------
+  | Loggers
+  |--------------------------------------------------------------------------
+  */
+
+  logError(error: unknown) {
+    logger.error(`Database Error: ${(error as Error).message}`, error);
+  }
 }

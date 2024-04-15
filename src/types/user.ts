@@ -61,6 +61,16 @@ export interface User {
       icon_name: string;
     }[];
   };
+  /**
+   * Some extra properties added by the script when inserting to local database.
+   * These are not present in the original tweet object and are used for internal purposes only.
+   */
+  twe_private_fields: {
+    /** The UNIX timestamp representation of `legacy.created_at` in milliseconds. */
+    created_at: number;
+    /** The UNIX timestamp in ms when inserted or updated to local database. */
+    updated_at: number;
+  };
 }
 
 export interface UserEntities {
