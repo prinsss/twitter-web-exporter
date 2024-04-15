@@ -1,13 +1,8 @@
-import { signal } from '@preact/signals';
 import { Interceptor } from '@/core/extensions';
+import { db } from '@/core/database';
 import { TimelineInstructions, Tweet } from '@/types';
 import { extractDataFromResponse, extractTimelineTweet } from '@/utils/api';
 import logger from '@/utils/logger';
-
-/**
- * The global store for "HomeTimeline".
- */
-export const homeTimelineSignal = signal<Tweet[]>([]);
 
 interface HomeTimelineResponse {
   data: {
@@ -23,7 +18,7 @@ interface HomeTimelineResponse {
 
 // https://twitter.com/i/api/graphql/uPv755D929tshj6KsxkSZg/HomeTimeline
 // https://twitter.com/i/api/graphql/70b_oNkcK9IEN13WNZv8xA/HomeLatestTimeline
-export const HomeTimelineInterceptor: Interceptor = (req, res) => {
+export const HomeTimelineInterceptor: Interceptor = (req, res, ext) => {
   if (!/\/graphql\/.+\/Home(Latest)?Timeline/.test(req.url)) {
     return;
   }
@@ -35,8 +30,8 @@ export const HomeTimelineInterceptor: Interceptor = (req, res) => {
       (entry) => extractTimelineTweet(entry.content.itemContent),
     );
 
-    // Add captured data to the global store.
-    homeTimelineSignal.value = [...homeTimelineSignal.value, ...newData];
+    // Add captured data to the database.
+    db.extAddTweets(ext.name, newData);
 
     logger.info(`HomeTimeline: ${newData.length} items received`);
   } catch (err) {

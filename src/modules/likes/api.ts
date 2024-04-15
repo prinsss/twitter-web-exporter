@@ -1,13 +1,8 @@
-import { signal } from '@preact/signals';
 import { Interceptor } from '@/core/extensions';
+import { db } from '@/core/database';
 import { TimelineInstructions, Tweet } from '@/types';
 import { extractDataFromResponse, extractTimelineTweet } from '@/utils/api';
 import logger from '@/utils/logger';
-
-/**
- * The global store for "Likes".
- */
-export const likesSignal = signal<Tweet[]>([]);
 
 interface LikesResponse {
   data: {
@@ -26,7 +21,7 @@ interface LikesResponse {
 }
 
 // https://twitter.com/i/api/graphql/lVf2NuhLoYVrpN4nO7uw0Q/Likes
-export const LikesInterceptor: Interceptor = (req, res) => {
+export const LikesInterceptor: Interceptor = (req, res, ext) => {
   if (!/\/graphql\/.+\/Likes/.test(req.url)) {
     return;
   }
@@ -38,8 +33,8 @@ export const LikesInterceptor: Interceptor = (req, res) => {
       (entry) => extractTimelineTweet(entry.content.itemContent),
     );
 
-    // Add captured data to the global store.
-    likesSignal.value = [...likesSignal.value, ...newData];
+    // Add captured data to the database.
+    db.extAddTweets(ext.name, newData);
 
     logger.info(`Likes: ${newData.length} items received`);
   } catch (err) {

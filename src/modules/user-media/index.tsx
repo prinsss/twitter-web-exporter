@@ -1,20 +1,17 @@
-import { ModuleUI } from '@/components/module-ui';
-import { Extension } from '@/core/extensions';
-import { Tweet } from '@/types';
-import { UserMediaInterceptor, userMediaSignal } from './api';
-
-function UserMediaPanel() {
-  return <ModuleUI<Tweet> title="UserMedia" recordsSignal={userMediaSignal} isTweet />;
-}
+import { CommonModuleUI } from '@/components/module-ui';
+import { Extension, ExtensionType } from '@/core/extensions';
+import { UserMediaInterceptor } from './api';
 
 export default class UserMediaModule extends Extension {
   name = 'UserMediaModule';
+
+  type = ExtensionType.TWEET;
 
   intercept() {
     return UserMediaInterceptor;
   }
 
   render() {
-    return UserMediaPanel;
+    return CommonModuleUI;
   }
 }

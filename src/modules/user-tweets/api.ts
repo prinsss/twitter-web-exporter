@@ -1,5 +1,5 @@
-import { signal } from '@preact/signals';
 import { Interceptor } from '@/core/extensions';
+import { db } from '@/core/database';
 import {
   TimelineAddEntriesInstruction,
   TimelineInstructions,
@@ -13,9 +13,6 @@ import {
   isTimelineEntryTweet,
 } from '@/utils/api';
 import logger from '@/utils/logger';
-
-// The global store for "UserTweets".
-export const userTweetsSignal = signal<Tweet[]>([]);
 
 interface UserTweetsResponse {
   data: {
@@ -35,7 +32,7 @@ interface UserTweetsResponse {
 
 // https://twitter.com/i/api/graphql/H8OOoI-5ZE4NxgRr8lfyWg/UserTweets
 // https://twitter.com/i/api/graphql/Q6aAvPw7azXZbqXzuqTALA/UserTweetsAndReplies
-export const UserTweetsInterceptor: Interceptor = (req, res) => {
+export const UserTweetsInterceptor: Interceptor = (req, res, ext) => {
   if (!/\/graphql\/.+\/UserTweets/.test(req.url)) {
     return;
   }
@@ -82,8 +79,8 @@ export const UserTweetsInterceptor: Interceptor = (req, res) => {
       }
     }
 
-    // Add captured tweets to the global store.
-    userTweetsSignal.value = [...userTweetsSignal.value, ...newData];
+    // Add captured tweets to the database.
+    db.extAddTweets(ext.name, newData);
 
     logger.info(`UserTweets: ${newData.length} items received`);
   } catch (err) {

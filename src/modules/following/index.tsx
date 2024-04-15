@@ -1,20 +1,17 @@
-import { ModuleUI } from '@/components/module-ui';
-import { Extension } from '@/core/extensions';
-import { User } from '@/types';
-import { FollowingInterceptor, followingSignal } from './api';
-
-function FollowingPanel() {
-  return <ModuleUI<User> title="Following" recordsSignal={followingSignal} />;
-}
+import { CommonModuleUI } from '@/components/module-ui';
+import { Extension, ExtensionType } from '@/core/extensions';
+import { FollowingInterceptor } from './api';
 
 export default class FollowingModule extends Extension {
   name = 'FollowingModule';
+
+  type = ExtensionType.USER;
 
   intercept() {
     return FollowingInterceptor;
   }
 
   render() {
-    return FollowingPanel;
+    return CommonModuleUI;
   }
 }

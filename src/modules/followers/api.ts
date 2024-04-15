@@ -1,13 +1,8 @@
-import { signal } from '@preact/signals';
 import { Interceptor } from '@/core/extensions';
+import { db } from '@/core/database';
 import { TimelineInstructions, User } from '@/types';
 import { extractDataFromResponse } from '@/utils/api';
 import logger from '@/utils/logger';
-
-/**
- * The global store for "Followers".
- */
-export const followersSignal = signal<User[]>([]);
 
 interface FollowersResponse {
   data: {
@@ -26,7 +21,7 @@ interface FollowersResponse {
 
 // https://twitter.com/i/api/graphql/rRXFSG5vR6drKr5M37YOTw/Followers
 // https://twitter.com/i/api/graphql/kXi37EbqWokFUNypPHhQDQ/BlueVerifiedFollowers
-export const FollowersInterceptor: Interceptor = (req, res) => {
+export const FollowersInterceptor: Interceptor = (req, res, ext) => {
   if (!/\/graphql\/.+\/(BlueVerified)*Followers/.test(req.url)) {
     return;
   }
@@ -38,8 +33,8 @@ export const FollowersInterceptor: Interceptor = (req, res) => {
       (entry) => entry.content.itemContent.user_results.result,
     );
 
-    // Add captured data to the global store.
-    followersSignal.value = [...followersSignal.value, ...newData];
+    // Add captured data to the database.
+    db.extAddUsers(ext.name, newData);
 
     logger.info(`Followers: ${newData.length} items received`);
   } catch (err) {

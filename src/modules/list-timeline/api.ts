@@ -1,13 +1,8 @@
-import { signal } from '@preact/signals';
 import { Interceptor } from '@/core/extensions';
+import { db } from '@/core/database';
 import { TimelineInstructions, Tweet } from '@/types';
 import { extractDataFromResponse, extractTimelineTweet } from '@/utils/api';
 import logger from '@/utils/logger';
-
-/**
- * The global store for "ListTimeline".
- */
-export const listTimelineSignal = signal<Tweet[]>([]);
 
 interface ListTimelineResponse {
   data: {
@@ -23,7 +18,7 @@ interface ListTimelineResponse {
 }
 
 // https://twitter.com/i/api/graphql/asz3yj2ZCgJt3pdZEY2zgA/ListLatestTweetsTimeline
-export const ListTimelineInterceptor: Interceptor = (req, res) => {
+export const ListTimelineInterceptor: Interceptor = (req, res, ext) => {
   if (!/\/graphql\/.+\/ListLatestTweetsTimeline/.test(req.url)) {
     return;
   }
@@ -35,8 +30,8 @@ export const ListTimelineInterceptor: Interceptor = (req, res) => {
       (entry) => extractTimelineTweet(entry.content.itemContent),
     );
 
-    // Add captured data to the global store.
-    listTimelineSignal.value = [...listTimelineSignal.value, ...newData];
+    // Add captured data to the database.
+    db.extAddTweets(ext.name, newData);
 
     logger.info(`ListTimeline: ${newData.length} items received`);
   } catch (err) {

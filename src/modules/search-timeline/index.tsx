@@ -1,20 +1,17 @@
-import { ModuleUI } from '@/components/module-ui';
-import { Extension } from '@/core/extensions';
-import { Tweet } from '@/types';
-import { SearchTimelineInterceptor, searchTimelineSignal } from './api';
-
-function SearchTimelinePanel() {
-  return <ModuleUI<Tweet> title="SearchTimeline" recordsSignal={searchTimelineSignal} isTweet />;
-}
+import { CommonModuleUI } from '@/components/module-ui';
+import { Extension, ExtensionType } from '@/core/extensions';
+import { SearchTimelineInterceptor } from './api';
 
 export default class SearchTimelineModule extends Extension {
   name = 'SearchTimelineModule';
+
+  type = ExtensionType.TWEET;
 
   intercept() {
     return SearchTimelineInterceptor;
   }
 
   render() {
-    return SearchTimelinePanel;
+    return CommonModuleUI;
   }
 }

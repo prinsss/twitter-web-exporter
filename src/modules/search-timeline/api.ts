@@ -1,5 +1,5 @@
-import { signal } from '@preact/signals';
 import { Interceptor } from '@/core/extensions';
+import { db } from '@/core/database';
 import {
   ItemContentUnion,
   List,
@@ -20,9 +20,6 @@ import {
 } from '@/utils/api';
 import logger from '@/utils/logger';
 
-// The global store for "SearchTimeline".
-export const searchTimelineSignal = signal<Tweet[]>([]);
-
 interface SearchTimelineResponse {
   data: {
     search_by_raw_query: {
@@ -37,7 +34,7 @@ interface SearchTimelineResponse {
 }
 
 // https://twitter.com/i/api/graphql/Aj1nGkALq99Xg3XI0OZBtw/SearchTimeline
-export const SearchTimelineInterceptor: Interceptor = (req, res) => {
+export const SearchTimelineInterceptor: Interceptor = (req, res, ext) => {
   if (!/\/graphql\/.+\/SearchTimeline/.test(req.url)) {
     return;
   }
@@ -118,8 +115,8 @@ export const SearchTimelineInterceptor: Interceptor = (req, res) => {
       newLists.push(...lists);
     }
 
-    // Finally, add captured tweets to the global store.
-    searchTimelineSignal.value = [...searchTimelineSignal.value, ...newTweets];
+    // Finally, add captured tweets to the database.
+    db.extAddTweets(ext.name, newTweets);
     logger.info(`SearchTimeline: ${newTweets.length} items received`);
 
     // TODO: Implement "People" and "Lists" search results.

@@ -1,20 +1,17 @@
-import { ModuleUI } from '@/components/module-ui';
-import { Extension } from '@/core/extensions';
-import { Tweet } from '@/types';
-import { HomeTimelineInterceptor, homeTimelineSignal } from './api';
-
-function HomeTimelinePanel() {
-  return <ModuleUI<Tweet> title="HomeTimeline" recordsSignal={homeTimelineSignal} isTweet />;
-}
+import { CommonModuleUI } from '@/components/module-ui';
+import { Extension, ExtensionType } from '@/core/extensions';
+import { HomeTimelineInterceptor } from './api';
 
 export default class HomeTimelineModule extends Extension {
   name = 'HomeTimelineModule';
+
+  type = ExtensionType.TWEET;
 
   intercept() {
     return HomeTimelineInterceptor;
   }
 
   render() {
-    return HomeTimelinePanel;
+    return CommonModuleUI;
   }
 }

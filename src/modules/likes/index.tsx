@@ -1,20 +1,17 @@
-import { ModuleUI } from '@/components/module-ui';
-import { Extension } from '@/core/extensions';
-import { Tweet } from '@/types';
-import { LikesInterceptor, likesSignal } from './api';
-
-function LikesPanel() {
-  return <ModuleUI<Tweet> title="Likes" recordsSignal={likesSignal} isTweet />;
-}
+import { CommonModuleUI } from '@/components/module-ui';
+import { Extension, ExtensionType } from '@/core/extensions';
+import { LikesInterceptor } from './api';
 
 export default class LikesModule extends Extension {
   name = 'LikesModule';
+
+  type = ExtensionType.TWEET;
 
   intercept() {
     return LikesInterceptor;
   }
 
   render() {
-    return LikesPanel;
+    return CommonModuleUI;
   }
 }

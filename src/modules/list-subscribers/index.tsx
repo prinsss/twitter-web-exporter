@@ -1,20 +1,17 @@
-import { ModuleUI } from '@/components/module-ui';
-import { Extension } from '@/core/extensions';
-import { User } from '@/types';
-import { ListSubscribersInterceptor, listSubscribersSignal } from './api';
-
-function ListSubscribersPanel() {
-  return <ModuleUI<User> title="ListSubscribers" recordsSignal={listSubscribersSignal} />;
-}
+import { CommonModuleUI } from '@/components/module-ui';
+import { Extension, ExtensionType } from '@/core/extensions';
+import { ListSubscribersInterceptor } from './api';
 
 export default class ListSubscribersModule extends Extension {
   name = 'ListSubscribersModule';
+
+  type = ExtensionType.USER;
 
   intercept() {
     return ListSubscribersInterceptor;
   }
 
   render() {
-    return ListSubscribersPanel;
+    return CommonModuleUI;
   }
 }
