@@ -1,6 +1,6 @@
 import i18next, { LanguageDetectorModule, i18n } from 'i18next';
 import resources, { LocaleResources } from 'virtual:i18next-loader';
-import { options } from '@/core/storage';
+import { options } from '@/core/options';
 import { detectBrowserLanguage } from './detector';
 
 declare module 'i18next' {

@@ -2,7 +2,7 @@ import { createColumnHelper } from '@tanstack/table-core';
 import { IconLink } from '@tabler/icons-preact';
 import { formatDateTime, parseTwitterDateTime, strEntitiesToHTML } from '@/utils/common';
 import { getProfileImageOriginalUrl, getUserURL } from '@/utils/api';
-import { options } from '@/core/storage';
+import { options } from '@/core/options';
 import { Trans } from '@/i18n';
 import { User } from '@/types';
 
