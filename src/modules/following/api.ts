@@ -31,12 +31,14 @@ export const FollowingInterceptor: Interceptor = (req, res) => {
   }
 
   try {
-    const newData = extractDataFromResponse<FollowingResponse, User>(
+    const extractedData = extractDataFromResponse<FollowingResponse, User>(
       res,
       (json) => json.data.user.result.timeline.timeline.instructions,
       (entry) => entry.content.itemContent.user_results.result,
     );
 
+    // Filter out non-User objects from the extracted data
+    const newData = extractedData.filter((user) => user.__typename === 'User');
     // Add captured data to the global store.
     followingSignal.value = [...followingSignal.value, ...newData];
 
