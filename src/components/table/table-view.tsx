@@ -137,7 +137,7 @@ export function TableView({ title, extension }: TableViewProps) {
         </table>
         {/* Empty view. */}
         {table.getRowModel().rows.length > 0 ? null : (
-          <div class="flex items-center justify-center h-52 w-full">
+          <div class="flex items-center justify-center h-[320px] w-full">
             <p class="text-base-content text-opacity-50">{t('No data available.')}</p>
           </div>
         )}

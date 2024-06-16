@@ -65,13 +65,7 @@ type ModalProps = {
 /**
  * Common template for modals.
  */
-export function Modal({
-  show,
-  onClose,
-  title,
-  children,
-  class: className = 'max-w-4xl md:max-w-screen-md sm:max-w-screen-sm',
-}: ModalProps) {
+export function Modal({ show, onClose, title, children, class: className }: ModalProps) {
   if (!show) {
     return <dialog class="modal" />;
   }

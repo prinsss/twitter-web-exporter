@@ -80,7 +80,7 @@ export function ExportMediaModal<T>({
 
   return (
     <Modal
-      class="max-w-sm md:max-w-screen-sm sm:max-w-screen-sm"
+      class="max-w-sm md:max-w-screen-sm sm:max-w-screen-sm max-h-full"
       title={`${t(title as TranslationKey, title, { ns: 'common' })} ${t('Media')}`}
       show={show}
       onClose={onClose}

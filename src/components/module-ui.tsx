@@ -31,7 +31,12 @@ export function CommonModuleUI({ extension }: CommonModuleUIProps) {
       onClick={toggleShowModal}
       indicatorColor={extension.type === ExtensionType.TWEET ? 'bg-primary' : 'bg-secondary'}
     >
-      <Modal title={title} show={showModal} onClose={toggleShowModal}>
+      <Modal
+        class="max-w-4xl md:max-w-screen-md sm:max-w-screen-sm min-h-[512px]"
+        title={title}
+        show={showModal}
+        onClose={toggleShowModal}
+      >
         <TableView title={title} extension={extension} />
       </Modal>
     </ExtensionPanel>
