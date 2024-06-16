@@ -90,11 +90,12 @@ export function TableView({ title, extension }: TableViewProps) {
   });
 
   // Select all rows by default.
-  // FIXME:
   useEffect(() => {
-    if (!table.getIsSomeRowsSelected()) {
-      table.toggleAllRowsSelected(true);
-    }
+    setTimeout(() => {
+      if (!table.getIsSomeRowsSelected()) {
+        table.toggleAllRowsSelected(true);
+      }
+    }, 100);
   }, [table]);
 
   return (
