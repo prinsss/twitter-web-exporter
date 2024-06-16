@@ -133,6 +133,7 @@ export const columns = [
           url: media.url,
           thumbnail: formatTwitterImage(media.media_url_https, 'thumb'),
           original: getMediaOriginalUrl(media),
+          ext_alt_text: media.ext_alt_text,
         })),
     },
     header: () => <Trans i18nKey="Media" />,
@@ -147,6 +148,8 @@ export const columns = [
             <img
               class="w-full h-full object-cover"
               src={formatTwitterImage(media.media_url_https, 'thumb')}
+              alt={media.ext_alt_text || ''}
+              title={media.ext_alt_text || ''}
             />
             {/* Show video duration or GIF. */}
             {media.type !== 'photo' && (
@@ -154,6 +157,12 @@ export const columns = [
                 {media.type === 'video'
                   ? formatVideoDuration(media.video_info?.duration_millis)
                   : 'GIF'}
+              </div>
+            )}
+            {/* Or show ALT text if any. */}
+            {media.type === 'photo' && media.ext_alt_text && (
+              <div class="absolute bottom-0.5 left-0.5 h-4 w-max px-0.5 text-xs text-white bg-black bg-opacity-30 leading-4 text-center rounded">
+                ALT
               </div>
             )}
           </div>

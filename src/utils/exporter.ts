@@ -114,6 +114,8 @@ export async function htmlExporter(data: DataType[], translations: Record<string
             const img = document.createElement('img');
             img.src = media.thumbnail;
             img.width = 50;
+            img.alt = media.ext_alt_text || '';
+            img.title = media.ext_alt_text || '';
             const link = document.createElement('a');
             link.href = media.original;
             link.target = '_blank';
