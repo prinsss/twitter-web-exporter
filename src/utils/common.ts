@@ -104,8 +104,8 @@ export function strEntitiesToHTML(str: string, urls: EntityURL[]) {
   for (const { url, display_url, expanded_url } of urls) {
     temp = temp.replaceAll(
       url,
-      `<a class="link" target="_blank" href="${xssFilter(expanded_url)}">${xssFilter(
-        display_url,
+      `<a class="link" target="_blank" href="${xssFilter(expanded_url ?? url)}">${xssFilter(
+        display_url ?? url,
       )}</a>`,
     );
   }
