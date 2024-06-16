@@ -39,8 +39,18 @@ export function saveFile(filename: string, content: string, prependBOM: boolean 
 
 /**
  * Export data and download as a file.
+ *
+ * @param data Data list to export.
+ * @param format Export format. (JSON, HTML, CSV)
+ * @param filename Filename to save.
+ * @param translations Translations for headers.
  */
-export async function exportData(data: DataType[], format: ExportFormatType, filename: string) {
+export async function exportData(
+  data: DataType[],
+  format: ExportFormatType,
+  filename: string,
+  translations: Record<string, string>,
+) {
   try {
     let content = '';
     let prependBOM = false;
@@ -51,7 +61,7 @@ export async function exportData(data: DataType[], format: ExportFormatType, fil
         content = await jsonExporter(data);
         break;
       case EXPORT_FORMAT.HTML:
-        content = await htmlExporter(data);
+        content = await htmlExporter(data, translations);
         break;
       case EXPORT_FORMAT.CSV:
         prependBOM = true;
@@ -68,16 +78,17 @@ export async function jsonExporter(data: DataType[]) {
   return JSON.stringify(data, undefined, '  ');
 }
 
-export async function htmlExporter(data: DataType[]) {
+export async function htmlExporter(data: DataType[], translations: Record<string, string>) {
   const table = document.createElement('table');
   const thead = document.createElement('thead');
   const tbody = document.createElement('tbody');
 
-  const headers = Object.keys(data[0] ?? {});
+  // The keys of the first row are translated and used as headers.
+  const exportKeys = Object.keys(data[0] ?? {});
   const headerRow = document.createElement('tr');
-  for (const header of headers) {
+  for (const exportKey of exportKeys) {
     const th = document.createElement('th');
-    th.textContent = header;
+    th.textContent = translations[exportKey] ?? exportKey;
     headerRow.appendChild(th);
   }
 
@@ -87,17 +98,17 @@ export async function htmlExporter(data: DataType[]) {
 
   for (const row of data) {
     const tr = document.createElement('tr');
-    for (const header of headers) {
+    for (const exportKey of exportKeys) {
       const td = document.createElement('td');
-      const value = row[header];
+      const value = row[exportKey];
 
-      if (header === 'profile_image_url' || header === 'profile_banner_url') {
+      if (exportKey === 'profile_image_url' || exportKey === 'profile_banner_url') {
         const img = document.createElement('img');
         img.src = value;
         img.width = 50;
         td.innerHTML = '';
         td.appendChild(img);
-      } else if (header === 'media') {
+      } else if (exportKey === 'media') {
         if (value?.length > 0) {
           for (const media of value) {
             const img = document.createElement('img');
@@ -111,13 +122,13 @@ export async function htmlExporter(data: DataType[]) {
             td.appendChild(link);
           }
         }
-      } else if (header === 'full_text' || header === 'description') {
+      } else if (exportKey === 'full_text' || exportKey === 'description') {
         const p = document.createElement('p');
         p.innerHTML = value;
         p.style.whiteSpace = 'pre-wrap';
         p.style.maxWidth = '640px';
         td.appendChild(p);
-      } else if (header === 'metadata') {
+      } else if (exportKey === 'metadata') {
         const details = document.createElement('details');
         const summary = document.createElement('summary');
         summary.textContent = 'Expand';
@@ -126,14 +137,14 @@ export async function htmlExporter(data: DataType[]) {
         pre.textContent = JSON.stringify(value, undefined, '  ');
         details.appendChild(pre);
         td.appendChild(details);
-      } else if (header === 'url') {
+      } else if (exportKey === 'url') {
         const link = document.createElement('a');
         link.href = value;
         link.target = '_blank';
         link.textContent = value;
         td.appendChild(link);
       } else {
-        td.textContent = typeof value === 'string' ? value : JSON.stringify(row[header]);
+        td.textContent = typeof value === 'string' ? value : JSON.stringify(row[exportKey]);
       }
 
       tr.appendChild(td);

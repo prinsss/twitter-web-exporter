@@ -64,11 +64,22 @@ export function ExportDataModal<T>({ title, table, show, onClose }: ExportDataMo
       setCurrentProgress(allRecords.length);
     }
 
+    // Prepare header translations for the exported data.
+    const headerTranslations = table
+      .getAllColumns()
+      .reduce<Record<string, string>>((acc, column) => {
+        const key = column.columnDef.meta?.exportKey || column.id;
+        const header = column.columnDef.meta?.exportHeader || column.id;
+        acc[key] = t(header as TranslationKey);
+        return acc;
+      }, {});
+
     // Convert data to selected format and download it.
     await exportData(
       allRecords,
       selectedFormat,
       `twitter-${title}-${Date.now()}.${selectedFormat.toLowerCase()}`,
+      headerTranslations,
     );
     setLoading(false);
   };
