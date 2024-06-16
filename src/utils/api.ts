@@ -71,6 +71,23 @@ export function extractTimelineTweet(itemContent: TimelineTweet): Tweet | null {
   return extractTweetUnion(tweetUnion);
 }
 
+/**
+ * Extract the user object from the timeline entry, ignoring unavailable users.
+ */
+export function extractTimelineUser(itemContent: TimelineUser): User | null {
+  const user = itemContent.user_results.result;
+
+  if (!user || user.__typename !== 'User') {
+    logger.warn(
+      "TimelineUser is empty. This could happen when the user's account is suspended or deleted.",
+      itemContent,
+    );
+    return null;
+  }
+
+  return user;
+}
+
 /*
 |--------------------------------------------------------------------------
 | Type predicates.

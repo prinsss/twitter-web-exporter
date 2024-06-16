@@ -4,9 +4,15 @@ export interface TimelineUser {
   itemType: 'TimelineUser';
   __typename: 'TimelineUser';
   user_results: {
-    result: User;
+    result: User | UserUnavailable;
   };
   userDisplayType: string;
+}
+
+export interface UserUnavailable {
+  __typename: 'UserUnavailable';
+  message: string;
+  reason: string;
 }
 
 export interface User {

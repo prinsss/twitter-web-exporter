@@ -1,7 +1,7 @@
 import { Interceptor } from '@/core/extensions';
 import { db } from '@/core/database';
 import { TimelineInstructions, User } from '@/types';
-import { extractDataFromResponse } from '@/utils/api';
+import { extractDataFromResponse, extractTimelineUser } from '@/utils/api';
 import logger from '@/utils/logger';
 
 interface ListSubscribersResponse {
@@ -26,7 +26,7 @@ export const ListSubscribersInterceptor: Interceptor = (req, res, ext) => {
     const newData = extractDataFromResponse<ListSubscribersResponse, User>(
       res,
       (json) => json.data.list.subscribers_timeline.timeline.instructions,
-      (entry) => entry.content.itemContent.user_results.result,
+      (entry) => extractTimelineUser(entry.content.itemContent),
     );
 
     // Add captured data to the database.

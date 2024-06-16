@@ -13,6 +13,7 @@ import {
 } from '@/types';
 import {
   extractTimelineTweet,
+  extractTimelineUser,
   isTimelineEntryListSearch,
   isTimelineEntrySearchGrid,
   isTimelineEntryTweet,
@@ -86,8 +87,10 @@ export const SearchTimelineInterceptor: Interceptor = (req, res, ext) => {
 
       // Extract users.
       if (isTimelineEntryUser(entry)) {
-        const user = entry.content.itemContent.user_results.result;
-        newUsers.push(user);
+        const user = extractTimelineUser(entry.content.itemContent);
+        if (user) {
+          newUsers.push(user);
+        }
       }
 
       // Extract lists.
