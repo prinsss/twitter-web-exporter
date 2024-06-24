@@ -39,9 +39,12 @@ export function extractDataFromResponse<
     (i) => i.type === 'TimelineAddEntries',
   ) as TimelineAddEntriesInstruction<P>;
 
+  // The "TimelineAddEntries" instruction may not exist in some cases.
+  const timelineAddEntriesInstructionEntries = timelineAddEntriesInstruction?.entries ?? [];
+
   const newData: T[] = [];
 
-  for (const entry of timelineAddEntriesInstruction.entries) {
+  for (const entry of timelineAddEntriesInstructionEntries) {
     if (isTimelineEntryItem<P>(entry)) {
       const data = extractDataFromTimelineEntry(entry);
       if (data) {

@@ -194,7 +194,7 @@ export function ExportMediaModal<T>({
             value={(currentProgress / (totalProgress || 1)) * 100}
             max="100"
           />
-          <span class="text-sm h-2 leading-none mt-2 text-base-content text-opacity-60">
+          <span class="text-sm h-4 leading-none mt-2 text-base-content text-opacity-60">
             {`${currentProgress}/${mediaList.length}`}
           </span>
         </div>

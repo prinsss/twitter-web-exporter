@@ -66,8 +66,11 @@ export const SearchTimelineInterceptor: Interceptor = (req, res, ext) => {
       (i) => i.type === 'TimelineAddToModule',
     ) as TimelineAddToModuleInstruction<ItemContentUnion>;
 
+    // The "TimelineAddEntries" instruction may not exist in some cases.
+    const timelineAddEntriesInstructionEntries = timelineAddEntriesInstruction?.entries ?? [];
+
     // First, parse "TimelineAddEntries" instruction.
-    for (const entry of timelineAddEntriesInstruction.entries) {
+    for (const entry of timelineAddEntriesInstructionEntries) {
       // Extract normal tweets.
       if (isTimelineEntryTweet(entry)) {
         const tweet = extractTimelineTweet(entry.content.itemContent);

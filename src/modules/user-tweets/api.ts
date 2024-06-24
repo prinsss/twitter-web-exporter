@@ -60,7 +60,10 @@ export const UserTweetsInterceptor: Interceptor = (req, res, ext) => {
       (i) => i.type === 'TimelineAddEntries',
     ) as TimelineAddEntriesInstruction<TimelineTweet>;
 
-    for (const entry of timelineAddEntriesInstruction.entries) {
+    // The "TimelineAddEntries" instruction may not exist in some cases.
+    const timelineAddEntriesInstructionEntries = timelineAddEntriesInstruction?.entries ?? [];
+
+    for (const entry of timelineAddEntriesInstructionEntries) {
       // Extract normal tweets.
       if (isTimelineEntryTweet(entry)) {
         const tweet = extractTimelineTweet(entry.content.itemContent);

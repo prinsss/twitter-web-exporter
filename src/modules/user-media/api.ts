@@ -44,7 +44,10 @@ export const UserMediaInterceptor: Interceptor = (req, res, ext) => {
       (i) => i.type === 'TimelineAddEntries',
     ) as TimelineAddEntriesInstruction<TimelineTweet>;
 
-    for (const entry of timelineAddEntriesInstruction.entries) {
+    // The "TimelineAddEntries" instruction may not exist in some cases.
+    const timelineAddEntriesInstructionEntries = timelineAddEntriesInstruction?.entries ?? [];
+
+    for (const entry of timelineAddEntriesInstructionEntries) {
       if (isTimelineEntryProfileGrid(entry)) {
         const tweetsInSearchGrid = entry.content.items
           .map((i) => extractTimelineTweet(i.item.itemContent))
