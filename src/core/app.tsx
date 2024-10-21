@@ -1,7 +1,7 @@
 import { Fragment } from 'preact';
 import { useEffect } from 'preact/hooks';
 import { useSignal } from '@preact/signals';
-import { IconX } from '@tabler/icons-preact';
+import { IconBrandTwitterFilled, IconX } from '@tabler/icons-preact';
 import { GM_registerMenuCommand } from '$';
 
 import { ErrorBoundary } from '@/components/error-boundary';
@@ -64,7 +64,8 @@ export function App() {
       >
         {/* Card title. */}
         <header class="flex items-center h-9">
-          <h2 class="font-semibold leading-none text-xl m-0 flex-grow">Web Exporter (α)</h2>
+          <IconBrandTwitterFilled class="mr-2" />
+          <h2 class="font-semibold leading-none text-xl m-0 flex-grow">Web Exporter</h2>
           <ErrorBoundary>
             <Settings />
           </ErrorBoundary>
@@ -76,7 +77,7 @@ export function App() {
           </div>
         </header>
         <p class="text-sm text-base-content text-opacity-70 mb-1 leading-none">
-          {t('Refresh or clear to start new captures.')}
+          {t('Browse around to capture more data.')}
         </p>
         <div class="divider mt-0 mb-0"></div>
         {/* Extensions UI. */}
