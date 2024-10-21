@@ -1,5 +1,6 @@
 import { Fragment } from 'preact';
 import { IconSettings, IconBrandGithubFilled, IconHelp } from '@tabler/icons-preact';
+import { GM_registerMenuCommand } from '$';
 
 import packageJson from '@/../package.json';
 import { Modal } from '@/components/common';
@@ -8,6 +9,7 @@ import { capitalizeFirstLetter, cx, useSignal, useToggle } from '@/utils/common'
 
 import extensionManager from './extensions';
 import { DEFAULT_APP_OPTIONS, options, THEMES } from './options';
+import { useEffect } from 'preact/hooks';
 
 export function Settings() {
   const { t, i18n } = useTranslation();
@@ -21,6 +23,12 @@ export function Settings() {
       'text-sm mb-2 w-full flex px-4 py-2 text-base-content bg-base-200 rounded-box justify-between',
     item: 'label cursor-pointer flex justify-between h-8 items-center p-0',
   };
+
+  useEffect(() => {
+    GM_registerMenuCommand(`${t('Version')} ${packageJson.version}`, () => {
+      window.open(packageJson.homepage, '_blank');
+    });
+  }, []);
 
   return (
     <Fragment>

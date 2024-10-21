@@ -1,6 +1,7 @@
 import { Fragment } from 'preact';
 import { useEffect } from 'preact/hooks';
 import { IconX } from '@tabler/icons-preact';
+import { GM_registerMenuCommand } from '$';
 
 import { ErrorBoundary } from '@/components/error-boundary';
 import { CatIcon } from '@/components/common';
@@ -34,6 +35,8 @@ export function App() {
     options.signal.subscribe(() => {
       currentTheme.value = options.get('theme');
     });
+
+    GM_registerMenuCommand(t('Open Control Panel'), toggleControlPanel);
 
     logger.debug('App useEffect executed');
   }, []);
