@@ -27,7 +27,6 @@ export default defineConfig({
         autoprefixer(),
         remToPx({ propList: ['*'] }),
         // Use scoped CSS.
-        // @ts-expect-error TS complains about types but it does work.
         prefixSelector({
           prefix: '#twe-root',
           exclude: [/^#twe-root/], // This may be a bug.
@@ -65,6 +64,7 @@ export default defineConfig({
         require: [
           'https://cdn.jsdelivr.net/npm/dayjs@1.11.13/dayjs.min.js',
           'https://cdn.jsdelivr.net/npm/dexie@4.0.9/dist/dexie.min.js',
+          'https://cdn.jsdelivr.net/npm/dexie-export-import@4.1.2/dist/dexie-export-import.js',
           'https://cdn.jsdelivr.net/npm/i18next@23.16.2/i18next.min.js',
           'https://cdn.jsdelivr.net/npm/preact@10.24.3/dist/preact.min.js',
           'https://cdn.jsdelivr.net/npm/preact@10.24.3/hooks/dist/hooks.umd.js',
@@ -80,6 +80,7 @@ export default defineConfig({
         externalGlobals: {
           dayjs: 'dayjs',
           dexie: 'Dexie',
+          'dexie-export-import': 'DexieExportImport',
           i18next: 'i18next',
           preact: 'preact',
           'preact/hooks': 'preactHooks',

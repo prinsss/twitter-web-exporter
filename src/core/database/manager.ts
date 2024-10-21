@@ -1,4 +1,5 @@
 import Dexie, { KeyPaths } from 'dexie';
+import { exportDB, importInto } from 'dexie-export-import';
 
 import packageJson from '@/../package.json';
 import { Capture, Tweet, User } from '@/types';
@@ -122,6 +123,34 @@ export class DatabaseManager {
       return;
     }
     return this.captures().bulkDelete(captures.map((capture) => capture.id));
+  }
+
+  /*
+  |--------------------------------------------------------------------------
+  | Export and Import Methods
+  |--------------------------------------------------------------------------
+  */
+
+  async export() {
+    return await exportDB(this.db);
+  }
+
+  async import(data: Blob) {
+    return await importInto(this.db, data);
+  }
+
+  async clear() {
+    await this.captures().clear();
+    await this.tweets().clear();
+    await this.users().clear();
+  }
+
+  async count() {
+    return {
+      tweets: await this.tweets().count(),
+      users: await this.users().count(),
+      captures: await this.captures().count(),
+    };
   }
 
   /*

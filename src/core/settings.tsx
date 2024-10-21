@@ -1,16 +1,25 @@
 import { Fragment } from 'preact';
+import { useEffect } from 'preact/hooks';
 import { useSignal } from '@preact/signals';
-import { IconSettings, IconBrandGithubFilled, IconHelp } from '@tabler/icons-preact';
+import {
+  IconSettings,
+  IconBrandGithubFilled,
+  IconHelp,
+  IconDatabaseExport,
+  IconTrashX,
+  IconReportAnalytics,
+} from '@tabler/icons-preact';
 import { GM_registerMenuCommand } from '$';
 
 import packageJson from '@/../package.json';
 import { Modal } from '@/components/common';
 import { useTranslation, detectBrowserLanguage, LANGUAGES_CONFIG, TranslationKey } from '@/i18n';
 import { capitalizeFirstLetter, cx, useToggle } from '@/utils/common';
+import { saveFile } from '@/utils/exporter';
 
+import { db } from './database';
 import extensionManager from './extensions';
 import { DEFAULT_APP_OPTIONS, options, THEMES } from './options';
-import { useEffect } from 'preact/hooks';
 
 export function Settings() {
   const { t, i18n } = useTranslation();
@@ -118,12 +127,52 @@ export function Settings() {
               }}
             />
           </label>
+          {/* Database operations. */}
+          <div class={styles.item}>
+            <div class="flex items-center">
+              <span class="label-text">{t('Local Database')}</span>
+            </div>
+            <div>
+              <button
+                class="btn btn-xs btn-neutral mr-2"
+                onClick={async () => {
+                  const count = await db.count();
+                  alert(JSON.stringify(count, undefined, '  '));
+                }}
+              >
+                <IconReportAnalytics size={20} />
+                {t('Analyze DB')}
+              </button>
+              <button
+                class="btn btn-xs btn-primary mr-2"
+                onClick={async () => {
+                  const blob = await db.export();
+                  saveFile(`twitter-web-exporter-${Date.now()}.json`, blob);
+                }}
+              >
+                <IconDatabaseExport size={20} />
+                {t('Export DB')}
+              </button>
+              <button
+                class="btn btn-xs btn-warning"
+                onClick={async () => {
+                  if (confirm(t('Are you sure to clear all data in the database?'))) {
+                    await db.clear();
+                    alert(t('Database cleared.'));
+                  }
+                }}
+              >
+                <IconTrashX size={20} />
+                {t('Clear DB')}
+              </button>
+            </div>
+          </div>
         </div>
         {/* Enable or disable modules. */}
-        <p class={styles.subtitle}>{t('Modules')}</p>
-        <div class={cx(styles.block, 'flex-col')}>
+        <p class={styles.subtitle}>{t('Modules (Scroll to see more)')}</p>
+        <div class={cx(styles.block, 'flex-col', 'max-h-44 overflow-scroll')}>
           {extensionManager.getExtensions().map((extension) => (
-            <label class={styles.item} key={extension.name}>
+            <label class={cx(styles.item, 'flex-shrink-0')} key={extension.name}>
               <span>
                 {t(extension.name.replace('Module', '') as TranslationKey)} {t('Module')}
               </span>

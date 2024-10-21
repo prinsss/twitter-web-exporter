@@ -24,6 +24,7 @@
     "@tanstack/table-core": "8.20.5",
     "dayjs": "1.11.13",
     "dexie": "4.0.9",
+    "dexie-export-import": "4.1.2",
     "file-saver": "2.0.5",
     "i18next": "23.16.2",
     "preact": "10.24.3"

@@ -24,11 +24,18 @@ export function csvEscapeStr(str: string) {
 /**
  * Save a text file to disk.
  */
-export function saveFile(filename: string, content: string, prependBOM: boolean = false) {
+export function saveFile(filename: string, content: string | Blob, prependBOM: boolean = false) {
   const link = document.createElement('a');
-  const blob = new Blob(prependBOM ? [new Uint8Array([0xef, 0xbb, 0xbf]), content] : [content], {
-    type: 'text/plain;charset=utf-8',
-  });
+  let blob: Blob;
+
+  if (content instanceof Blob) {
+    blob = content;
+  } else {
+    blob = new Blob(prependBOM ? [new Uint8Array([0xef, 0xbb, 0xbf]), content] : [content], {
+      type: 'text/plain;charset=utf-8',
+    });
+  }
+
   const url = URL.createObjectURL(blob);
 
   link.href = url;
