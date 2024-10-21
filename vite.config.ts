@@ -27,19 +27,10 @@ export default defineConfig({
         autoprefixer(),
         remToPx({ propList: ['*'] }),
         // Use scoped CSS.
+        // @ts-expect-error TS complains about types but it does work.
         prefixSelector({
           prefix: '#twe-root',
-          transform(prefix, selector, prefixedSelector) {
-            if (selector.match(/:root/)) {
-              return selector.replace(/:root/, prefix);
-            }
-
-            if (selector.match(/html/)) {
-              return selector.replace(/html/, prefix);
-            }
-
-            return prefixedSelector;
-          },
+          exclude: [/^#twe-root/], // This may be a bug.
         }),
       ],
     },
@@ -72,14 +63,14 @@ export default defineConfig({
         downloadURL:
           'https://github.com/prinsss/twitter-web-exporter/releases/latest/download/twitter-web-exporter.user.js',
         require: [
-          'https://cdn.jsdelivr.net/npm/dayjs@1.11.10/dayjs.min.js',
-          'https://cdn.jsdelivr.net/npm/dexie@4.0.4/dist/dexie.min.js',
-          'https://cdn.jsdelivr.net/npm/i18next@23.11.1/i18next.min.js',
-          'https://cdn.jsdelivr.net/npm/preact@10.19.3/dist/preact.min.js',
-          'https://cdn.jsdelivr.net/npm/preact@10.19.3/hooks/dist/hooks.umd.js',
-          'https://cdn.jsdelivr.net/npm/@preact/signals-core@1.5.1/dist/signals-core.min.js',
-          'https://cdn.jsdelivr.net/npm/@preact/signals@1.2.2/dist/signals.min.js',
-          'https://cdn.jsdelivr.net/npm/@tanstack/table-core@8.11.2/build/umd/index.production.js',
+          'https://cdn.jsdelivr.net/npm/dayjs@1.11.13/dayjs.min.js',
+          'https://cdn.jsdelivr.net/npm/dexie@4.0.9/dist/dexie.min.js',
+          'https://cdn.jsdelivr.net/npm/i18next@23.16.2/i18next.min.js',
+          'https://cdn.jsdelivr.net/npm/preact@10.24.3/dist/preact.min.js',
+          'https://cdn.jsdelivr.net/npm/preact@10.24.3/hooks/dist/hooks.umd.js',
+          'https://cdn.jsdelivr.net/npm/@preact/signals-core@1.8.0/dist/signals-core.min.js',
+          'https://cdn.jsdelivr.net/npm/@preact/signals@1.3.0/dist/signals.min.js',
+          'https://cdn.jsdelivr.net/npm/@tanstack/table-core@8.20.5/build/umd/index.production.js',
           // We bundle FileSaver.js in the script since the UMD build is broken.
           // See: https://github.com/eligrey/FileSaver.js/issues/500
           // 'https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js',
