@@ -1,11 +1,12 @@
 import { Fragment } from 'preact';
+import { useSignal } from '@preact/signals';
 import { IconSettings, IconBrandGithubFilled, IconHelp } from '@tabler/icons-preact';
 import { GM_registerMenuCommand } from '$';
 
 import packageJson from '@/../package.json';
 import { Modal } from '@/components/common';
 import { useTranslation, detectBrowserLanguage, LANGUAGES_CONFIG, TranslationKey } from '@/i18n';
-import { capitalizeFirstLetter, cx, useSignal, useToggle } from '@/utils/common';
+import { capitalizeFirstLetter, cx, useToggle } from '@/utils/common';
 
 import extensionManager from './extensions';
 import { DEFAULT_APP_OPTIONS, options, THEMES } from './options';
@@ -131,9 +132,11 @@ export function Settings() {
                 class="toggle toggle-secondary"
                 checked={extension.enabled}
                 onChange={() => {
-                  extension.enabled
-                    ? extensionManager.disable(extension.name)
-                    : extensionManager.enable(extension.name);
+                  if (extension.enabled) {
+                    extensionManager.disable(extension.name);
+                  } else {
+                    extensionManager.enable(extension.name);
+                  }
                 }}
               />
             </label>

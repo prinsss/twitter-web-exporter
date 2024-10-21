@@ -213,7 +213,7 @@ function createWriter(underlyingSource) {
   return new ReadableStream({
     start: (c) => {
       ctrl = c;
-      underlyingSource.start && Promise.resolve(underlyingSource.start(zipWriter));
+      if (underlyingSource.start) Promise.resolve(underlyingSource.start(zipWriter));
     },
     pull() {
       return (

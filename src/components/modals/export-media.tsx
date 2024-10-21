@@ -1,4 +1,5 @@
 import { Table } from '@tanstack/table-core';
+import { useSignal } from '@preact/signals';
 import { IconCircleCheck, IconCircleDashed, IconInfoCircle } from '@tabler/icons-preact';
 
 import { FileLike, ProgressCallback, zipStreamDownload } from '@/utils/download';
@@ -6,7 +7,7 @@ import { DEFAULT_FILENAME_PATTERN, extractMedia, patterns } from '@/utils/media'
 import { Modal } from '@/components/common';
 import { TranslationKey, useTranslation } from '@/i18n';
 import { Tweet, User } from '@/types';
-import { useSignalState, cx, useSignal, useToggle } from '@/utils/common';
+import { useSignalState, cx, useToggle } from '@/utils/common';
 import logger from '@/utils/logger';
 
 type ExportMediaModalProps<T> = {

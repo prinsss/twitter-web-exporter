@@ -1,12 +1,13 @@
 import { Fragment } from 'preact';
 import { useEffect } from 'preact/hooks';
+import { useSignal } from '@preact/signals';
 import { IconX } from '@tabler/icons-preact';
 import { GM_registerMenuCommand } from '$';
 
 import { ErrorBoundary } from '@/components/error-boundary';
 import { CatIcon } from '@/components/common';
 import { useTranslation } from '@/i18n';
-import { cx, useSignal } from '@/utils/common';
+import { cx } from '@/utils/common';
 import logger from '@/utils/logger';
 
 import extensionManager, { Extension } from './extensions';

@@ -1,6 +1,5 @@
 import dayjs from 'dayjs';
-import { useMemo } from 'preact/hooks';
-import { signal } from '@preact/signals';
+import { useSignal } from '@preact/signals';
 import { EntityURL } from '@/types';
 import logger from './logger';
 
@@ -14,15 +13,6 @@ export function safeJSONParse(text: string) {
     logger.error((e as Error).message);
     return null;
   }
-}
-
-/**
- * Avoid importing `useSignal` from "@preact/signals" package.
- *
- * @see https://github.com/preactjs/signals/pull/415
- */
-export function useSignal<T>(value: T) {
-  return useMemo(() => signal<T>(value), []);
 }
 
 /**
