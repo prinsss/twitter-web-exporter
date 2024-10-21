@@ -56,7 +56,12 @@ export class DatabaseManager {
       return [];
     }
     const tweetIds = captures.map((capture) => capture.data_key);
-    return this.tweets().where('rest_id').anyOf(tweetIds).toArray().catch(this.logError);
+    return this.tweets()
+      .where('rest_id')
+      .anyOf(tweetIds)
+      .filter((t) => this.filterEmptyData(t))
+      .toArray()
+      .catch(this.logError);
   }
 
   async extGetCapturedUsers(extName: string) {
@@ -65,7 +70,12 @@ export class DatabaseManager {
       return [];
     }
     const userIds = captures.map((capture) => capture.data_key);
-    return this.users().where('rest_id').anyOf(userIds).toArray().catch(this.logError);
+    return this.users()
+      .where('rest_id')
+      .anyOf(userIds)
+      .filter((t) => this.filterEmptyData(t))
+      .toArray()
+      .catch(this.logError);
   }
 
   /*
@@ -171,6 +181,14 @@ export class DatabaseManager {
 
   async deleteAllCaptures() {
     return this.captures().clear().catch(this.logError);
+  }
+
+  private filterEmptyData(data: Tweet | User) {
+    if (!data?.legacy) {
+      logger.warn('Empty data found in DB', data);
+      return false;
+    }
+    return true;
   }
 
   /*

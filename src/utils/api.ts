@@ -192,11 +192,11 @@ export function isTimelineEntryListSearch(
 export function extractTweetUnion(tweet: TweetUnion): Tweet | null {
   try {
     if (tweet.__typename === 'Tweet') {
-      return tweet;
+      return filterEmptyTweet(tweet);
     }
 
     if (tweet.__typename === 'TweetWithVisibilityResults') {
-      return tweet.tweet;
+      return filterEmptyTweet(tweet.tweet);
     }
 
     if (tweet.__typename === 'TweetTombstone') {
@@ -254,6 +254,15 @@ export function extractTweetMedia(tweet: Tweet): Media[] {
 
 export function extractTweetFullText(tweet: Tweet): string {
   return tweet.note_tweet?.note_tweet_results.result.text ?? tweet.legacy.full_text;
+}
+
+export function filterEmptyTweet(tweet: Tweet): Tweet | null {
+  if (!tweet.legacy) {
+    logger.warn('Empty tweet received', tweet);
+    return null;
+  }
+
+  return tweet;
 }
 
 /*
