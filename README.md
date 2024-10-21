@@ -45,7 +45,13 @@
 
 ## Usage
 
-Once the script is installed, you can find a floating panel on the left side of the page. Click the 🐈 Cat button to close the panel or open it again. Click the ⚙️ Cog button to open the settings panel. You can change the UI theme and enable/disable features of script here.
+Once the script is installed, you can find a floating panel on the left side of the page. Click the 🐈 Cat button to close the panel or open it again. You can also open the control panel by clicking the Tampermonkey/Violentmonkey icon in the browser menu bar and then selecting it from the script menu.
+
+If you do not see the cat button or the menu options as shown in the image, please check if the script is properly installed and enabled.
+
+![03-menu-commands](https://github.com/prinsss/twitter-web-exporter/raw/main/docs/03-menu-commands.png)
+
+Click the ⚙️ Cog button to open the settings panel. You can change the UI theme and enable/disable features of script here.
 
 Then open the page that you want to export data from. The script will automatically capture on the following pages:
 
