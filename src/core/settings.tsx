@@ -50,7 +50,7 @@ export function Settings() {
         <IconSettings />
       </div>
       {/* Settings modal. */}
-      <Modal title="Settings" show={showSettings} onClose={toggleSettings} class="max-w-lg">
+      <Modal title={t('Settings')} show={showSettings} onClose={toggleSettings} class="max-w-lg">
         {/* Common settings. */}
         <p class={styles.subtitle}>{t('General')}</p>
         <div class={cx(styles.block, 'flex-col')}>
@@ -147,7 +147,9 @@ export function Settings() {
                 class="btn btn-xs btn-primary mr-2"
                 onClick={async () => {
                   const blob = await db.export();
-                  saveFile(`twitter-web-exporter-${Date.now()}.json`, blob);
+                  if (blob) {
+                    saveFile(`twitter-web-exporter-${Date.now()}.json`, blob);
+                  }
                 }}
               >
                 <IconDatabaseExport size={20} />
@@ -158,7 +160,6 @@ export function Settings() {
                 onClick={async () => {
                   if (confirm(t('Are you sure to clear all data in the database?'))) {
                     await db.clear();
-                    alert(t('Database cleared.'));
                   }
                 }}
               >

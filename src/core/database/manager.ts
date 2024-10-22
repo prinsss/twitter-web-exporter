@@ -132,25 +132,31 @@ export class DatabaseManager {
   */
 
   async export() {
-    return await exportDB(this.db);
+    return exportDB(this.db).catch(this.logError);
   }
 
   async import(data: Blob) {
-    return await importInto(this.db, data);
+    return importInto(this.db, data).catch(this.logError);
   }
 
   async clear() {
-    await this.captures().clear();
-    await this.tweets().clear();
-    await this.users().clear();
+    await this.deleteAllCaptures();
+    await this.deleteAllTweets();
+    await this.deleteAllUsers();
+    logger.info('Database cleared');
   }
 
   async count() {
-    return {
-      tweets: await this.tweets().count(),
-      users: await this.users().count(),
-      captures: await this.captures().count(),
-    };
+    try {
+      return {
+        tweets: await this.tweets().count(),
+        users: await this.users().count(),
+        captures: await this.captures().count(),
+      };
+    } catch (error) {
+      this.logError(error);
+      return null;
+    }
   }
 
   /*
