@@ -2,6 +2,44 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.0](https://github.com/prinsss/twitter-web-exporter/compare/v1.1.0..v1.2.0) - 2024-10-21
+
+### ⛰️  Features
+
+- Update title text on UI - ([0e1409a](https://github.com/prinsss/twitter-web-exporter/commit/0e1409ac9fa0fe95f42e9ab8a9f2b3798efe6751))
+- Support exporting and clearing database - ([4cb8035](https://github.com/prinsss/twitter-web-exporter/commit/4cb8035adf0d35be58422129f9ddc563263027bf))
+- Upgrade dependencies - ([5413a9a](https://github.com/prinsss/twitter-web-exporter/commit/5413a9a73ef1775af8f54030bce92ce49f7530f7))
+- Add menu command for opening control panel - ([37f32f7](https://github.com/prinsss/twitter-web-exporter/commit/37f32f7bc0b28f2450dfe35e7e6f63b36fc5a26f))
+- Export ALT text for images - ([1e81fb3](https://github.com/prinsss/twitter-web-exporter/commit/1e81fb30703b102f3b0955d4475264c4556399ff))
+- Add i18n for headers of exported HTML - ([59ca0fe](https://github.com/prinsss/twitter-web-exporter/commit/59ca0fe928ef2f6abb2eb96e4bc05985225ce6fc))
+- Add local database - ([d357c4d](https://github.com/prinsss/twitter-web-exporter/commit/d357c4dc5ca981a6f7df5c9963ca45c263f74eb1))
+- Pass ext instance to interceptor and component - ([07127f0](https://github.com/prinsss/twitter-web-exporter/commit/07127f0426161899567c804d82d0dd27359627dc))
+
+### 🐛 Bug Fixes
+
+- Import useSignal from proper package - ([11eae28](https://github.com/prinsss/twitter-web-exporter/commit/11eae2813fb6aee1b92976bfb00fb1f11bc16a42))
+- Filter out empty tweets in db - ([2e35ba0](https://github.com/prinsss/twitter-web-exporter/commit/2e35ba02b0f4faaec65ab5255b49144a811a497b))
+- Error when TimelineAddEntries is missing - ([9b3ccb8](https://github.com/prinsss/twitter-web-exporter/commit/9b3ccb85e76a1d7018c9388a50ddfa87b388dd9f))
+- Update min height of modals - ([2d284b5](https://github.com/prinsss/twitter-web-exporter/commit/2d284b57e9d154945c7217a045eca9d1a9b3cc89))
+- Select all rows by default - ([e4d6aa2](https://github.com/prinsss/twitter-web-exporter/commit/e4d6aa2f90e140db5ca34d7a32c4cac9cb5f6cc0))
+- Skip and warn when exporting suspended user - ([1c7f970](https://github.com/prinsss/twitter-web-exporter/commit/1c7f9707a4c46951a1df3663108e4d0cd408d81f))
+- Error when expaned_url does not exist - ([f45ee10](https://github.com/prinsss/twitter-web-exporter/commit/f45ee10803ca1915e9e827215c178c24bbda635f))
+
+### 🚜 Refactor
+
+- Adapt modules to new database - ([947c9f7](https://github.com/prinsss/twitter-web-exporter/commit/947c9f75b51a3c300cf6a18560e7275259f18305))
+- Read data from database instead of signals - ([c420263](https://github.com/prinsss/twitter-web-exporter/commit/c4202630317234b12daa95a6f3e7a903d93254c9))
+- Rearrange directory structure of core - ([3caafdf](https://github.com/prinsss/twitter-web-exporter/commit/3caafdf03faa43ef20e3684621ad6fd6f042a5e9))
+
+### 📚 Documentation
+
+- Update README - ([2a159b9](https://github.com/prinsss/twitter-web-exporter/commit/2a159b9228ec2a04bd1a8db5ba02d8e09eb9ec24))
+- I18n for userscript name - ([7b2307f](https://github.com/prinsss/twitter-web-exporter/commit/7b2307fa5503469329c39f9e9852fc7097019ecf))
+
+### ⚙️ Miscellaneous Tasks
+
+- Rename eslint config file - ([77d05f3](https://github.com/prinsss/twitter-web-exporter/commit/77d05f3f3d609d67c1002c692899f02b2de53240))
+
 ## [1.1.0](https://github.com/prinsss/twitter-web-exporter/compare/v1.0.10..v1.1.0) - 2024-04-13
 
 ### ⛰️  Features
