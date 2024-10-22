@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://github.com/prinsss/twitter-web-exporter">
-    <img alt="twitter-web-exporter" src="https://socialify.git.ci/prinsss/twitter-web-exporter/image?description=1&descriptionEditable=Export%20tweets%2C%20bookmarks%2C%20lists%20and%20much%20more%20from%20Twitter(X)%20web%20app.&font=Raleway&forks=0&issues=0&pattern=Plus&pulls=0&theme=Light" />
+    <img alt="twitter-web-exporter" src="https://socialify.git.ci/prinsss/twitter-web-exporter/image?description=1&descriptionEditable=Export%20tweets%2C%20bookmarks%2C%20lists%20and%20much%20more%20from%20Twitter(X)%20web%20app.&font=Raleway&forks=0&issues=0&pattern=Plus&pulls=0&theme=Light&logo=https%3A%2F%2Fcdn.jsdelivr.net%2Fnpm%2F%40tabler%2Ficons%403.19.0%2Ficons%2Foutline%2Fbrand-twitter.svg" />
   </a>
 </p>
 
