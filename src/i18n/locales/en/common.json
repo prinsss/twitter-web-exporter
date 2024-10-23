@@ -42,6 +42,7 @@
   "RuntimeLogs": "RuntimeLogs",
   "SearchTimeline": "SearchTimeline",
   "TweetDetail": "TweetDetail",
+  "UserDetail": "UserDetail",
   "UserMedia": "UserMedia",
   "UserTweets": "UserTweets"
 }

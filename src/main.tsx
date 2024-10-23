@@ -13,6 +13,7 @@ import ListTimelineModule from './modules/list-timeline';
 import RuntimeLogsModule from './modules/runtime-logs';
 import SearchTimelineModule from './modules/search-timeline';
 import TweetDetailModule from './modules/tweet-detail';
+import UserDetailModule from './modules/user-detail';
 import UserMediaModule from './modules/user-media';
 import UserTweetsModule from './modules/user-tweets';
 
@@ -20,6 +21,7 @@ import './index.css';
 
 extensions.add(FollowersModule);
 extensions.add(FollowingModule);
+extensions.add(UserDetailModule);
 extensions.add(ListMembersModule);
 extensions.add(ListSubscribersModule);
 extensions.add(HomeTimelineModule);
