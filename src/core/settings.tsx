@@ -136,8 +136,20 @@ export function Settings() {
               <button
                 class="btn btn-xs btn-neutral mr-2"
                 onClick={async () => {
+                  let storageUsageText = 'Storage usage: N/A';
+                  if (typeof navigator.storage.estimate === 'function') {
+                    const { quota = 1, usage = 0 } = await navigator.storage.estimate();
+                    const usageMB = (usage / 1024 / 1024).toFixed(2);
+                    const quotaMB = (quota / 1024 / 1024).toFixed(2);
+                    storageUsageText = `Storage usage: ${usageMB}MB / ${quotaMB}MB`;
+                  }
+
                   const count = await db.count();
-                  alert(JSON.stringify(count, undefined, '  '));
+                  alert(
+                    storageUsageText +
+                      '\n\nIndexedDB tables count:\n' +
+                      JSON.stringify(count, undefined, '  '),
+                  );
                 }}
               >
                 <IconReportAnalytics size={20} />
