@@ -1,6 +1,11 @@
 import { createColumnHelper } from '@tanstack/table-core';
 import { IconLink } from '@tabler/icons-preact';
-import { formatDateTime, parseTwitterDateTime, strEntitiesToHTML } from '@/utils/common';
+import {
+  formatDateTime,
+  formatTwitterBirthdate,
+  parseTwitterDateTime,
+  strEntitiesToHTML,
+} from '@/utils/common';
 import { getProfileImageOriginalUrl, getUserURL } from '@/utils/api';
 import { options } from '@/core/options';
 import { Trans } from '@/i18n';
@@ -121,6 +126,34 @@ export const columns = [
     header: () => <Trans i18nKey="Listed" />,
     cell: (info) => <p>{info.getValue()}</p>,
   }),
+  columnHelper.accessor('legacy.location', {
+    meta: { exportKey: 'location', exportHeader: 'Location' },
+    header: () => <Trans i18nKey="Location" />,
+    cell: (info) => <p>{info.getValue() ?? 'N/A'}</p>,
+  }),
+  columnHelper.accessor('legacy.url', {
+    meta: { exportKey: 'website', exportHeader: 'Website' },
+    header: () => <Trans i18nKey="Website" />,
+    cell: (info) => (
+      <p
+        dangerouslySetInnerHTML={{
+          __html: strEntitiesToHTML(
+            info.row.original.legacy.url || 'N/A',
+            info.row.original.legacy.entities.url?.urls,
+          ),
+        }}
+      />
+    ),
+  }),
+  columnHelper.accessor('legacy_extended_profile.birthdate', {
+    meta: {
+      exportKey: 'birthdate',
+      exportHeader: 'Birthdate',
+      exportValue: (row) => formatTwitterBirthdate(row.original.legacy_extended_profile?.birthdate),
+    },
+    header: () => <Trans i18nKey="Birthdate" />,
+    cell: (info) => <p>{formatTwitterBirthdate(info.getValue()) ?? 'N/A'}</p>,
+  }),
   columnHelper.accessor('legacy.verified_type', {
     meta: { exportKey: 'verified_type', exportHeader: 'Verified Type' },
     header: () => <Trans i18nKey="Verified Type" />,
@@ -139,6 +172,16 @@ export const columns = [
   columnHelper.accessor('legacy.followed_by', {
     meta: { exportKey: 'followed_by', exportHeader: 'Follows You' },
     header: () => <Trans i18nKey="Follows You" />,
+    cell: (info) => <p>{info.getValue() ? 'YES' : 'NO'}</p>,
+  }),
+  columnHelper.accessor('legacy.can_dm', {
+    meta: { exportKey: 'can_dm', exportHeader: 'Can DM' },
+    header: () => <Trans i18nKey="Can DM" />,
+    cell: (info) => <p>{info.getValue() ? 'YES' : 'NO'}</p>,
+  }),
+  columnHelper.accessor('legacy.protected', {
+    meta: { exportKey: 'protected', exportHeader: 'Protected' },
+    header: () => <Trans i18nKey="Protected" />,
     cell: (info) => <p>{info.getValue() ? 'YES' : 'NO'}</p>,
   }),
   columnHelper.accessor((row) => +parseTwitterDateTime(row.legacy.created_at), {

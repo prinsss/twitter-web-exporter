@@ -84,7 +84,7 @@ export function xssFilter(str: string) {
  * <p>Verification: <a href="http://nasa.gov/socialmedia">nasa.gov/socialmedia</a> NASA Hubble Space Telescope</p>
  * ```
  */
-export function strEntitiesToHTML(str: string, urls: EntityURL[]) {
+export function strEntitiesToHTML(str: string, urls?: EntityURL[]) {
   let temp = str;
 
   if (!urls?.length) {
@@ -117,6 +117,20 @@ export function formatDateTime(date: string | number | dayjs.Dayjs, format?: str
 
   // Display in local time zone.
   return date.format(format);
+}
+
+export function formatTwitterBirthdate(arg?: { day: number; month: number; year?: number }) {
+  if (!arg) {
+    return null;
+  }
+
+  const { day, month, year } = arg;
+  const date = dayjs()
+    .set('year', year ?? 0)
+    .set('month', month - 1)
+    .set('date', day);
+
+  return year ? date.format('MMM DD, YYYY') : date.format('MMM DD');
 }
 
 export function formatVideoDuration(durationInMs?: number): string {

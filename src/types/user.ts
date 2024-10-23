@@ -49,6 +49,7 @@ export interface User {
     profile_banner_url?: string;
     profile_image_url_https: string;
     profile_interstitial_type: string;
+    protected?: boolean;
     screen_name: string;
     statuses_count: number;
     translator_type: string;
@@ -57,6 +58,15 @@ export interface User {
     verified_type: string;
     want_retweets: boolean;
     withheld_in_countries: unknown[];
+  };
+  legacy_extended_profile?: {
+    birthdate?: {
+      day: number;
+      month: number;
+      year?: number;
+      visibility: string;
+      year_visibility: string;
+    };
   };
   professional?: {
     rest_id: string;
@@ -83,7 +93,7 @@ export interface UserEntities {
   description: {
     urls: EntityURL[];
   };
-  url: {
+  url?: {
     urls: EntityURL[];
   };
 }
