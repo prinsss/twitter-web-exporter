@@ -3,11 +3,16 @@ import { useSignal } from '@preact/signals';
 import { IconCircleCheck, IconCircleDashed, IconInfoCircle } from '@tabler/icons-preact';
 
 import { FileLike, ProgressCallback, zipStreamDownload } from '@/utils/download';
-import { DEFAULT_FILENAME_PATTERN, extractMedia, patterns } from '@/utils/media';
-import { Modal } from '@/components/common';
+import {
+  DEFAULT_FILENAME_PATTERN,
+  DEFAULT_MEDIA_TYPES,
+  extractMedia,
+  patterns,
+} from '@/utils/media';
+import { Modal, MultiSelect } from '@/components/common';
 import { TranslationKey, useTranslation } from '@/i18n';
-import { Tweet, User } from '@/types';
-import { useSignalState, cx, useToggle } from '@/utils/common';
+import { Media, Tweet, User } from '@/types';
+import { useSignalState, cx } from '@/utils/common';
 import logger from '@/utils/logger';
 
 type ExportMediaModalProps<T> = {
@@ -17,6 +22,8 @@ type ExportMediaModalProps<T> = {
   show?: boolean;
   onClose?: () => void;
 };
+
+type MediaFilterType = Media['type'] | 'retweet';
 
 /**
  * Modal for exporting media.
@@ -35,17 +42,22 @@ export function ExportMediaModal<T>({
 
   const [rateLimit, setRateLimit] = useSignalState(1000);
   const [filenamePattern, setFilenamePattern] = useSignalState(DEFAULT_FILENAME_PATTERN);
-  const [includeRetweets, toggleIncludeRetweets] = useToggle(true);
-
   const [currentProgress, setCurrentProgress] = useSignalState(0);
   const [totalProgress, setTotalProgress] = useSignalState(0);
   const taskStatusSignal = useSignal<Record<string, number>>({});
 
+  // Media type filters.
+  const [filters, setFilters] = useSignalState<MediaFilterType[]>([
+    ...DEFAULT_MEDIA_TYPES,
+    ...(isTweet ? ['retweet' as const] : []),
+  ]);
+
+  const includeRetweets = filters.includes('retweet');
   const mediaList = extractMedia(
     table.getSelectedRowModel().rows.map((row) => row.original) as Tweet[] | User[],
     includeRetweets,
     filenamePattern,
-  );
+  ).filter((media) => filters.includes(media.type as MediaFilterType));
 
   const onProgress: ProgressCallback<FileLike> = (current, total, value) => {
     setCurrentProgress(current);
@@ -103,10 +115,10 @@ export function ExportMediaModal<T>({
         </div>
         {/* Export options. */}
         {isTweet && (
-          <div class="flex items-center h-9">
-            <p class="mr-2 leading-8">{t('Filename template:')}</p>
+          <div class="grid grid-cols-4 gap-2 items-center h-9">
+            <p class="leading-8">{t('Filename template:')}</p>
             <div
-              class="flex-grow tooltip tooltip-bottom before:whitespace-pre-line before:max-w-max"
+              class="tooltip tooltip-bottom col-span-3 before:whitespace-pre-line before:max-w-max"
               data-tip={Object.entries(patterns)
                 .map(([key, value]) => `{${key}} - ${t(value.description as TranslationKey)}`)
                 .reduce((acc, cur) => acc + cur + '\n', '')}
@@ -122,28 +134,31 @@ export function ExportMediaModal<T>({
             </div>
           </div>
         )}
-        <div class="flex h-9 justify-between">
-          <div class="flex items-center h-9 w-1/2">
-            <p class="mr-2 leading-8">{t('Rate limit (ms):')}</p>
-            <input
-              type="number"
-              class="input input-bordered input-sm w-32"
-              value={rateLimit}
-              onChange={(e) => {
-                const value = parseInt((e?.target as HTMLInputElement)?.value);
-                setRateLimit(value || 0);
-              }}
-            />
-          </div>
-          <div class="flex items-center h-9 w-1/2">
-            <p class="mr-2 leading-8">{t('Include retweets:')}</p>
-            <input
-              type="checkbox"
-              class="checkbox checkbox-sm"
-              checked={includeRetweets}
-              onChange={toggleIncludeRetweets}
-            />
-          </div>
+        <div class="grid grid-cols-4 gap-2 items-center h-9">
+          <p class="leading-8">{t('Rate limit (ms):')}</p>
+          <input
+            type="number"
+            class="input input-bordered input-sm col-span-3"
+            value={rateLimit}
+            onChange={(e) => {
+              const value = parseInt((e?.target as HTMLInputElement)?.value);
+              setRateLimit(value || 0);
+            }}
+          />
+        </div>
+        <div class="grid grid-cols-4 gap-2 items-center h-9">
+          <p class="leading-8">{t('Media Filter:')}</p>
+          <MultiSelect<MediaFilterType>
+            class="col-span-3"
+            options={[
+              { label: t('filter.photo'), value: 'photo' },
+              { label: t('filter.video'), value: 'video' },
+              { label: t('filter.animated_gif'), value: 'animated_gif' },
+              ...(isTweet ? [{ label: t('filter.retweet'), value: 'retweet' as const }] : []),
+            ]}
+            selected={filters}
+            onChange={setFilters}
+          />
         </div>
         {/* Media list preview. */}
         <div class="my-3 overflow-x-scroll">
@@ -153,6 +168,7 @@ export function ExportMediaModal<T>({
                 <th></th>
                 <th>#</th>
                 <th>{t('File Name')}</th>
+                <th>{t('Media Type')}</th>
                 <th>{t('Download URL')}</th>
               </tr>
             </thead>
@@ -168,6 +184,7 @@ export function ExportMediaModal<T>({
                   </td>
                   <th>{index + 1}</th>
                   <td>{media.filename}</td>
+                  <td>{t(`filter.${media.type}` as TranslationKey)}</td>
                   <td>
                     <a
                       class="link whitespace-nowrap"

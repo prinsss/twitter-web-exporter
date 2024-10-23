@@ -51,8 +51,9 @@
   "For more than 100 media or large files, it is recommended to copy the URLs and download them with an external download manager such as aria2.": "对于超过 100 个媒体或大文件，建议复制 URL 并使用外部下载管理器（如 aria2）下载。",
   "Filename template:": "文件名模板:",
   "Rate limit (ms):": "速率限制（毫秒）:",
-  "Include retweets:": "包括转推:",
+  "Media Filter:": "媒体过滤器：",
   "File Name": "文件名",
+  "Media Type": "媒体类型",
   "Download URL": "下载地址",
   "No media selected.": "未选择媒体。",
   "Copied!": "已复制！",
@@ -67,5 +68,10 @@
   "The media type (photo/video/animated_gif)": "媒体类型（photo/video/animated_gif）",
   "The file extension of media (jpg/png/mp4)": "媒体文件扩展名（jpg/png/mp4）",
   "Failed to export media. Open DevTools for more details.": "导出媒体失败。打开 DevTools 以获取更多详细信息。",
-  "Failed to copy media URLs. Open DevTools for more details.": "复制媒体 URL 失败。打开 DevTools 以获取更多详细信息。"
+  "Failed to copy media URLs. Open DevTools for more details.": "复制媒体 URL 失败。打开 DevTools 以获取更多详细信息。",
+
+  "filter.photo": "图片",
+  "filter.video": "视频",
+  "filter.animated_gif": "GIF",
+  "filter.retweet": "包括转推"
 }

@@ -5,6 +5,8 @@ import { useTranslation } from '@/i18n';
 import { cx } from '@/utils/common';
 import { ErrorBoundary } from './error-boundary';
 
+// #region ExtensionPanel
+
 type ExtensionPanelProps = {
   title: string;
   description: string;
@@ -54,6 +56,8 @@ export function ExtensionPanel({
   );
 }
 
+// #region Modal
+
 type ModalProps = {
   show?: boolean;
   onClose?: () => void;
@@ -91,6 +95,8 @@ export function Modal({ show, onClose, title, children, class: className }: Moda
   );
 }
 
+// #region SearchArea
+
 type SearchAreaProps = {
   defaultValue?: string;
   onChange: (value: string) => void;
@@ -123,6 +129,66 @@ export function SearchArea({ defaultValue, onChange }: SearchAreaProps) {
     </div>
   );
 }
+
+// #region MultiSelect
+
+type MultiSelectProps<T> = {
+  class?: string;
+  options: { label: string; value: T }[];
+  selected: T[];
+  onChange: (value: T[]) => void;
+};
+
+export function MultiSelect<T extends string>(props: MultiSelectProps<T>) {
+  const { options, selected, onChange } = props;
+
+  const onInputChange = (e: Event) => {
+    const target = e.target as HTMLInputElement;
+    if (target.checked) {
+      onChange([...new Set([...selected, target.value as T])]);
+    } else {
+      onChange(selected.filter((value) => value !== target.value));
+    }
+  };
+
+  return (
+    <div class={cx('dropdown', props.class)}>
+      <div
+        tabIndex={0}
+        class="input input-bordered input-sm flex flex-row items-center space-x-1 cursor-pointer"
+      >
+        {options
+          .filter((option) => selected.includes(option.value))
+          .map((option) => (
+            <div key={option.value} class="badge badge-accent select-none">
+              {option.label}
+            </div>
+          ))}
+      </div>
+      <ul
+        tabIndex={0}
+        class="dropdown-content menu menu-sm z-10 w-full rounded-box bg-base-100 p-2 shadow"
+      >
+        {options.map((option) => (
+          <li key={option.value}>
+            <label class="label cursor-pointer justify-start">
+              <input
+                type="checkbox"
+                class="checkbox checkbox-accent checkbox-sm"
+                value={option.value}
+                checked={selected.includes(option.value)}
+                onChange={onInputChange}
+              />
+              <span class="label-text ml-1">{option.label}</span>
+            </label>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+// #region Icons
 
 /**
  * @license

@@ -51,8 +51,9 @@
   "For more than 100 media or large files, it is recommended to copy the URLs and download them with an external download manager such as aria2.": "For more than 100 media or large files, it is recommended to copy the URLs and download them with an external download manager such as aria2.",
   "Filename template:": "Filename template:",
   "Rate limit (ms):": "Rate limit (ms):",
-  "Include retweets:": "Include retweets:",
+  "Media Filter:": "Media Filter:",
   "File Name": "File Name",
+  "Media Type": "Media Type",
   "Download URL": "Download URL",
   "No media selected.": "No media selected.",
   "Copied!": "Copied!",
@@ -67,5 +68,10 @@
   "The media type (photo/video/animated_gif)": "The media type (photo/video/animated_gif)",
   "The file extension of media (jpg/png/mp4)": "The file extension of media (jpg/png/mp4)",
   "Failed to export media. Open DevTools for more details.": "Failed to export media. Open DevTools for more details.",
-  "Failed to copy media URLs. Open DevTools for more details.": "Failed to copy media URLs. Open DevTools for more details."
+  "Failed to copy media URLs. Open DevTools for more details.": "Failed to copy media URLs. Open DevTools for more details.",
+
+  "filter.photo": "Photo",
+  "filter.video": "Video",
+  "filter.animated_gif": "GIF",
+  "filter.retweet": "Include retweets"
 }

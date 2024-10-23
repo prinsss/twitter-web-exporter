@@ -55,6 +55,8 @@ export const patterns: Record<string, { description: string; extractor: PatternE
 
 export const DEFAULT_FILENAME_PATTERN = '{screen_name}_{id}_{type}_{num}_{date}.{ext}';
 
+export const DEFAULT_MEDIA_TYPES = ['photo', 'video', 'animated_gif'] as const;
+
 /**
  * Extract media from tweets and users.
  */
@@ -79,7 +81,7 @@ export function extractMedia(
           filename = filename.replace(`{${key}}`, value.extractor(item, media));
         }
 
-        return { filename, url: getMediaOriginalUrl(media) };
+        return { filename, type: media.type, url: getMediaOriginalUrl(media) };
       });
 
       for (const media of tweetMedia) {
@@ -94,6 +96,7 @@ export function extractMedia(
         const filename = `${item.legacy.screen_name}_profile_image.${ext}`;
         gallery.set(filename, {
           filename,
+          type: 'photo',
           url: getProfileImageOriginalUrl(item.legacy.profile_image_url_https),
         });
       }
@@ -103,6 +106,7 @@ export function extractMedia(
         const filename = `${item.legacy.screen_name}_profile_banner.${ext}`;
         gallery.set(filename, {
           filename,
+          type: 'photo',
           url: item.legacy.profile_banner_url,
         });
       }

@@ -2,7 +2,7 @@ import { saveAs } from 'file-saver';
 import createWriter from './zip-stream';
 import logger from './logger';
 
-export type FileLike = { filename: string; url: string };
+export type FileLike = { filename: string; url: string; type?: string };
 
 export type ProgressCallback<T = unknown> = (current: number, total: number, value?: T) => void;
 
