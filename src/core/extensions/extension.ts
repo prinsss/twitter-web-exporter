@@ -25,6 +25,7 @@ export type Interceptor = (
 export enum ExtensionType {
   TWEET = 'tweet',
   USER = 'user',
+  CUSTOM = 'custom',
   NONE = 'none',
 }
 

@@ -250,6 +250,6 @@ interface UserMention {
   indices: number[];
 }
 
-interface TweetExtendedEntities {
+export interface TweetExtendedEntities {
   media: Media[];
 }

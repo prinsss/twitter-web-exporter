@@ -1,8 +1,12 @@
 import { JSX } from 'preact';
 import { useRef } from 'preact/hooks';
 import { IconArrowUpRight, IconSearch, IconX } from '@tabler/icons-preact';
+
 import { useTranslation } from '@/i18n';
-import { cx } from '@/utils/common';
+import { Media } from '@/types';
+import { formatTwitterImage } from '@/utils/api';
+import { cx, formatVideoDuration } from '@/utils/common';
+
 import { ErrorBoundary } from './error-boundary';
 
 // #region ExtensionPanel
@@ -184,6 +188,49 @@ export function MultiSelect<T extends string>(props: MultiSelectProps<T>) {
           </li>
         ))}
       </ul>
+    </div>
+  );
+}
+
+// #region Columns
+
+type MediaDisplayColumnProps = {
+  data: Media[];
+  onClick: (media: Media) => void;
+};
+
+export function MediaDisplayColumn({ data, onClick }: MediaDisplayColumnProps) {
+  return (
+    <div class="flex flex-row items-start space-x-1 w-max">
+      {data.map((media) => (
+        <div
+          key={media.media_key ?? media.id_str}
+          class="flex-shrink-0 block cursor-pointer relative w-12 h-12 rounded bg-base-300 overflow-hidden"
+          onClick={() => onClick(media)}
+        >
+          <img
+            class="w-full h-full object-cover"
+            src={formatTwitterImage(media.media_url_https, 'thumb')}
+            alt={media.ext_alt_text || ''}
+            title={media.ext_alt_text || ''}
+          />
+          {/* Show video duration or GIF. */}
+          {media.type !== 'photo' && (
+            <div class="absolute bottom-0.5 left-0.5 h-4 w-max px-0.5 text-xs text-white bg-black bg-opacity-30 leading-4 text-center rounded">
+              {media.type === 'video'
+                ? formatVideoDuration(media.video_info?.duration_millis)
+                : 'GIF'}
+            </div>
+          )}
+          {/* Or show ALT text if any. */}
+          {media.type === 'photo' && media.ext_alt_text && (
+            <div class="absolute bottom-0.5 left-0.5 h-4 w-max px-0.5 text-xs text-white bg-black bg-opacity-30 leading-4 text-center rounded">
+              ALT
+            </div>
+          )}
+        </div>
+      ))}
+      {data.length ? null : 'N/A'}
     </div>
   );
 }

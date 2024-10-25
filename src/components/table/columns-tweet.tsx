@@ -1,11 +1,6 @@
 import { createColumnHelper } from '@tanstack/table-core';
 import { IconLink } from '@tabler/icons-preact';
-import {
-  formatDateTime,
-  formatVideoDuration,
-  parseTwitterDateTime,
-  strEntitiesToHTML,
-} from '@/utils/common';
+import { formatDateTime, parseTwitterDateTime, strEntitiesToHTML } from '@/utils/common';
 import { options } from '@/core/options';
 import { Trans } from '@/i18n';
 import { Tweet } from '@/types';
@@ -22,6 +17,7 @@ import {
   getUserURL,
   getInReplyToTweetURL,
 } from '@/utils/api';
+import { MediaDisplayColumn } from '../common';
 
 const columnHelper = createColumnHelper<Tweet>();
 
@@ -138,37 +134,10 @@ export const columns = [
     },
     header: () => <Trans i18nKey="Media" />,
     cell: (info) => (
-      <div class="flex flex-row items-start space-x-1 w-max">
-        {extractTweetMedia(info.row.original).map((media) => (
-          <div
-            key={media.media_key}
-            class="flex-shrink-0 block cursor-pointer relative w-12 h-12 rounded bg-base-300 overflow-hidden"
-            onClick={() => info.table.options.meta?.setMediaPreview(getMediaOriginalUrl(media))}
-          >
-            <img
-              class="w-full h-full object-cover"
-              src={formatTwitterImage(media.media_url_https, 'thumb')}
-              alt={media.ext_alt_text || ''}
-              title={media.ext_alt_text || ''}
-            />
-            {/* Show video duration or GIF. */}
-            {media.type !== 'photo' && (
-              <div class="absolute bottom-0.5 left-0.5 h-4 w-max px-0.5 text-xs text-white bg-black bg-opacity-30 leading-4 text-center rounded">
-                {media.type === 'video'
-                  ? formatVideoDuration(media.video_info?.duration_millis)
-                  : 'GIF'}
-              </div>
-            )}
-            {/* Or show ALT text if any. */}
-            {media.type === 'photo' && media.ext_alt_text && (
-              <div class="absolute bottom-0.5 left-0.5 h-4 w-max px-0.5 text-xs text-white bg-black bg-opacity-30 leading-4 text-center rounded">
-                ALT
-              </div>
-            )}
-          </div>
-        ))}
-        {extractTweetMedia(info.row.original).length ? null : 'N/A'}
-      </div>
+      <MediaDisplayColumn
+        data={extractTweetMedia(info.row.original)}
+        onClick={(media) => info.table.options.meta?.setMediaPreview(getMediaOriginalUrl(media))}
+      />
     ),
   }),
   columnHelper.accessor('core.user_results.result.legacy.screen_name', {
