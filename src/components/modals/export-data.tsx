@@ -87,7 +87,7 @@ export function ExportDataModal<T>({ title, table, show, onClose }: ExportDataMo
   return (
     <Modal
       class="max-w-sm md:max-w-screen-sm sm:max-w-screen-sm max-h-full"
-      title={`${t(title as TranslationKey, title, { ns: 'common' })} ${t('Data')}`}
+      title={`${title} ${t('Data')}`}
       show={show}
       onClose={onClose}
     >
