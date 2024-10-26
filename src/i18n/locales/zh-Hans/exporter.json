@@ -38,6 +38,10 @@
   "Can DM": "可私信",
   "Protected": "受保护",
   "Created At": "创建时间",
+  "Sender": "发送者",
+  "Recipient": "接收者",
+  "Conversation ID": "对话 ID",
+  "Conversation Type": "对话类型",
 
   "Data": "数据",
   "Export captured data as JSON/HTML/CSV file. This may take a while depending on the amount of data. The exported file does not include media files such as images and videos but only the URLs.": "将捕获的数据导出为 JSON/HTML/CSV 文件。这可能需要一些时间，具体取决于数据量。导出的文件不包括图片和视频等媒体文件，只包括它们的 URL。",

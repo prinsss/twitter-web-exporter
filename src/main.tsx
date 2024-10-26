@@ -3,6 +3,7 @@ import { App } from './core/app';
 import extensions from './core/extensions';
 
 import BookmarksModule from './modules/bookmarks';
+import DirectMessagesModule from './modules/direct-messages';
 import FollowersModule from './modules/followers';
 import FollowingModule from './modules/following';
 import HomeTimelineModule from './modules/home-timeline';
@@ -32,6 +33,7 @@ extensions.add(UserTweetsModule);
 extensions.add(UserMediaModule);
 extensions.add(TweetDetailModule);
 extensions.add(SearchTimelineModule);
+extensions.add(DirectMessagesModule);
 extensions.add(RuntimeLogsModule);
 extensions.start();
 

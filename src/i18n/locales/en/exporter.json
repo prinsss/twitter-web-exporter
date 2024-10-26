@@ -38,6 +38,10 @@
   "Can DM": "Can DM",
   "Protected": "Protected",
   "Created At": "Created At",
+  "Sender": "Sender",
+  "Recipient": "Recipient",
+  "Conversation ID": "Conversation ID",
+  "Conversation Type": "Conversation Type",
 
   "Data": "Data",
   "Export captured data as JSON/HTML/CSV file. This may take a while depending on the amount of data. The exported file does not include media files such as images and videos but only the URLs.": "Export captured data as JSON/HTML/CSV file. This may take a while depending on the amount of data. The exported file does not include media files such as images and videos but only the URLs.",
