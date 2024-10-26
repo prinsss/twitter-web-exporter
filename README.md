@@ -32,6 +32,7 @@
 - 👥 Export list members and subscribers
 - 🌪️ Export tweets from home timeline and list timeline
 - 🔍 Export search results
+- ✉️ Export direct messages
 - 📦 Download images and videos from tweets in bulk at original size
 - 🚀 No developer account or API key required
 - 🛠️ Ship as a UserScript and everything is done in your browser
