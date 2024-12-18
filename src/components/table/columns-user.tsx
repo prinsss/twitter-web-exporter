@@ -66,7 +66,7 @@ export const columns = [
     header: () => <Trans i18nKey="Description" />,
     cell: (info) => (
       <p
-        class="w-52"
+        class="w-52 break-words"
         dangerouslySetInnerHTML={{
           __html: strEntitiesToHTML(
             info.row.original.legacy.description,
@@ -109,6 +109,11 @@ export const columns = [
   columnHelper.accessor('legacy.followers_count', {
     meta: { exportKey: 'followers_count', exportHeader: 'Followers' },
     header: () => <Trans i18nKey="Followers" />,
+    cell: (info) => <p>{info.getValue()}</p>,
+  }),
+  columnHelper.accessor('legacy.friends_count', {
+    meta: { exportKey: 'friends_count', exportHeader: 'FollowingCount' },
+    header: () => <Trans i18nKey="FollowingCount" />,
     cell: (info) => <p>{info.getValue()}</p>,
   }),
   columnHelper.accessor('legacy.statuses_count', {
@@ -212,6 +217,21 @@ export const columns = [
       <a href={getUserURL(info.row.original)} target="_blank">
         <IconLink />
       </a>
+    ),
+  }),
+  columnHelper.display({
+    id: 'actions',
+    meta: { exportable: false },
+    header: () => <Trans i18nKey="Actions" />,
+    cell: (info) => (
+      <div class="flex flex-row items-start space-x-1">
+        <button
+          onClick={() => info.table.options.meta?.setRawDataPreview(info.row.original)}
+          class="btn btn-xs btn-neutral whitespace-nowrap"
+        >
+          <Trans i18nKey="Details" />
+        </button>
+      </div>
     ),
   }),
 ];

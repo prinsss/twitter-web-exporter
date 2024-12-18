@@ -258,6 +258,7 @@ export class DatabaseManager {
       'twe_private_fields.updated_at',
       'legacy.screen_name',
       'legacy.followers_count',
+      // 'legacy.friends_count',
       'legacy.statuses_count',
       'legacy.favourites_count',
       'legacy.listed_count',
