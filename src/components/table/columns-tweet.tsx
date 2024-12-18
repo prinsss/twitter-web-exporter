@@ -269,7 +269,7 @@ export const columns = [
       exportKey: 'views_count',
       exportHeader: 'Views',
       exportValue: (row) =>
-        typeof row.original.views.count === 'undefined' ? null : +row.original.views.count,
+        typeof row.original.views?.count === 'undefined' ? null : +row.original.views.count,
     },
     header: () => <Trans i18nKey="Views" />,
     cell: (info) => <p>{info.getValue() ?? 'N/A'}</p>,
