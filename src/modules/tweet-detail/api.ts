@@ -22,15 +22,43 @@ interface TweetDetailResponse {
   };
 }
 
+interface ModeratedTimelineResponse {
+  data: {
+    tweet: {
+      result: {
+        timeline_response: {
+          timeline: {
+            instructions: TimelineInstructions;
+          };
+        };
+      };
+    };
+  };
+}
+
 // https://twitter.com/i/api/graphql/8sK2MBRZY9z-fgmdNpR3LA/TweetDetail
+// https://twitter.com/i/api/graphql/8sK2MBRZY9z-fgmdNpR3LA/ModeratedTimeline
 export const TweetDetailInterceptor: Interceptor = (req, res, ext) => {
-  if (!/\/graphql\/.+\/TweetDetail/.test(req.url)) {
+  if (!/\/graphql\/.+\/(TweetDetail|ModeratedTimeline)/.test(req.url)) {
     return;
   }
 
   try {
     const json: TweetDetailResponse = JSON.parse(res.responseText);
-    const instructions = json.data.threaded_conversation_with_injections_v2.instructions;
+    let instructions: TimelineInstructions;
+
+    // Determine the endpoint and extract instructions accordingly.
+    if (/\/graphql\/.+\/TweetDetail/.test(req.url)) {
+      // Handle TweetDetail response.
+      const tweetDetailResponse = json as TweetDetailResponse;
+      instructions = tweetDetailResponse.data.threaded_conversation_with_injections_v2.instructions;
+    } else if (/\/graphql\/.+\/ModeratedTimeline/.test(req.url)) {
+      // Handle ModeratedTimeline response.
+      const moderatedTimelineResponse = json as ModeratedTimelineResponse;
+      instructions = moderatedTimelineResponse.data.tweet.result.timeline_response.timeline.instructions;
+    } else {
+      return;
+    }
 
     const newData: Tweet[] = [];
 
@@ -50,8 +78,8 @@ export const TweetDetailInterceptor: Interceptor = (req, res, ext) => {
         }
       }
 
-      // The conversation thread.
-      if (isTimelineEntryConversationThread(entry)) {
+      // The conversation thread (only for TweetDetail).
+      if (/\/graphql\/.+\/TweetDetail/.test(req.url) && isTimelineEntryConversationThread(entry)) {
         // Be careful about the "conversationthread-{id}-cursor-showmore-{cid}" item.
         const tweetsInConversation = entry.content.items.map((i) => {
           if (i.entryId.includes('-tweet-')) {
@@ -79,7 +107,12 @@ export const TweetDetailInterceptor: Interceptor = (req, res, ext) => {
     // Add captured tweets to the database.
     db.extAddTweets(ext.name, newData);
 
-    logger.info(`TweetDetail: ${newData.length} items received`);
+    // Log the number of items received.
+    if (/\/graphql\/.+\/TweetDetail/.test(req.url)) {
+      logger.info(`TweetDetail: ${newData.length} items received`);
+    } else if (/\/graphql\/.+\/ModeratedTimeline/.test(req.url)) {
+      logger.info(`ModeratedTimeline: ${newData.length} items received`);
+    }
   } catch (err) {
     logger.debug(req.method, req.url, res.status, res.responseText);
     logger.errorWithBanner('TweetDetail: Failed to parse API response', err as Error);
