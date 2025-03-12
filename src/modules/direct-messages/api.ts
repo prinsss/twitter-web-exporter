@@ -50,7 +50,7 @@ const strategies: Strategy[] = [
     }),
   },
   {
-    test: (url) => /\/dm\/conversation\/\d+-\d+\.json/.test(url),
+    test: (url) => /\/dm\/conversation\/\d+-?\d+\.json/.test(url),
     parse: (json: ConversationResponse) => ({
       entries: json.conversation_timeline.entries,
       conversations: Object.values(json.conversation_timeline.conversations),
@@ -61,7 +61,8 @@ const strategies: Strategy[] = [
 
 // https://twitter.com/i/api/1.1/dm/inbox_initial_state.json
 // https://twitter.com/i/api/1.1/dm/inbox_timeline/trusted.json
-// https://twitter.com/i/api/1.1/dm/conversation/{uid}-{uid}.json
+// https://twitter.com/i/api/1.1/dm/conversation/{uid}-{uid}.json  # ONE_TO_ONE
+// https://twitter.com/i/api/1.1/dm/conversation/{cid}.json        # GROUP_DM
 export const DirectMessagesInterceptor: Interceptor = (req, res) => {
   const strategy = strategies.find((s) => s.test(req.url));
 

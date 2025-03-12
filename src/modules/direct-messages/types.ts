@@ -33,6 +33,7 @@ interface DmTimeline<U = LegacyUser> {
 
 export interface DmEntry {
   message?: Message;
+  conversation_create?: ConversationCreate;
   trust_conversation?: TrustConversation;
   join_conversation?: JoinConversation;
   participants_join?: ParticipantsJoin;
@@ -91,8 +92,16 @@ interface MessageReaction {
   time: string;
   conversation_id: string;
   message_id: string;
-  reaction_key: string;
+  reaction_key: 'agree' | 'emoji';
+  emoji_reaction?: string;
   sender_id: string;
+}
+
+interface ConversationCreate {
+  id: string;
+  time: string;
+  conversation_id: string;
+  request_id?: string;
 }
 
 interface TrustConversation {
