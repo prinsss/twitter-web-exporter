@@ -8,7 +8,7 @@ interface LikesResponse {
   data: {
     user: {
       result: {
-        timeline_v2: {
+        timeline: {
           timeline: {
             instructions: TimelineInstructions;
             responseObjects: unknown;
@@ -29,7 +29,7 @@ export const LikesInterceptor: Interceptor = (req, res, ext) => {
   try {
     const newData = extractDataFromResponse<LikesResponse, Tweet>(
       res,
-      (json) => json.data.user.result.timeline_v2.timeline.instructions,
+      (json) => json.data.user.result.timeline.timeline.instructions,
       (entry) => extractTimelineTweet(entry.content.itemContent),
     );
 

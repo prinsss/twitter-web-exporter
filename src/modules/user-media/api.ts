@@ -14,7 +14,7 @@ interface UserMediaResponse {
   data: {
     user: {
       result: {
-        timeline_v2: {
+        timeline: {
           timeline: {
             instructions: TimelineInstructions;
             metadata: unknown;
@@ -34,7 +34,7 @@ export const UserMediaInterceptor: Interceptor = (req, res, ext) => {
 
   try {
     const json: UserMediaResponse = JSON.parse(res.responseText);
-    const instructions = json.data.user.result.timeline_v2.timeline.instructions;
+    const instructions = json.data.user.result.timeline.timeline.instructions;
 
     const newData: Tweet[] = [];
 
