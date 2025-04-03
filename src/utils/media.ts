@@ -53,8 +53,6 @@ export const patterns: Record<string, { description: string; extractor: PatternE
   },
 };
 
-export const DEFAULT_FILENAME_PATTERN = '{screen_name}_{id}_{type}_{num}_{date}.{ext}';
-
 export const DEFAULT_MEDIA_TYPES = ['photo', 'video', 'animated_gif'] as const;
 
 /**

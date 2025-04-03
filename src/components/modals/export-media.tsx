@@ -3,13 +3,9 @@ import { useSignal } from '@preact/signals';
 import { IconCircleCheck, IconCircleDashed, IconHelp, IconInfoCircle } from '@tabler/icons-preact';
 
 import { FileLike, ProgressCallback, zipStreamDownload } from '@/utils/download';
-import {
-  DEFAULT_FILENAME_PATTERN,
-  DEFAULT_MEDIA_TYPES,
-  extractMedia,
-  patterns,
-} from '@/utils/media';
+import { DEFAULT_MEDIA_TYPES, extractMedia, patterns } from '@/utils/media';
 import { Modal, MultiSelect } from '@/components/common';
+import { options } from '@/core/options';
 import { TranslationKey, useTranslation } from '@/i18n';
 import { Media, Tweet, User } from '@/types';
 import { useSignalState, cx, useToggle } from '@/utils/common';
@@ -42,7 +38,7 @@ export function ExportMediaModal<T>({
 
   const [useAria2Format, toggleUseAria2Format] = useToggle(false);
   const [rateLimit, setRateLimit] = useSignalState(1000);
-  const [filenamePattern, setFilenamePattern] = useSignalState(DEFAULT_FILENAME_PATTERN);
+  const [filenamePattern, setFilenamePattern] = useSignalState(options.get('filenamePattern'));
   const [currentProgress, setCurrentProgress] = useSignalState(0);
   const [totalProgress, setTotalProgress] = useSignalState(0);
   const taskStatusSignal = useSignal<Record<string, number>>({});
@@ -57,7 +53,7 @@ export function ExportMediaModal<T>({
   const mediaList = extractMedia(
     table.getSelectedRowModel().rows.map((row) => row.original) as Tweet[] | User[],
     includeRetweets,
-    filenamePattern,
+    filenamePattern ?? '',
   ).filter((media) => filters.includes(media.type as MediaFilterType));
 
   const onProgress: ProgressCallback<FileLike> = (current, total, value) => {
@@ -132,7 +128,9 @@ export function ExportMediaModal<T>({
                 class="input input-bordered input-sm w-full"
                 value={filenamePattern}
                 onChange={(e) => {
-                  setFilenamePattern((e?.target as HTMLInputElement)?.value);
+                  const value = (e?.target as HTMLInputElement)?.value;
+                  setFilenamePattern(value);
+                  options.set('filenamePattern', value);
                 }}
               />
             </div>

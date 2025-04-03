@@ -12,6 +12,7 @@ export interface AppOptions {
   showControlPanel?: boolean;
   disabledExtensions?: string[];
   dateTimeFormat?: string;
+  filenamePattern?: string;
   language?: string;
   version?: string;
 }
@@ -27,6 +28,7 @@ export const DEFAULT_APP_OPTIONS: AppOptions = {
     'ListMembersModule',
   ],
   dateTimeFormat: 'YYYY-MM-DD HH:mm:ss Z',
+  filenamePattern: '{screen_name}_{id}_{type}_{num}_{date}.{ext}',
   language: '',
   version: packageJson.version,
 };
