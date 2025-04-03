@@ -16,6 +16,9 @@ export const Pagination = ({ table }: PaginationProps) => {
   const { t } = useTranslation();
   const state = table.getState().pagination;
 
+  // With @preact/signals 2.0.1+, this component does not re-render when filtered rows change.
+  // While the reason is not clear, we will stick at 2.0.0 for now.
+
   return (
     <div className="mt-3 flex items-center gap-2">
       <span>{t('Rows per page:')}</span>
