@@ -55,6 +55,8 @@
   "Download and save media files from captured data. This may take a while depending on the amount of data. Media that will be downloaded includes: profile images, profile banners (for users), images, videos (for tweets).": "Download and save media files from captured data. This may take a while depending on the amount of data. Media that will be downloaded includes: profile images, profile banners (for users), images, videos (for tweets).",
   "For more than 100 media or large files, it is recommended to copy the URLs and download them with an external download manager such as aria2.": "For more than 100 media or large files, it is recommended to copy the URLs and download them with an external download manager such as aria2.",
   "Filename template:": "Filename template:",
+  "Use aria2 format:": "Use aria2 format:",
+  "Click for more information. Each URL will be on a new line, with its filename on the next line. This format is compatible with aria2.": "Click for more information. Each URL will be on a new line, with its filename on the next line. This format is compatible with aria2.",
   "Rate limit (ms):": "Rate limit (ms):",
   "Media Filter:": "Media Filter:",
   "File Name": "File Name",

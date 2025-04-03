@@ -55,6 +55,8 @@
   "Download and save media files from captured data. This may take a while depending on the amount of data. Media that will be downloaded includes: profile images, profile banners (for users), images, videos (for tweets).": "从捕获的数据中下载并保存媒体文件。这可能需要一些时间，具体取决于数据量。将下载的媒体包括：用户的个人资料图片、个人资料头图、图片、推文中的视频。",
   "For more than 100 media or large files, it is recommended to copy the URLs and download them with an external download manager such as aria2.": "对于超过 100 个媒体或大文件，建议复制 URL 并使用外部下载管理器（如 aria2）下载。",
   "Filename template:": "文件名模板:",
+  "Use aria2 format:": "使用 aria2 格式:",
+  "Click for more information. Each URL will be on a new line, with its filename on the next line. This format is compatible with aria2.": "点击获取更多信息。每个 URL 将在新行中显示，其文件名在下一行。此格式与 aria2 兼容。",
   "Rate limit (ms):": "速率限制（毫秒）:",
   "Media Filter:": "媒体过滤器：",
   "File Name": "文件名",

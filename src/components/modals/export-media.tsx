@@ -1,6 +1,6 @@
 import { Table } from '@tanstack/table-core';
 import { useSignal } from '@preact/signals';
-import { IconCircleCheck, IconCircleDashed, IconInfoCircle } from '@tabler/icons-preact';
+import { IconCircleCheck, IconCircleDashed, IconHelp, IconInfoCircle } from '@tabler/icons-preact';
 
 import { FileLike, ProgressCallback, zipStreamDownload } from '@/utils/download';
 import {
@@ -12,7 +12,7 @@ import {
 import { Modal, MultiSelect } from '@/components/common';
 import { TranslationKey, useTranslation } from '@/i18n';
 import { Media, Tweet, User } from '@/types';
-import { useSignalState, cx } from '@/utils/common';
+import { useSignalState, cx, useToggle } from '@/utils/common';
 import logger from '@/utils/logger';
 
 type ExportMediaModalProps<T> = {
@@ -40,6 +40,7 @@ export function ExportMediaModal<T>({
   const [loading, setLoading] = useSignalState(false);
   const [copied, setCopied] = useSignalState(false);
 
+  const [useAria2Format, toggleUseAria2Format] = useToggle(false);
   const [rateLimit, setRateLimit] = useSignalState(1000);
   const [filenamePattern, setFilenamePattern] = useSignalState(DEFAULT_FILENAME_PATTERN);
   const [currentProgress, setCurrentProgress] = useSignalState(0);
@@ -81,7 +82,10 @@ export function ExportMediaModal<T>({
   };
 
   const onCopy = () => {
-    const text = mediaList.map((media) => `${media.url}\n  out=${media.filename}`).join('\n');
+    const text = mediaList
+      .map((media) => (useAria2Format ? `${media.url}\n  out=${media.filename}` : media.url))
+      .join('\n');
+
     try {
       navigator.clipboard.writeText(text);
       setCopied(true);
@@ -135,16 +139,36 @@ export function ExportMediaModal<T>({
           </div>
         )}
         <div class="grid grid-cols-4 gap-2 items-center h-9">
-          <p class="leading-8">{t('Rate limit (ms):')}</p>
+          <p class="leading-8 col-span-1">{t('Rate limit (ms):')}</p>
           <input
             type="number"
-            class="input input-bordered input-sm col-span-3"
+            class="input input-bordered input-sm col-span-1"
             value={rateLimit}
             onChange={(e) => {
               const value = parseInt((e?.target as HTMLInputElement)?.value);
               setRateLimit(value || 0);
             }}
           />
+          <p class="leading-8 col-span-1 pl-2">{t('Use aria2 format:')}</p>
+          <div class="col-span-1 flex items-center">
+            <input
+              type="checkbox"
+              class="toggle toggle-primary"
+              checked={useAria2Format}
+              onChange={toggleUseAria2Format}
+            />
+            <a
+              href="https://aria2.github.io/manual/en/html/aria2c.html#input-file"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="tooltip tooltip-bottom before:max-w-40 ml-1"
+              data-tip={t(
+                'Click for more information. Each URL will be on a new line, with its filename on the next line. This format is compatible with aria2.',
+              )}
+            >
+              <IconHelp size={20} />
+            </a>
+          </div>
         </div>
         <div class="grid grid-cols-4 gap-2 items-center h-9">
           <p class="leading-8">{t('Media Filter:')}</p>
