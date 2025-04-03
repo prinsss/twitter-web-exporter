@@ -1,37 +1,80 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+@plugin "daisyui" {
+  themes:
+    cupcake --default,
+    dark,
+    emerald,
+    cyberpunk,
+    valentine,
+    lofi,
+    dracula --prefersdark,
+    cmyk,
+    business,
+    winter;
+}
 
-@layer utilities {
-  /* Set border radius relative to the current theme. */
-  .rounded-box-half {
-    border-radius: calc(var(--rounded-box) / 2);
+@theme {
+  --width-screen-sm: var(--breakpoint-sm);
+  --width-screen-md: var(--breakpoint-md);
+  --width-screen-lg: var(--breakpoint-lg);
+  --width-screen-xl: var(--breakpoint-xl);
+  --width-screen-2xl: var(--breakpoint-2xl);
+}
+
+/*
+  The default border color has changed to `currentColor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
   }
+}
 
+@utility rounded-box-half {
+  /* Set border radius relative to the current theme. */
+  border-radius: calc(var(--rounded-box) / 2);
+}
+
+@utility table-border-bc {
   /* Set a different border color for tables. */
-  .table-border-bc :where(thead, tbody) :where(tr:not(:last-child)),
-  .table-border-bc :where(thead, tbody) :where(tr:first-child:last-child) {
+  & :where(thead, tbody) :where(tr:not(:last-child)) {
     --tw-border-opacity: 20%;
     border-bottom-width: 1px;
     border-bottom-color: var(--fallback-bc, oklch(var(--bc) / var(--tw-border-opacity)));
   }
+  & :where(thead, tbody) :where(tr:first-child:last-child) {
+    --tw-border-opacity: 20%;
+    border-bottom-width: 1px;
+    border-bottom-color: var(--fallback-bc, oklch(var(--bc) / var(--tw-border-opacity)));
+  }
+}
 
+@utility table-padding-sm {
   /* Set a smaller padding for tables. */
-  .table-padding-sm :where(th, td) {
+  & :where(th, td) {
     padding-left: 0.75rem /* 12px */;
     padding-right: 0.75rem /* 12px */;
     padding-top: 0.5rem /* 8px */;
     padding-bottom: 0.5rem /* 8px */;
   }
+}
 
+@utility no-scrollbar {
   /* Hide scrollbar for Chrome, Safari and Opera. */
-  .no-scrollbar::-webkit-scrollbar {
+  &::-webkit-scrollbar {
     display: none;
   }
 
   /* Hide scrollbar for IE, Edge and Firefox. */
-  .no-scrollbar {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

@@ -5,8 +5,7 @@ import preact from '@preact/preset-vite';
 import monkey from 'vite-plugin-monkey';
 import i18nextLoader from 'vite-plugin-i18next-loader';
 
-import tailwindcss from 'tailwindcss';
-import autoprefixer from 'autoprefixer';
+import tailwindcss from '@tailwindcss/vite';
 import prefixSelector from 'postcss-prefix-selector';
 import remToPx from 'postcss-rem-to-pixel-next';
 
@@ -23,8 +22,6 @@ export default defineConfig({
   css: {
     postcss: {
       plugins: [
-        tailwindcss(),
-        autoprefixer(),
         remToPx({ propList: ['*'] }),
         // Use scoped CSS.
         prefixSelector({
@@ -36,6 +33,7 @@ export default defineConfig({
   },
   plugins: [
     preact(),
+    tailwindcss(),
     i18nextLoader({ paths: ['./src/i18n/locales'], namespaceResolution: 'basename' }),
     monkey({
       entry: 'src/main.tsx',

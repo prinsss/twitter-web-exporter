@@ -185,7 +185,7 @@ export function Settings() {
         <p class={styles.subtitle}>{t('Modules (Scroll to see more)')}</p>
         <div class={cx(styles.block, 'flex-col', 'max-h-44 overflow-scroll')}>
           {extensionManager.getExtensions().map((extension) => (
-            <label class={cx(styles.item, 'flex-shrink-0')} key={extension.name}>
+            <label class={cx(styles.item, 'shrink-0')} key={extension.name}>
               <span>
                 {t(extension.name.replace('Module', '') as TranslationKey)} {t('Module')}
               </span>

@@ -58,14 +58,14 @@ export function App() {
       <section
         data-theme={currentTheme.value}
         class={cx(
-          'card card-compact bg-base-100 fixed border shadow-xl w-80 leading-loose text-base-content px-4 py-3 rounded-box border-solid border-neutral-content border-opacity-50 left-8 top-8 transition-transform duration-500',
+          'card card-compact bg-base-100 fixed border shadow-xl w-80 leading-loose text-base-content px-4 py-3 rounded-box border-solid border-neutral-content/50 left-8 top-8 transition-transform duration-500',
           showControlPanel.value ? 'translate-x-0 transform-none' : 'translate-x-[-500px]',
         )}
       >
         {/* Card title. */}
         <header class="flex items-center h-9">
           <IconBrandTwitterFilled class="mr-2" />
-          <h2 class="font-semibold leading-none text-xl m-0 flex-grow">Web Exporter</h2>
+          <h2 class="font-semibold leading-none text-xl m-0 grow">Web Exporter</h2>
           <ErrorBoundary>
             <Settings />
           </ErrorBoundary>
@@ -76,9 +76,10 @@ export function App() {
             <IconX />
           </div>
         </header>
-        <p class="text-sm text-base-content text-opacity-70 mb-1 leading-none">
+        <p class="text-sm text-base-content/70 mb-1 leading-none">
           {t('Browse around to capture more data.')}
         </p>
+        {/* FIXME: https://github.com/tailwindlabs/tailwindcss/issues/16582 */}
         <div class="divider mt-0 mb-0"></div>
         {/* Extensions UI. */}
         <main>

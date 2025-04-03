@@ -100,7 +100,7 @@ export function ExportMediaModal<T>({
     >
       {/* Modal content. */}
       <div class="px-4 text-base overflow-y-scroll overscroll-none">
-        <p class="text-base-content text-opacity-60 leading-5 text-sm">
+        <p class="text-base-content/60 leading-5 text-sm">
           {t(
             'Download and save media files from captured data. This may take a while depending on the amount of data. Media that will be downloaded includes: profile images, profile banners (for users), images, videos (for tweets).',
           )}
@@ -223,7 +223,7 @@ export function ExportMediaModal<T>({
           </table>
           {mediaList.length > 0 ? null : (
             <div class="flex items-center justify-center h-28 w-full">
-              <p class="text-base-content text-opacity-50">{t('No media selected.')}</p>
+              <p class="text-base-content/50">{t('No media selected.')}</p>
             </div>
           )}
         </div>
@@ -234,14 +234,14 @@ export function ExportMediaModal<T>({
             value={(currentProgress / (totalProgress || 1)) * 100}
             max="100"
           />
-          <span class="text-sm h-4 leading-none mt-2 text-base-content text-opacity-60">
+          <span class="text-sm h-4 leading-none mt-2 text-base-content/60">
             {`${currentProgress}/${mediaList.length}`}
           </span>
         </div>
       </div>
       {/* Action buttons. */}
       <div class="flex space-x-2 mt-2">
-        <span class="flex-grow" />
+        <span class="grow" />
         <button class="btn" onClick={onClose}>
           {t('Cancel')}
         </button>

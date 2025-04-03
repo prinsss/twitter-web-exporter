@@ -35,7 +35,7 @@ export const Pagination = ({ table }: PaginationProps) => {
           </option>
         ))}
       </select>
-      <span class="flex-grow" />
+      <span class="grow" />
       <span>
         {t('A - B of N items', {
           from: state.pageSize * state.pageIndex + 1,
