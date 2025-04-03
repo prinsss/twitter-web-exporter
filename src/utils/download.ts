@@ -1,4 +1,4 @@
-import { saveAs } from 'file-saver';
+import { saveAs } from 'file-saver-es';
 import createWriter from './zip-stream';
 import logger from './logger';
 

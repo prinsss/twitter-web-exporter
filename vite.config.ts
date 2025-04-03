@@ -65,15 +65,13 @@ export default defineConfig({
           'https://cdn.jsdelivr.net/npm/dayjs@1.11.13/dayjs.min.js',
           'https://cdn.jsdelivr.net/npm/dexie@4.0.9/dist/dexie.min.js',
           'https://cdn.jsdelivr.net/npm/dexie-export-import@4.1.2/dist/dexie-export-import.js',
+          'https://cdn.jsdelivr.net/npm/file-saver-es@2.0.5/dist/FileSaver.min.js',
           'https://cdn.jsdelivr.net/npm/i18next@23.16.2/i18next.min.js',
           'https://cdn.jsdelivr.net/npm/preact@10.24.3/dist/preact.min.js',
           'https://cdn.jsdelivr.net/npm/preact@10.24.3/hooks/dist/hooks.umd.js',
           'https://cdn.jsdelivr.net/npm/@preact/signals-core@1.8.0/dist/signals-core.min.js',
           'https://cdn.jsdelivr.net/npm/@preact/signals@1.3.0/dist/signals.min.js',
           'https://cdn.jsdelivr.net/npm/@tanstack/table-core@8.20.5/build/umd/index.production.js',
-          // We bundle FileSaver.js in the script since the UMD build is broken.
-          // See: https://github.com/eligrey/FileSaver.js/issues/500
-          // 'https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js',
         ],
       },
       build: {
@@ -81,6 +79,7 @@ export default defineConfig({
           dayjs: 'dayjs',
           dexie: 'Dexie',
           'dexie-export-import': 'DexieExportImport',
+          'file-saver-es': 'FileSaver',
           i18next: 'i18next',
           preact: 'preact',
           'preact/hooks': 'preactHooks',

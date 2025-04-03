@@ -25,7 +25,7 @@
     "dayjs": "1.11.13",
     "dexie": "4.0.9",
     "dexie-export-import": "4.1.2",
-    "file-saver": "2.0.5",
+    "file-saver-es": "2.0.5",
     "i18next": "23.16.2",
     "preact": "10.24.3"
   },
@@ -35,7 +35,7 @@
     "@eslint/js": "^9.13.0",
     "@preact/preset-vite": "^2.9.1",
     "@types/eslint__js": "^8.42.3",
-    "@types/file-saver": "^2.0.7",
+    "@types/file-saver-es": "^2.0.3",
     "@types/node": "^20",
     "autoprefixer": "^10.4.20",
     "daisyui": "^4.12.13",
