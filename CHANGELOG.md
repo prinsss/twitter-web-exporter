@@ -2,7 +2,38 @@
 
 All notable changes to this project will be documented in this file.
 
-## [1.2.0](https://github.com/prinsss/twitter-web-exporter/compare/v1.1.0..v1.2.0) - 2024-10-21
+## [1.2.1](https://github.com/prinsss/twitter-web-exporter/compare/v1.2.0..v1.2.1) - 2025-04-03
+
+### ⛰️  Features
+
+- Extend TweetDetail to support hidden replies #66 - ([a13508f](https://github.com/prinsss/twitter-web-exporter/commit/a13508f97b790d53c95a6d729d44e646278474b5))
+- Show following count in user table - ([cf61756](https://github.com/prinsss/twitter-web-exporter/commit/cf61756ee07b97c244414785a894e5392fdc9c29))
+- Add DirectMessagesModule - ([80993d1](https://github.com/prinsss/twitter-web-exporter/commit/80993d195a5b486e336200f8a319d3ed3696c0df))
+- Show storage quota when analyzing DB - ([8dbe72e](https://github.com/prinsss/twitter-web-exporter/commit/8dbe72ec15feca1e5bbe8fa7486a54a7efc9b613))
+- Support filtering by type when exporting media - ([15c0790](https://github.com/prinsss/twitter-web-exporter/commit/15c079081a1c7622e9c956d6f524740c46a171a5))
+- Add more columns to user table - ([bea3fe0](https://github.com/prinsss/twitter-web-exporter/commit/bea3fe06ebc38997a4d9113ff5a3bc894130a675))
+- Add UserDetailModule - ([6089ca3](https://github.com/prinsss/twitter-web-exporter/commit/6089ca3614593e82e472a6b07049bfa7055c596c))
+
+### 🐛 Bug Fixes
+
+- Adapt to timeline_v2 API changes - ([4ff3040](https://github.com/prinsss/twitter-web-exporter/commit/4ff3040a1aebb5f23e5b150402aab65241b0d971))
+- Update TweetDetail API - ([5a50bc6](https://github.com/prinsss/twitter-web-exporter/commit/5a50bc66c90c97b922061251f1021402e1392050))
+- Capture group DM conversations - ([df153a4](https://github.com/prinsss/twitter-web-exporter/commit/df153a4d1ffa7616c00debb594d3bff5249ace76))
+- Error when reading views count - ([4137b5f](https://github.com/prinsss/twitter-web-exporter/commit/4137b5f3ec486c3fff9b82c1d7ad706c1a065289))
+- Import from proper package - ([a5b6e55](https://github.com/prinsss/twitter-web-exporter/commit/a5b6e55f9b816b89217c9c43e4aebc72a72ab509))
+- Missing translation key for modal titles - ([172f3f3](https://github.com/prinsss/twitter-web-exporter/commit/172f3f3178862af2dd3fb6c2ed69d443e39230b1))
+- Catch database errors - ([e984b68](https://github.com/prinsss/twitter-web-exporter/commit/e984b68ddd388f2de2be616400a4af9961cc93a5))
+
+### 🚜 Refactor
+
+- Extract table view as a common component - ([f8e1d18](https://github.com/prinsss/twitter-web-exporter/commit/f8e1d1809d7ada795b662e4576f3f1fa7922a6c1))
+
+### 📚 Documentation
+
+- Update README - ([c1cedd4](https://github.com/prinsss/twitter-web-exporter/commit/c1cedd422f1ccf3e17eaa4de24c2d77216828c70))
+- Update README - ([9904480](https://github.com/prinsss/twitter-web-exporter/commit/9904480dbfd29f2ade82aee3e328a09b4da11fd0))
+
+## [1.2.0](https://github.com/prinsss/twitter-web-exporter/compare/v1.1.0..v1.2.0) - 2024-10-22
 
 ### ⛰️  Features
 
