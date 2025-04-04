@@ -93,7 +93,7 @@ export function ExportDataModal<T>({ title, table, show, onClose }: ExportDataMo
     >
       {/* Modal content. */}
       <div class="px-4 text-base">
-        <p class="text-base-content text-opacity-60 mb-2 leading-5 text-sm">
+        <p class="text-base-content/60 mb-2 leading-5 text-sm">
           {t(
             'Export captured data as JSON/HTML/CSV file. This may take a while depending on the amount of data. The exported file does not include media files such as images and videos but only the URLs.',
           )}
@@ -131,7 +131,7 @@ export function ExportDataModal<T>({ title, table, show, onClose }: ExportDataMo
         </div>
         {selectedRows.length > 0 ? null : (
           <div class="flex items-center justify-center h-28 w-full">
-            <p class="text-base-content text-opacity-50">{t('No data selected.')}</p>
+            <p class="text-base-content/50">{t('No data selected.')}</p>
           </div>
         )}
         {/* Progress bar. */}
@@ -141,14 +141,14 @@ export function ExportDataModal<T>({ title, table, show, onClose }: ExportDataMo
             value={(currentProgress / (totalProgress || 1)) * 100}
             max="100"
           />
-          <span class="text-sm leading-none mt-2 text-base-content text-opacity-60">
+          <span class="text-sm leading-none mt-2 text-base-content/60">
             {`${currentProgress}/${selectedRows.length}`}
           </span>
         </div>
       </div>
       {/* Action buttons. */}
       <div class="flex space-x-2">
-        <span class="flex-grow" />
+        <span class="grow" />
         <button class="btn" onClick={onClose}>
           {t('Cancel')}
         </button>

@@ -46,9 +46,9 @@ export function ExtensionPanel({
           )}
           <span class={cx('relative inline-flex rounded-full h-4 w-4', indicatorColor)} />
         </div>
-        <div class="flex flex-col flex-grow">
+        <div class="flex flex-col grow">
           <p class="text-base m-0 font-medium leading-none">{title}</p>
-          <p class="text-sm text-base-content leading-5 text-opacity-70 m-0">{description}</p>
+          <p class="text-sm text-base-content/70 leading-5 m-0">{description}</p>
         </div>
         <button class="btn btn-sm p-0 w-9 h-9" onClick={onClick}>
           <IconArrowUpRight />
@@ -118,7 +118,7 @@ export function SearchArea({ defaultValue, onChange }: SearchAreaProps) {
       <input
         ref={inputRef}
         type="text"
-        class="input input-bordered input-sm join-item"
+        class="input input-bordered input-sm join-item w-52"
         placeholder={t('Search...')}
         defaultValue={defaultValue}
         onKeyDown={(e) => {
@@ -171,7 +171,7 @@ export function MultiSelect<T extends string>(props: MultiSelectProps<T>) {
       </div>
       <ul
         tabIndex={0}
-        class="dropdown-content menu menu-sm z-10 w-full rounded-box bg-base-100 p-2 shadow"
+        class="dropdown-content menu menu-sm z-10 w-full rounded-box bg-base-100 p-2 shadow-sm"
       >
         {options.map((option) => (
           <li key={option.value}>
@@ -205,7 +205,7 @@ export function MediaDisplayColumn({ data, onClick }: MediaDisplayColumnProps) {
       {data.map((media) => (
         <div
           key={media.media_key ?? media.id_str}
-          class="flex-shrink-0 block cursor-pointer relative w-12 h-12 rounded bg-base-300 overflow-hidden"
+          class="shrink-0 block cursor-pointer relative w-12 h-12 rounded-sm bg-base-300 overflow-hidden"
           onClick={() => onClick(media)}
         >
           <img
@@ -216,7 +216,7 @@ export function MediaDisplayColumn({ data, onClick }: MediaDisplayColumnProps) {
           />
           {/* Show video duration or GIF. */}
           {media.type !== 'photo' && (
-            <div class="absolute bottom-0.5 left-0.5 h-4 w-max px-0.5 text-xs text-white bg-black bg-opacity-30 leading-4 text-center rounded">
+            <div class="absolute bottom-0.5 left-0.5 h-4 w-max px-0.5 text-xs text-white bg-black/30 leading-4 text-center rounded-sm">
               {media.type === 'video'
                 ? formatVideoDuration(media.video_info?.duration_millis)
                 : 'GIF'}
@@ -224,7 +224,7 @@ export function MediaDisplayColumn({ data, onClick }: MediaDisplayColumnProps) {
           )}
           {/* Or show ALT text if any. */}
           {media.type === 'photo' && media.ext_alt_text && (
-            <div class="absolute bottom-0.5 left-0.5 h-4 w-max px-0.5 text-xs text-white bg-black bg-opacity-30 leading-4 text-center rounded">
+            <div class="absolute bottom-0.5 left-0.5 h-4 w-max px-0.5 text-xs text-white bg-black/30 leading-4 text-center rounded-sm">
               ALT
             </div>
           )}
