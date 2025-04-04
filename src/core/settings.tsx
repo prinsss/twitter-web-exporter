@@ -2,6 +2,7 @@ import { Fragment } from 'preact';
 import { useEffect } from 'preact/hooks';
 import { useSignal } from '@preact/signals';
 import {
+  IconPalette,
   IconSettings,
   IconBrandGithubFilled,
   IconHelp,
@@ -14,18 +15,20 @@ import { GM_registerMenuCommand } from '$';
 import packageJson from '@/../package.json';
 import { Modal } from '@/components/common';
 import { useTranslation, detectBrowserLanguage, LANGUAGES_CONFIG, TranslationKey } from '@/i18n';
-import { capitalizeFirstLetter, cx, useToggle } from '@/utils/common';
+import { cx, useToggle } from '@/utils/common';
 import { saveFile } from '@/utils/exporter';
 
 import { db } from './database';
 import extensionManager from './extensions';
-import { DEFAULT_APP_OPTIONS, options, THEMES } from './options';
+import { options } from './options';
+import { Themes } from './themes';
 
 export function Settings() {
   const { t, i18n } = useTranslation();
 
   const currentTheme = useSignal(options.get('theme'));
   const [showSettings, toggleSettings] = useToggle(false);
+  const [showThemes, toggleThemes] = useToggle(false);
 
   const styles = {
     subtitle: 'mb-2 text-base-content ml-4 opacity-50 font-semibold text-xs',
@@ -54,23 +57,17 @@ export function Settings() {
         {/* Common settings. */}
         <p class={styles.subtitle}>{t('General')}</p>
         <div class={cx(styles.block, 'flex-col')}>
-          <label class={styles.item}>
-            <span class="label-text">{t('Theme')}</span>
-            <select
-              class="select select-xs"
-              onChange={(e) => {
-                currentTheme.value =
-                  (e.target as HTMLSelectElement)?.value ?? DEFAULT_APP_OPTIONS.theme;
-                options.set('theme', currentTheme.value);
-              }}
-            >
-              {THEMES.map((theme) => (
-                <option key={theme} value={theme} selected={currentTheme.value === theme}>
-                  {capitalizeFirstLetter(theme)}
-                </option>
-              ))}
-            </select>
-          </label>
+          <div class={styles.item}>
+            <div class="flex items-center">
+              <span class="label-text">{t('Theme')}</span>
+            </div>
+            <div>
+              <button class="btn btn-xs btn-accent mr-2" onClick={toggleThemes}>
+                <IconPalette size={20} />
+                {currentTheme.value}
+              </button>
+            </div>
+          </div>
           <label class={styles.item}>
             <span class="label-text">{t('Language')}</span>
             <select
@@ -216,6 +213,8 @@ export function Settings() {
           </a>
         </div>
       </Modal>
+      {/* Themes modal. */}
+      <Themes show={showThemes} onClose={toggleThemes} />
     </Fragment>
   );
 }

@@ -1,16 +1,38 @@
 @import 'tailwindcss';
 @plugin "daisyui" {
   themes:
-    cupcake --default,
+    light,
     dark,
+    cupcake --default,
+    bumblebee,
     emerald,
+    corporate,
+    synthwave,
+    retro,
     cyberpunk,
     valentine,
+    halloween,
+    garden,
+    forest,
+    aqua,
     lofi,
+    pastel,
+    fantasy,
+    wireframe,
+    black,
+    luxury,
     dracula --prefersdark,
     cmyk,
+    autumn,
     business,
-    winter;
+    acid,
+    lemonade,
+    night,
+    coffee,
+    winter,
+    dim,
+    nord,
+    sunset;
 }
 
 @theme {
