@@ -18,7 +18,7 @@ import UserDetailModule from './modules/user-detail';
 import UserMediaModule from './modules/user-media';
 import UserTweetsModule from './modules/user-tweets';
 
-import './index.css';
+import styles from './index.css?inline';
 
 extensions.add(FollowersModule);
 extensions.add(FollowingModule);
@@ -42,7 +42,28 @@ function mountApp() {
   root.id = 'twe-root';
   document.body.append(root);
 
-  render(<App />, root);
+  // Use shadow DOM to avoid CSS conflicts.
+  const shadowRoot = root.attachShadow({ mode: 'open' });
+  shadowRoot.adoptedStyleSheets = [prepareStyles()];
+
+  render(<App />, shadowRoot);
+}
+
+// To use Tailwind CSS v4 in shadow DOM,
+// See: https://github.com/tailwindlabs/tailwindcss/issues/15005
+function prepareStyles() {
+  const shadowSheet = new CSSStyleSheet();
+  shadowSheet.replaceSync(styles.replace(/:root/gu, ':host'));
+
+  const globalSheet = new CSSStyleSheet();
+  for (const rule of shadowSheet.cssRules) {
+    if (rule instanceof CSSPropertyRule) {
+      globalSheet.insertRule(rule.cssText);
+    }
+  }
+
+  document.adoptedStyleSheets.push(globalSheet);
+  return shadowSheet;
 }
 
 if (document.readyState === 'loading') {

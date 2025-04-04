@@ -2,12 +2,9 @@ import { defineConfig } from 'vite';
 import { fileURLToPath, URL } from 'node:url';
 
 import preact from '@preact/preset-vite';
+import tailwindcss from '@tailwindcss/vite';
 import monkey from 'vite-plugin-monkey';
 import i18nextLoader from 'vite-plugin-i18next-loader';
-
-import tailwindcss from '@tailwindcss/vite';
-import prefixSelector from 'postcss-prefix-selector';
-import remToPx from 'postcss-rem-to-pixel-next';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -18,18 +15,6 @@ export default defineConfig({
   },
   build: {
     minify: false,
-  },
-  css: {
-    postcss: {
-      plugins: [
-        remToPx({ propList: ['*'] }),
-        // Use scoped CSS.
-        prefixSelector({
-          prefix: '#twe-root',
-          exclude: [/^#twe-root/], // This may be a bug.
-        }),
-      ],
-    },
   },
   plugins: [
     preact(),
