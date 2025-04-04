@@ -118,7 +118,7 @@ export function ExportMediaModal<T>({
           <div class="grid grid-cols-4 gap-2 items-center h-9">
             <p class="leading-8">{t('Filename template:')}</p>
             <div
-              class="tooltip tooltip-bottom col-span-3 before:whitespace-pre-line before:max-w-max"
+              class="tooltip tooltip-bottom col-span-3 before:whitespace-pre-line! before:max-w-max!"
               data-tip={Object.entries(patterns)
                 .map(([key, value]) => `{${key}} - ${t(value.description as TranslationKey)}`)
                 .reduce((acc, cur) => acc + cur + '\n', '')}
@@ -159,7 +159,7 @@ export function ExportMediaModal<T>({
               href="https://aria2.github.io/manual/en/html/aria2c.html#input-file"
               target="_blank"
               rel="noopener noreferrer"
-              class="tooltip tooltip-bottom before:max-w-40 ml-1"
+              class="tooltip tooltip-bottom before:max-w-40! ml-1"
               data-tip={t(
                 'Click for more information. Each URL will be on a new line, with its filename on the next line. This format is compatible with aria2.',
               )}

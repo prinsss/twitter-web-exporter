@@ -59,7 +59,9 @@ export function App() {
         data-theme={currentTheme.value}
         class={cx(
           'card card-compact bg-base-100 fixed border shadow-xl w-80 leading-loose text-base-content px-4 py-3 rounded-box border-solid border-neutral-content/50 left-8 top-8 transition-transform duration-500',
-          showControlPanel.value ? 'translate-x-0 transform-none' : 'translate-x-[-500px]',
+          // Set translate to none otherwise it will create a new containing block and affect position: fixed.
+          // Since translate-xxx in Tailwind v4 now uses `translate` property, transform-none will not work.
+          showControlPanel.value ? 'translate-x-0 translate-none' : 'translate-x-[-500px]',
         )}
       >
         {/* Card title. */}

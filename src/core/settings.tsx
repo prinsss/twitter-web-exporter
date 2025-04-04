@@ -74,7 +74,7 @@ export function Settings() {
           <label class={styles.item}>
             <span class="label-text">{t('Language')}</span>
             <select
-              class="select select-xs"
+              class="select select-xs w-52"
               onChange={(e) => {
                 const language = (e.target as HTMLSelectElement)?.value ?? detectBrowserLanguage();
                 i18n.changeLanguage(language);
@@ -110,7 +110,7 @@ export function Settings() {
                 href="https://day.js.org/docs/en/display/format"
                 target="_blank"
                 rel="noopener noreferrer"
-                class="tooltip tooltip-bottom ml-0.5 before:max-w-40"
+                class="tooltip tooltip-bottom ml-0.5 before:max-w-40!"
                 data-tip={t(
                   'Click for more information. This will take effect on both previewer and exported files.',
                 )}
@@ -120,7 +120,7 @@ export function Settings() {
             </div>
             <input
               type="text"
-              class="input input-bordered input-xs w-48"
+              class="input input-bordered input-xs w-52"
               value={options.get('dateTimeFormat')}
               onChange={(e) => {
                 options.set('dateTimeFormat', (e.target as HTMLInputElement)?.value);

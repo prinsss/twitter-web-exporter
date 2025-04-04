@@ -27,7 +27,7 @@ export const Pagination = ({ table }: PaginationProps) => {
         onChange={(e) => {
           table.setPageSize(Number((e.target as HTMLInputElement).value));
         }}
-        className="select select-sm select-bordered"
+        className="select select-sm select-bordered w-20"
       >
         {[10, 20, 50, 100].map((pageSize) => (
           <option key={pageSize} value={pageSize}>

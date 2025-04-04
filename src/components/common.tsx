@@ -118,7 +118,7 @@ export function SearchArea({ defaultValue, onChange }: SearchAreaProps) {
       <input
         ref={inputRef}
         type="text"
-        class="input input-bordered input-sm join-item"
+        class="input input-bordered input-sm join-item w-52"
         placeholder={t('Search...')}
         defaultValue={defaultValue}
         onKeyDown={(e) => {
