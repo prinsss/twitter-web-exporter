@@ -67,7 +67,8 @@ export function extractMedia(
 
   for (const item of data) {
     // For tweets, download media files with custom filenames.
-    if (item.__typename === 'Tweet') {
+    // __typename can be undefined in some cases.
+    if (item.__typename === 'Tweet' || item.__typename === undefined) {
       if (!includeRetweets && item.legacy.retweeted_status_result) {
         continue;
       }
