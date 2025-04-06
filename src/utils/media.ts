@@ -67,8 +67,8 @@ export function extractMedia(
 
   for (const item of data) {
     // For tweets, download media files with custom filenames.
-    // __typename can be undefined in some cases.
-    if (item.__typename === 'Tweet' || item.__typename === undefined) {
+    // NOTE: __typename is undefined in TweetWithVisibilityResults.
+    if (item.__typename === 'Tweet' || (typeof item.__typename === 'undefined' && 'core' in item)) {
       if (!includeRetweets && item.legacy.retweeted_status_result) {
         continue;
       }
