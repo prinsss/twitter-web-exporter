@@ -1,6 +1,7 @@
 import {
   ItemContentUnion,
   Media,
+  Tag,
   TimelineAddEntriesInstruction,
   TimelineEntry,
   TimelineInstructions,
@@ -252,6 +253,23 @@ export function extractTweetMedia(tweet: Tweet): Media[] {
   return realTweet.legacy.entities.media ?? [];
 }
 
+export function extractTweetMediaTags(tweet: Tweet): Tag[] {
+  const media = extractTweetMedia(tweet);
+  const dedupedTags: Tag[] = [];
+
+  for (const item of media) {
+    const tags = getMediaTags(item);
+    for (const tag of tags) {
+      if (dedupedTags.some((t) => t.user_id === tag.user_id)) {
+        continue;
+      }
+      dedupedTags.push(tag);
+    }
+  }
+
+  return dedupedTags;
+}
+
 export function extractTweetFullText(tweet: Tweet): string {
   return tweet.note_tweet?.note_tweet_results.result.text ?? tweet.legacy.full_text;
 }
@@ -297,6 +315,10 @@ export function getMediaOriginalUrl(media: Media): string {
   return formatTwitterImage(media.media_url_https, 'orig');
 }
 
+export function getMediaTags(media: Media): Tag[] {
+  return media.features?.all?.tags ?? [];
+}
+
 export function formatTwitterImage(
   imgUrl: string,
   name: 'thumb' | 'small' | 'medium' | 'large' | 'orig' = 'medium',
@@ -332,8 +354,8 @@ export function getTweetURL(tweet: Tweet): string {
   return `https://twitter.com/${extractTweetUserScreenName(tweet)}/status/${tweet.legacy.id_str}`;
 }
 
-export function getUserURL(user: User): string {
-  return `https://twitter.com/${user.legacy.screen_name}`;
+export function getUserURL(user: User | string): string {
+  return `https://twitter.com/${typeof user === 'string' ? user : user.legacy.screen_name}`;
 }
 
 export function getInReplyToTweetURL(tweet: Tweet): string {

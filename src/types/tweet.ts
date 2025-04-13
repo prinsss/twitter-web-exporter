@@ -192,6 +192,7 @@ export interface Media {
   };
   url: string;
   features: {
+    all?: Feature;
     large: Feature;
     medium: Feature;
     small: Feature;
@@ -228,6 +229,7 @@ export interface Variant {
 
 interface Feature {
   faces: FocusRect[];
+  tags?: Tag[];
 }
 
 interface FocusRect {
@@ -235,6 +237,13 @@ interface FocusRect {
   y: number;
   h: number;
   w: number;
+}
+
+export interface Tag {
+  user_id: string;
+  name: string;
+  screen_name: string;
+  type: string;
 }
 
 interface Size {

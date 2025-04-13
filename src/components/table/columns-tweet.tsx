@@ -16,6 +16,7 @@ import {
   getTweetURL,
   getUserURL,
   getInReplyToTweetURL,
+  extractTweetMediaTags,
 } from '@/utils/api';
 import { MediaDisplayColumn } from '../common';
 
@@ -238,6 +239,26 @@ export const columns = [
         </p>
       );
     },
+  }),
+  columnHelper.display({
+    id: 'media_tags',
+    meta: {
+      exportKey: 'media_tags',
+      exportHeader: 'Media Tags',
+      exportValue: (row) => extractTweetMediaTags(row.original),
+    },
+    header: () => <Trans i18nKey="Media Tags" />,
+    cell: (info) => (
+      <p>
+        {extractTweetMediaTags(info.row.original).length
+          ? extractTweetMediaTags(info.row.original).map((tag) => (
+              <a class="link inline-block" target="_blank" href={getUserURL(tag.screen_name)}>
+                @{tag.screen_name}
+              </a>
+            ))
+          : 'N/A'}
+      </p>
+    ),
   }),
   columnHelper.accessor('legacy.favorite_count', {
     meta: { exportKey: 'favorite_count', exportHeader: 'Favorites' },
