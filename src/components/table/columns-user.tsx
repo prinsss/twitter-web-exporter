@@ -86,7 +86,7 @@ export const columns = [
           info.table.options.meta?.setMediaPreview(getProfileImageOriginalUrl(info.getValue()))
         }
       >
-        <img class="w-12 h-12 rounded" src={info.getValue()} />
+        <img class="w-12 h-12 rounded-sm" src={info.getValue()} />
       </div>
     ),
   }),
@@ -99,7 +99,7 @@ export const columns = [
         onClick={() => info.table.options.meta?.setMediaPreview(info.getValue() ?? '')}
       >
         {info.getValue() ? (
-          <img class="w-auto h-12 rounded" src={`${info.getValue()}/600x200`} />
+          <img class="w-auto h-12 rounded-sm" src={`${info.getValue()}/600x200`} />
         ) : (
           <span class="leading-[48px]">N/A</span>
         )}

@@ -171,7 +171,7 @@ export const columns = [
           info.table.options.meta?.setMediaPreview(getProfileImageOriginalUrl(info.getValue()))
         }
       >
-        <img class="w-12 h-12 rounded" src={info.getValue()} />
+        <img class="w-12 h-12 rounded-sm" src={info.getValue()} />
       </div>
     ),
   }),

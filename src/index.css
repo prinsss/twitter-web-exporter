@@ -1,37 +1,81 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+@plugin "daisyui" {
+  themes:
+    light,
+    dark,
+    cupcake --default,
+    bumblebee,
+    emerald,
+    corporate,
+    synthwave,
+    retro,
+    cyberpunk,
+    valentine,
+    halloween,
+    garden,
+    forest,
+    aqua,
+    lofi,
+    pastel,
+    fantasy,
+    wireframe,
+    black,
+    luxury,
+    dracula --prefersdark,
+    cmyk,
+    autumn,
+    business,
+    acid,
+    lemonade,
+    night,
+    coffee,
+    winter,
+    dim,
+    nord,
+    sunset;
+}
 
-@layer utilities {
-  /* Set border radius relative to the current theme. */
-  .rounded-box-half {
-    border-radius: calc(var(--rounded-box) / 2);
+@theme {
+  --width-screen-sm: var(--breakpoint-sm);
+  --width-screen-md: var(--breakpoint-md);
+  --width-screen-lg: var(--breakpoint-lg);
+  --width-screen-xl: var(--breakpoint-xl);
+  --width-screen-2xl: var(--breakpoint-2xl);
+}
+
+@utility modal-box {
+  max-height: calc(100vh - 5em);
+}
+
+/* Set border radius relative to the current theme. */
+@utility rounded-box-half {
+  border-radius: calc(var(--radius-box) / 2);
+}
+
+/* Set a different border color for tables. */
+@utility table-border-bc {
+  & :where(thead, tbody) :where(tr:not(:last-child)) {
+    @apply border-b border-b-base-content/20;
   }
-
-  /* Set a different border color for tables. */
-  .table-border-bc :where(thead, tbody) :where(tr:not(:last-child)),
-  .table-border-bc :where(thead, tbody) :where(tr:first-child:last-child) {
-    --tw-border-opacity: 20%;
-    border-bottom-width: 1px;
-    border-bottom-color: var(--fallback-bc, oklch(var(--bc) / var(--tw-border-opacity)));
+  & :where(thead, tbody) :where(tr:first-child:last-child) {
+    @apply border-b border-b-base-content/20;
   }
+}
 
-  /* Set a smaller padding for tables. */
-  .table-padding-sm :where(th, td) {
-    padding-left: 0.75rem /* 12px */;
-    padding-right: 0.75rem /* 12px */;
-    padding-top: 0.5rem /* 8px */;
-    padding-bottom: 0.5rem /* 8px */;
+/* Set a smaller padding for tables. */
+@utility table-padding-sm {
+  & :where(th, td) {
+    @apply px-3 py-2;
   }
+}
 
+@utility no-scrollbar {
   /* Hide scrollbar for Chrome, Safari and Opera. */
-  .no-scrollbar::-webkit-scrollbar {
+  &::-webkit-scrollbar {
     display: none;
   }
 
   /* Hide scrollbar for IE, Edge and Firefox. */
-  .no-scrollbar {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

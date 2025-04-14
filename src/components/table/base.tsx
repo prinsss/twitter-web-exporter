@@ -134,7 +134,7 @@ export function BaseTableView<T>({
         {/* Empty view. */}
         {table.getRowModel().rows.length > 0 ? null : (
           <div class="flex items-center justify-center h-[320px] w-full">
-            <p class="text-base-content text-opacity-50">{t('No data available.')}</p>
+            <p class="text-base-content/50">{t('No data available.')}</p>
           </div>
         )}
       </main>
@@ -145,7 +145,7 @@ export function BaseTableView<T>({
         <button class="btn btn-neutral btn-ghost" onClick={clear}>
           {t('Clear')}
         </button>
-        <span class="flex-grow" />
+        <span class="grow" />
         {renderActions?.(table)}
         <button class="btn btn-primary" onClick={toggleShowExportDataModal}>
           {t('Export Data')}

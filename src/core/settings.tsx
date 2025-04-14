@@ -2,6 +2,7 @@ import { Fragment } from 'preact';
 import { useEffect } from 'preact/hooks';
 import { useSignal } from '@preact/signals';
 import {
+  IconPalette,
   IconSettings,
   IconBrandGithubFilled,
   IconHelp,
@@ -14,18 +15,20 @@ import { GM_registerMenuCommand } from '$';
 import packageJson from '@/../package.json';
 import { Modal } from '@/components/common';
 import { useTranslation, detectBrowserLanguage, LANGUAGES_CONFIG, TranslationKey } from '@/i18n';
-import { capitalizeFirstLetter, cx, useToggle } from '@/utils/common';
+import { cx, useToggle } from '@/utils/common';
 import { saveFile } from '@/utils/exporter';
 
 import { db } from './database';
 import extensionManager from './extensions';
-import { DEFAULT_APP_OPTIONS, options, THEMES } from './options';
+import { options } from './options';
+import { Themes } from './themes';
 
 export function Settings() {
   const { t, i18n } = useTranslation();
 
   const currentTheme = useSignal(options.get('theme'));
   const [showSettings, toggleSettings] = useToggle(false);
+  const [showThemes, toggleThemes] = useToggle(false);
 
   const styles = {
     subtitle: 'mb-2 text-base-content ml-4 opacity-50 font-semibold text-xs',
@@ -54,27 +57,21 @@ export function Settings() {
         {/* Common settings. */}
         <p class={styles.subtitle}>{t('General')}</p>
         <div class={cx(styles.block, 'flex-col')}>
-          <label class={styles.item}>
-            <span class="label-text">{t('Theme')}</span>
-            <select
-              class="select select-xs"
-              onChange={(e) => {
-                currentTheme.value =
-                  (e.target as HTMLSelectElement)?.value ?? DEFAULT_APP_OPTIONS.theme;
-                options.set('theme', currentTheme.value);
-              }}
-            >
-              {THEMES.map((theme) => (
-                <option key={theme} value={theme} selected={currentTheme.value === theme}>
-                  {capitalizeFirstLetter(theme)}
-                </option>
-              ))}
-            </select>
-          </label>
+          <div class={styles.item}>
+            <div class="flex items-center">
+              <span class="label-text">{t('Theme')}</span>
+            </div>
+            <div>
+              <button class="btn btn-xs btn-accent mr-2" onClick={toggleThemes}>
+                <IconPalette size={20} />
+                {currentTheme.value}
+              </button>
+            </div>
+          </div>
           <label class={styles.item}>
             <span class="label-text">{t('Language')}</span>
             <select
-              class="select select-xs"
+              class="select select-xs w-52"
               onChange={(e) => {
                 const language = (e.target as HTMLSelectElement)?.value ?? detectBrowserLanguage();
                 i18n.changeLanguage(language);
@@ -110,7 +107,7 @@ export function Settings() {
                 href="https://day.js.org/docs/en/display/format"
                 target="_blank"
                 rel="noopener noreferrer"
-                class="tooltip tooltip-bottom ml-0.5 before:max-w-40"
+                class="tooltip tooltip-bottom ml-0.5 before:max-w-40!"
                 data-tip={t(
                   'Click for more information. This will take effect on both previewer and exported files.',
                 )}
@@ -120,7 +117,7 @@ export function Settings() {
             </div>
             <input
               type="text"
-              class="input input-bordered input-xs w-48"
+              class="input input-bordered input-xs w-52"
               value={options.get('dateTimeFormat')}
               onChange={(e) => {
                 options.set('dateTimeFormat', (e.target as HTMLInputElement)?.value);
@@ -185,7 +182,7 @@ export function Settings() {
         <p class={styles.subtitle}>{t('Modules (Scroll to see more)')}</p>
         <div class={cx(styles.block, 'flex-col', 'max-h-44 overflow-scroll')}>
           {extensionManager.getExtensions().map((extension) => (
-            <label class={cx(styles.item, 'flex-shrink-0')} key={extension.name}>
+            <label class={cx(styles.item, 'shrink-0')} key={extension.name}>
               <span>
                 {t(extension.name.replace('Module', '') as TranslationKey)} {t('Module')}
               </span>
@@ -216,6 +213,8 @@ export function Settings() {
           </a>
         </div>
       </Modal>
+      {/* Themes modal. */}
+      <Themes show={showThemes} onClose={toggleThemes} />
     </Fragment>
   );
 }

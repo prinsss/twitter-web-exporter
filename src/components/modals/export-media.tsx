@@ -100,7 +100,7 @@ export function ExportMediaModal<T>({
     >
       {/* Modal content. */}
       <div class="px-4 text-base overflow-y-scroll overscroll-none">
-        <p class="text-base-content text-opacity-60 leading-5 text-sm">
+        <p class="text-base-content/60 leading-5 text-sm">
           {t(
             'Download and save media files from captured data. This may take a while depending on the amount of data. Media that will be downloaded includes: profile images, profile banners (for users), images, videos (for tweets).',
           )}
@@ -118,7 +118,7 @@ export function ExportMediaModal<T>({
           <div class="grid grid-cols-4 gap-2 items-center h-9">
             <p class="leading-8">{t('Filename template:')}</p>
             <div
-              class="tooltip tooltip-bottom col-span-3 before:whitespace-pre-line before:max-w-max"
+              class="tooltip tooltip-bottom col-span-3 before:whitespace-pre-line! before:max-w-max!"
               data-tip={Object.entries(patterns)
                 .map(([key, value]) => `{${key}} - ${t(value.description as TranslationKey)}`)
                 .reduce((acc, cur) => acc + cur + '\n', '')}
@@ -159,7 +159,7 @@ export function ExportMediaModal<T>({
               href="https://aria2.github.io/manual/en/html/aria2c.html#input-file"
               target="_blank"
               rel="noopener noreferrer"
-              class="tooltip tooltip-bottom before:max-w-40 ml-1"
+              class="tooltip tooltip-bottom before:max-w-40! ml-1"
               data-tip={t(
                 'Click for more information. Each URL will be on a new line, with its filename on the next line. This format is compatible with aria2.',
               )}
@@ -223,7 +223,7 @@ export function ExportMediaModal<T>({
           </table>
           {mediaList.length > 0 ? null : (
             <div class="flex items-center justify-center h-28 w-full">
-              <p class="text-base-content text-opacity-50">{t('No media selected.')}</p>
+              <p class="text-base-content/50">{t('No media selected.')}</p>
             </div>
           )}
         </div>
@@ -234,14 +234,14 @@ export function ExportMediaModal<T>({
             value={(currentProgress / (totalProgress || 1)) * 100}
             max="100"
           />
-          <span class="text-sm h-4 leading-none mt-2 text-base-content text-opacity-60">
+          <span class="text-sm h-4 leading-none mt-2 text-base-content/60">
             {`${currentProgress}/${mediaList.length}`}
           </span>
         </div>
       </div>
       {/* Action buttons. */}
       <div class="flex space-x-2 mt-2">
-        <span class="flex-grow" />
+        <span class="grow" />
         <button class="btn" onClick={onClose}>
           {t('Cancel')}
         </button>
