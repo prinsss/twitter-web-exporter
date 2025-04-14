@@ -113,7 +113,7 @@ export const columns = [
               )
             }
           >
-            {'>>'} Show Full Text
+            {'>>'} <Trans i18nKey="Show Full Text" />
           </button>
         )}
       </div>
@@ -174,6 +174,11 @@ export const columns = [
         <img class="w-12 h-12 rounded" src={info.getValue()} />
       </div>
     ),
+  }),
+  columnHelper.accessor('core.user_results.result.rest_id', {
+    meta: { exportKey: 'user_id', exportHeader: 'User ID' },
+    header: () => <Trans i18nKey="User ID" />,
+    cell: (info) => <p class="w-20 break-all font-mono text-xs">{info.getValue()}</p>,
   }),
   columnHelper.accessor('legacy.in_reply_to_screen_name', {
     meta: {
