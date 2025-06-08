@@ -5,11 +5,12 @@ import packageJson from '@/../package.json';
 import { Capture, Tweet, User } from '@/types';
 import { extractTweetMedia } from '@/utils/api';
 import { parseTwitterDateTime } from '@/utils/common';
+import { migration_20250609 } from '@/utils/migration';
 import logger from '@/utils/logger';
 import { ExtensionType } from '../extensions';
 
 const DB_NAME = packageJson.name;
-const DB_VERSION = 1;
+const DB_VERSION = 2;
 
 export class DatabaseManager {
   private db: Dexie;
@@ -188,7 +189,7 @@ export class DatabaseManager {
         const data: User[] = users.map((user) => ({
           ...user,
           twe_private_fields: {
-            created_at: +parseTwitterDateTime(user.legacy.created_at),
+            created_at: +parseTwitterDateTime(user.core.created_at),
             updated_at: Date.now(),
           },
         }));
@@ -239,7 +240,7 @@ export class DatabaseManager {
       'twe_private_fields.created_at',
       'twe_private_fields.updated_at',
       'twe_private_fields.media_count',
-      'core.user_results.result.legacy.screen_name',
+      'core.user_results.result.core.screen_name',
       'legacy.favorite_count',
       'legacy.retweet_count',
       'legacy.bookmark_count',
@@ -256,16 +257,16 @@ export class DatabaseManager {
       'rest_id',
       'twe_private_fields.created_at',
       'twe_private_fields.updated_at',
-      'legacy.screen_name',
+      'core.screen_name',
       'legacy.followers_count',
-      // 'legacy.friends_count',
+      'legacy.friends_count',
       'legacy.statuses_count',
       'legacy.favourites_count',
       'legacy.listed_count',
-      'legacy.verified_type',
+      'verification.verified_type',
       'is_blue_verified',
-      'legacy.following',
-      'legacy.followed_by',
+      'relationship_perspectives.following',
+      'relationship_perspectives.followed_by',
     ];
 
     // Indexes for the "captures" table.
@@ -281,7 +282,9 @@ export class DatabaseManager {
           users: userIndexPaths.join(','),
           captures: captureIndexPaths.join(','),
         })
-        .upgrade(async () => {
+        .upgrade(async (tx) => {
+          logger.info('Upgrading database schema...');
+          await migration_20250609(tx);
           logger.info('Database upgraded');
         });
 

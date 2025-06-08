@@ -237,7 +237,7 @@ export function extractQuotedTweet(tweet: Tweet): Tweet | null {
 }
 
 export function extractTweetUserScreenName(tweet: Tweet): string {
-  return tweet.core.user_results.result.legacy.screen_name;
+  return tweet.core.user_results.result.core.screen_name;
 }
 
 export function extractTweetMedia(tweet: Tweet): Media[] {
@@ -355,7 +355,7 @@ export function getTweetURL(tweet: Tweet): string {
 }
 
 export function getUserURL(user: User | string): string {
-  return `https://twitter.com/${typeof user === 'string' ? user : user.legacy.screen_name}`;
+  return `https://twitter.com/${typeof user === 'string' ? user : user.core.screen_name}`;
 }
 
 export function getInReplyToTweetURL(tweet: Tweet): string {

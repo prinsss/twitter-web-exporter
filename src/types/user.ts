@@ -24,11 +24,6 @@ export interface User {
   is_blue_verified: boolean;
   profile_image_shape: 'Square' | 'Circle';
   legacy: {
-    followed_by: boolean;
-    following: boolean;
-    can_dm: boolean;
-    can_media_tag: boolean;
-    created_at: string;
     default_profile: boolean;
     default_profile_image: boolean;
     description: string;
@@ -40,25 +35,65 @@ export interface User {
     has_custom_timelines: boolean;
     is_translator: boolean;
     listed_count: number;
-    location: string;
     media_count: number;
-    name: string;
     normal_followers_count: number;
     pinned_tweet_ids_str: string[];
     possibly_sensitive: boolean;
     profile_banner_url?: string;
-    profile_image_url_https: string;
     profile_interstitial_type: string;
-    protected?: boolean;
-    screen_name: string;
     statuses_count: number;
     translator_type: string;
-    url: string;
-    verified: boolean;
-    verified_type: string;
+    url?: string;
     want_retweets: boolean;
     withheld_in_countries: unknown[];
   };
+  avatar: {
+    image_url: string;
+  };
+  core: {
+    created_at: string;
+    name: string;
+    screen_name: string;
+  };
+  dm_permissions: {
+    can_dm: boolean;
+  };
+  location: {
+    location: string;
+  };
+  media_permissions: {
+    can_media_tag: boolean;
+  };
+  privacy: {
+    protected?: boolean;
+  };
+  verification: {
+    verified: boolean;
+    verified_type?: 'Business' | 'Government' | string;
+  };
+  relationship_perspectives: {
+    following: boolean;
+    followed_by?: boolean;
+    blocking?: boolean;
+    muting?: boolean;
+  };
+  // The fields above are originally present in `legacy` but are now moved to the top level.
+  parody_commentary_fan_label?: 'None' | 'Parody' | 'Commentary' | 'Fan';
+  tipjar_settings?: {
+    is_enabled?: boolean;
+    patreon_handle?: string;
+  };
+  is_profile_translatable?: boolean;
+  has_hidden_subscriptions_on_profile?: boolean;
+  verification_info?: VerificationInfo;
+  highlights_info?: {
+    can_highlight_tweets: boolean;
+    highlighted_tweets: string;
+  };
+  user_seed_tweet_count?: number;
+  premium_gifting_eligible?: boolean;
+  business_account?: unknown;
+  creator_subscriptions_count?: number;
   legacy_extended_profile?: {
     birthdate?: {
       day: number;
@@ -86,6 +121,29 @@ export interface User {
     created_at: number;
     /** The UNIX timestamp in ms when inserted or updated to local database. */
     updated_at: number;
+    /** The UNIX timestamp in ms when the data record was migrated from legacy format. */
+    migrated_at?: number;
+  };
+}
+
+/**
+ * The user type definition prior to the Twitter API's breaking changes introduced in June 2025.
+ * Used for compatibility with existing legacy data and database migrations.
+ */
+export interface UserLegacy extends User {
+  legacy: User['legacy'] & {
+    followed_by: boolean;
+    following: boolean;
+    can_dm: boolean;
+    can_media_tag: boolean;
+    created_at: string;
+    location: string;
+    name: string;
+    profile_image_url_https: string;
+    protected?: boolean;
+    screen_name: string;
+    verified: boolean;
+    verified_type?: string;
   };
 }
 
@@ -95,5 +153,23 @@ export interface UserEntities {
   };
   url?: {
     urls: EntityURL[];
+  };
+}
+
+export interface VerificationInfo {
+  is_identity_verified: boolean;
+  reason: {
+    description: {
+      text: string;
+      entities: {
+        from_index: number;
+        to_index: number;
+        ref: {
+          url: string;
+          url_type: 'ExternalUrl';
+        };
+      }[];
+    };
+    verified_since_msec: string;
   };
 }

@@ -87,6 +87,9 @@ export interface Tweet {
     state: 'Enabled' | 'EnabledWithCount';
   };
   source: string;
+  unmention_data?: unknown;
+  grok_analysis_button?: boolean;
+  quick_promote_eligibility?: unknown;
   // Used for long tweets.
   note_tweet?: {
     is_expandable: boolean;
@@ -142,6 +145,8 @@ export interface Tweet {
     updated_at: number;
     /** The number of media items in the tweet. */
     media_count: number;
+    /** The UNIX timestamp in ms when the data record was migrated from legacy format. */
+    migrated_at?: number;
   };
 }
 
@@ -169,6 +174,7 @@ export interface TweetEntities {
   urls: EntityURL[];
   hashtags: Hashtag[];
   symbols: unknown[];
+  timestamps: unknown[];
 }
 
 export interface Hashtag {
@@ -182,16 +188,19 @@ export interface Media {
   id_str: string;
   indices: number[];
   media_url_https: string;
+  source_user_id_str?: string;
+  source_status_id_str?: string;
   type: 'video' | 'photo' | 'animated_gif';
   additional_media_info?: {
-    title: string;
-    description: string;
+    title?: string;
+    description?: string;
+    monetizable?: boolean;
   };
   mediaStats?: {
     viewCount: number;
   };
   url: string;
-  features: {
+  features?: {
     all?: Feature;
     large: Feature;
     medium: Feature;
@@ -208,6 +217,14 @@ export interface Media {
     height: number;
     width: number;
     focus_rects?: FocusRect[];
+  };
+  allow_download_status?: {
+    allow_download: boolean;
+  };
+  media_results: {
+    result: {
+      media_key: string;
+    };
   };
   video_info?: {
     aspect_ratio: number[];
@@ -228,7 +245,7 @@ export interface Variant {
 }
 
 interface Feature {
-  faces: FocusRect[];
+  faces?: FocusRect[];
   tags?: Tag[];
 }
 

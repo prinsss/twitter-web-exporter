@@ -141,7 +141,7 @@ export const columns = [
       />
     ),
   }),
-  columnHelper.accessor('core.user_results.result.legacy.screen_name', {
+  columnHelper.accessor('core.user_results.result.core.screen_name', {
     meta: { exportKey: 'screen_name', exportHeader: 'Screen Name' },
     header: () => <Trans i18nKey="Screen Name" />,
     cell: (info) => (
@@ -156,12 +156,12 @@ export const columns = [
       </p>
     ),
   }),
-  columnHelper.accessor('core.user_results.result.legacy.name', {
+  columnHelper.accessor('core.user_results.result.core.name', {
     meta: { exportKey: 'name', exportHeader: 'Profile Name' },
     header: () => <Trans i18nKey="Profile Name" />,
     cell: (info) => <p class="w-32">{info.getValue()}</p>,
   }),
-  columnHelper.accessor('core.user_results.result.legacy.profile_image_url_https', {
+  columnHelper.accessor('core.user_results.result.avatar.image_url', {
     meta: { exportKey: 'profile_image_url', exportHeader: 'Profile Image' },
     header: () => <Trans i18nKey="Profile Image" />,
     cell: (info) => (

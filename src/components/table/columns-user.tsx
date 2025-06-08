@@ -45,7 +45,7 @@ export const columns = [
     header: () => <Trans i18nKey="ID" />,
     cell: (info) => <p class="w-20 break-all font-mono text-xs">{info.getValue()}</p>,
   }),
-  columnHelper.accessor('legacy.screen_name', {
+  columnHelper.accessor('core.screen_name', {
     meta: { exportKey: 'screen_name', exportHeader: 'Screen Name' },
     header: () => <Trans i18nKey="Screen Name" />,
     cell: (info) => (
@@ -56,7 +56,7 @@ export const columns = [
       </p>
     ),
   }),
-  columnHelper.accessor('legacy.name', {
+  columnHelper.accessor('core.name', {
     meta: { exportKey: 'name', exportHeader: 'Profile Name' },
     header: () => <Trans i18nKey="Profile Name" />,
     cell: (info) => <p class="w-32">{info.getValue()}</p>,
@@ -76,7 +76,7 @@ export const columns = [
       />
     ),
   }),
-  columnHelper.accessor('legacy.profile_image_url_https', {
+  columnHelper.accessor('avatar.image_url', {
     meta: { exportKey: 'profile_image_url', exportHeader: 'Profile Image' },
     header: () => <Trans i18nKey="Profile Image" />,
     cell: (info) => (
@@ -131,7 +131,7 @@ export const columns = [
     header: () => <Trans i18nKey="Listed" />,
     cell: (info) => <p>{info.getValue()}</p>,
   }),
-  columnHelper.accessor('legacy.location', {
+  columnHelper.accessor('location.location', {
     meta: { exportKey: 'location', exportHeader: 'Location' },
     header: () => <Trans i18nKey="Location" />,
     cell: (info) => <p>{info.getValue() ?? 'N/A'}</p>,
@@ -159,7 +159,7 @@ export const columns = [
     header: () => <Trans i18nKey="Birthdate" />,
     cell: (info) => <p>{formatTwitterBirthdate(info.getValue()) ?? 'N/A'}</p>,
   }),
-  columnHelper.accessor('legacy.verified_type', {
+  columnHelper.accessor('verification.verified_type', {
     meta: { exportKey: 'verified_type', exportHeader: 'Verified Type' },
     header: () => <Trans i18nKey="Verified Type" />,
     cell: (info) => <p>{info.getValue() ?? 'N/A'}</p>,
@@ -169,34 +169,34 @@ export const columns = [
     header: () => <Trans i18nKey="Blue Verified" />,
     cell: (info) => <p>{info.getValue() ? 'YES' : 'NO'}</p>,
   }),
-  columnHelper.accessor('legacy.following', {
+  columnHelper.accessor('relationship_perspectives.following', {
     meta: { exportKey: 'following', exportHeader: 'Following' },
     header: () => <Trans i18nKey="Following" />,
     cell: (info) => <p>{info.getValue() ? 'YES' : 'NO'}</p>,
   }),
-  columnHelper.accessor('legacy.followed_by', {
+  columnHelper.accessor('relationship_perspectives.followed_by', {
     meta: { exportKey: 'followed_by', exportHeader: 'Follows You' },
     header: () => <Trans i18nKey="Follows You" />,
     cell: (info) => <p>{info.getValue() ? 'YES' : 'NO'}</p>,
   }),
-  columnHelper.accessor('legacy.can_dm', {
+  columnHelper.accessor('dm_permissions.can_dm', {
     meta: { exportKey: 'can_dm', exportHeader: 'Can DM' },
     header: () => <Trans i18nKey="Can DM" />,
     cell: (info) => <p>{info.getValue() ? 'YES' : 'NO'}</p>,
   }),
-  columnHelper.accessor('legacy.protected', {
+  columnHelper.accessor('privacy.protected', {
     meta: { exportKey: 'protected', exportHeader: 'Protected' },
     header: () => <Trans i18nKey="Protected" />,
     cell: (info) => <p>{info.getValue() ? 'YES' : 'NO'}</p>,
   }),
-  columnHelper.accessor((row) => +parseTwitterDateTime(row.legacy.created_at), {
+  columnHelper.accessor((row) => +parseTwitterDateTime(row.core.created_at), {
     id: 'created_at',
     meta: {
       exportKey: 'created_at',
       exportHeader: 'Created At',
       exportValue: (row) =>
         formatDateTime(
-          parseTwitterDateTime(row.original.legacy.created_at),
+          parseTwitterDateTime(row.original.core.created_at),
           options.get('dateTimeFormat'),
         ),
     },
