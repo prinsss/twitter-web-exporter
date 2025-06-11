@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.0](https://github.com/prinsss/twitter-web-exporter/compare/v1.2.1..v1.3.0) - 2025-06-11
+
+### ⛰️  Features
+
+- Export author's user ID of tweet - ([b9bdf90](https://github.com/prinsss/twitter-web-exporter/commit/b9bdf902dbab7555b07aab9ee4e5c5cfc727ab47))
+- Export media tags of tweet - ([0308628](https://github.com/prinsss/twitter-web-exporter/commit/0308628206fabc5c299566073789de899b82f9d0))
+- Upgrade dependencies - ([537aaad](https://github.com/prinsss/twitter-web-exporter/commit/537aaadb7b962d9c6a06fb2932e5172b7274b401))
+- Save filename pattern for exporting media to options - ([9daaf5c](https://github.com/prinsss/twitter-web-exporter/commit/9daaf5c0383784bc60f626ab2fb84f64b6704921))
+- Add option for exporting URLs in aria2 format - ([f54f09d](https://github.com/prinsss/twitter-web-exporter/commit/f54f09dae31ace73221b689c34310a8fee2732ba))
+
+### 🐛 Bug Fixes
+
+- Adapt to Twitter API changes for users - ([9f0327a](https://github.com/prinsss/twitter-web-exporter/commit/9f0327ae9cc63b630683c43d7dcf622aec9d6e12))
+- Allow undefined typename when extracting media #75 - ([c54a544](https://github.com/prinsss/twitter-web-exporter/commit/c54a5444aba76d518033765c7a10a5495ab40c5e))
+- Use file-saver-es instead of file-saver - ([728b993](https://github.com/prinsss/twitter-web-exporter/commit/728b993d3c222e8d4b899a0468c09dbbd35665a9))
+
+### Build
+
+- Migrate from pnpm to bun - ([e6701e4](https://github.com/prinsss/twitter-web-exporter/commit/e6701e4b45e1a71ae8b297b0b9f8309acd856df5))
+
 ## [1.2.1](https://github.com/prinsss/twitter-web-exporter/compare/v1.2.0..v1.2.1) - 2025-04-03
 
 ### ⛰️  Features
