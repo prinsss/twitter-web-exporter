@@ -78,6 +78,16 @@ Please set a reasonable value for the "Rate limit" option to avoid downloading t
 
 ![02-export-media.png](https://github.com/prinsss/twitter-web-exporter/raw/main/docs/02-export-media.png)
 
+# Important Notice
+
+If you are experiencing issues with the script not running properly, please ensure that **uBlock Origin** (or similar ad blockers) is disabled for Twitter or any other relevant sites. uBlock Origin's content filtering might block essential elements or network requests that the script relies on.
+
+For a smooth experience, consider the following steps:
+- **Whitelist Twitter**: Add twitter.com to your whitelist in uBlock Origin.
+- **Disable uBlock Origin**: Temporarily disable the extension while running the script.
+
+If you continue to have issues, please refer to the troubleshooting section or open an issue on this repository.
+
 ## Limitation
 
 The script only works on the web app (twitter.com). It does not work on the mobile app.
