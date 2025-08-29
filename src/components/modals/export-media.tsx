@@ -105,7 +105,7 @@ export function ExportMediaModal<T>({
             'Download and save media files from captured data. This may take a while depending on the amount of data. Media that will be downloaded includes: profile images, profile banners (for users), images, videos (for tweets).',
           )}
         </p>
-        <div role="alert" class="alert text-sm py-2 mt-2 mb-2">
+        <div role="alert" class="alert text-sm py-2 mt-2 mb-2 grid-cols-[auto_minmax(auto,1fr)]">
           <IconInfoCircle size={24} />
           <span>
             {t(
@@ -115,7 +115,7 @@ export function ExportMediaModal<T>({
         </div>
         {/* Export options. */}
         {isTweet && (
-          <div class="grid grid-cols-4 gap-2 items-center h-9">
+          <div class="flex flex-wrap sm:grid grid-cols-4 sm:gap-2 items-center sm:h-9">
             <p class="leading-8">{t('Filename template:')}</p>
             <div
               class="tooltip tooltip-bottom col-span-3 before:whitespace-pre-line before:max-w-max"
@@ -136,8 +136,8 @@ export function ExportMediaModal<T>({
             </div>
           </div>
         )}
-        <div class="grid grid-cols-4 gap-2 items-center h-9">
-          <p class="leading-8 col-span-1">{t('Rate limit (ms):')}</p>
+        <div class="flex flex-wrap sm:grid grid-cols-4 sm:gap-2 items-center sm:h-9">
+          <p class="leading-8 col-span-1 whitespace-nowrap">{t('Rate limit (ms):')}</p>
           <input
             type="number"
             class="input input-bordered input-sm col-span-1"
@@ -147,7 +147,7 @@ export function ExportMediaModal<T>({
               setRateLimit(value || 0);
             }}
           />
-          <p class="leading-8 col-span-1 pl-2">{t('Use aria2 format:')}</p>
+          <p class="leading-8 col-span-1 whitespace-nowrap sm:pl-2">{t('Use aria2 format:')}</p>
           <div class="col-span-1 flex items-center">
             <input
               type="checkbox"
@@ -168,7 +168,7 @@ export function ExportMediaModal<T>({
             </a>
           </div>
         </div>
-        <div class="grid grid-cols-4 gap-2 items-center h-9">
+        <div class="flex flex-wrap sm:grid grid-cols-4 sm:gap-2 items-center sm:h-9">
           <p class="leading-8">{t('Media Filter:')}</p>
           <MultiSelect<MediaFilterType>
             class="col-span-3"

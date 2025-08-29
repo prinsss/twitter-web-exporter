@@ -55,7 +55,7 @@ export function Settings() {
         <p class={styles.subtitle}>{t('General')}</p>
         <div class={cx(styles.block, 'flex-col')}>
           <label class={styles.item}>
-            <span class="label-text">{t('Theme')}</span>
+            <span class="label-text whitespace-nowrap">{t('Theme')}</span>
             <select
               class="select select-xs"
               onChange={(e) => {
@@ -72,7 +72,7 @@ export function Settings() {
             </select>
           </label>
           <label class={styles.item}>
-            <span class="label-text">{t('Language')}</span>
+            <span class="label-text whitespace-nowrap">{t('Language')}</span>
             <select
               class="select select-xs"
               onChange={(e) => {
@@ -93,7 +93,7 @@ export function Settings() {
             </select>
           </label>
           <label class={styles.item}>
-            <span class="label-text">{t('Debug')}</span>
+            <span class="label-text whitespace-nowrap">{t('Debug')}</span>
             <input
               type="checkbox"
               class="toggle toggle-primary"
@@ -105,7 +105,7 @@ export function Settings() {
           </label>
           <label class={styles.item}>
             <div class="flex items-center">
-              <span class="label-text">{t('Date Time Format')}</span>
+              <span class="label-text whitespace-nowrap">{t('Date Time Format')}</span>
               <a
                 href="https://day.js.org/docs/en/display/format"
                 target="_blank"
@@ -130,9 +130,9 @@ export function Settings() {
           {/* Database operations. */}
           <div class={styles.item}>
             <div class="flex items-center">
-              <span class="label-text">{t('Local Database')}</span>
+              <span class="label-text whitespace-nowrap">{t('Local Database')}</span>
             </div>
-            <div>
+            <div class="flex">
               <button
                 class="btn btn-xs btn-neutral mr-2"
                 onClick={async () => {
@@ -207,7 +207,7 @@ export function Settings() {
         {/* Information about this script. */}
         <p class={styles.subtitle}>{t('About')}</p>
         <div class={styles.block}>
-          <span class="label-text">
+          <span class="label-text whitespace-nowrap">
             {t('Version')} {packageJson.version}
           </span>
           <a class="btn btn-xs btn-ghost" target="_blank" href={packageJson.homepage}>

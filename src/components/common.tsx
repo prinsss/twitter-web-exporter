@@ -114,11 +114,11 @@ export function SearchArea({ defaultValue, onChange }: SearchAreaProps) {
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   return (
-    <div class="join justify-end my-[2px] w-full max-w-xs absolute top-3 right-3">
+    <div class="join justify-end my-[2px] w-full max-w-[50%] absolute top-3 right-3">
       <input
         ref={inputRef}
         type="text"
-        class="input input-bordered input-sm join-item"
+        class="input input-bordered input-sm join-item max-w-[calc(100%-46px)]"
         placeholder={t('Search...')}
         defaultValue={defaultValue}
         onKeyDown={(e) => {

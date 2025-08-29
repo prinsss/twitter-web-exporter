@@ -20,7 +20,7 @@ export const Pagination = ({ table }: PaginationProps) => {
   // While the reason is not clear, we will stick at 2.0.0 for now.
 
   return (
-    <div className="mt-3 flex items-center gap-2">
+    <div className="mt-3 flex items-center gap-2 flex-wrap">
       <span>{t('Rows per page:')}</span>
       <select
         value={state.pageSize}
