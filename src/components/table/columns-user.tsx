@@ -69,8 +69,8 @@ export const columns = [
         class="w-52 break-words"
         dangerouslySetInnerHTML={{
           __html: strEntitiesToHTML(
-            info.row.original.legacy.description,
-            info.row.original.legacy.entities.description.urls,
+            info.row.original.legacy.description || 'N/A',
+            info.row.original.legacy.entities?.description.urls,
           ),
         }}
       />
@@ -109,27 +109,27 @@ export const columns = [
   columnHelper.accessor('legacy.followers_count', {
     meta: { exportKey: 'followers_count', exportHeader: 'Followers' },
     header: () => <Trans i18nKey="Followers" />,
-    cell: (info) => <p>{info.getValue()}</p>,
+    cell: (info) => <p>{info.getValue() ?? 'N/A'}</p>,
   }),
   columnHelper.accessor('legacy.friends_count', {
     meta: { exportKey: 'friends_count', exportHeader: 'FollowingCount' },
     header: () => <Trans i18nKey="FollowingCount" />,
-    cell: (info) => <p>{info.getValue()}</p>,
+    cell: (info) => <p>{info.getValue() ?? 'N/A'}</p>,
   }),
   columnHelper.accessor('legacy.statuses_count', {
     meta: { exportKey: 'statuses_count', exportHeader: 'Statuses' },
     header: () => <Trans i18nKey="Statuses" />,
-    cell: (info) => <p>{info.getValue()}</p>,
+    cell: (info) => <p>{info.getValue() ?? 'N/A'}</p>,
   }),
   columnHelper.accessor('legacy.favourites_count', {
     meta: { exportKey: 'favourites_count', exportHeader: 'Favourites' },
     header: () => <Trans i18nKey="Favourites" />,
-    cell: (info) => <p>{info.getValue()}</p>,
+    cell: (info) => <p>{info.getValue() ?? 'N/A'}</p>,
   }),
   columnHelper.accessor('legacy.listed_count', {
     meta: { exportKey: 'listed_count', exportHeader: 'Listed' },
     header: () => <Trans i18nKey="Listed" />,
-    cell: (info) => <p>{info.getValue()}</p>,
+    cell: (info) => <p>{info.getValue() ?? 'N/A'}</p>,
   }),
   columnHelper.accessor('location.location', {
     meta: { exportKey: 'location', exportHeader: 'Location' },
@@ -144,7 +144,7 @@ export const columns = [
         dangerouslySetInnerHTML={{
           __html: strEntitiesToHTML(
             info.row.original.legacy.url || 'N/A',
-            info.row.original.legacy.entities.url?.urls,
+            info.row.original.legacy.entities?.url?.urls,
           ),
         }}
       />
@@ -202,7 +202,9 @@ export const columns = [
     },
     header: () => <Trans i18nKey="Created At" />,
     cell: (info) => (
-      <p class="w-24">{formatDateTime(info.getValue(), options.get('dateTimeFormat'))}</p>
+      <p class="w-24">
+        {info.getValue() ? formatDateTime(info.getValue(), options.get('dateTimeFormat')) : 'N/A'}
+      </p>
     ),
   }),
   columnHelper.display({

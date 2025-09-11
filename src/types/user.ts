@@ -51,7 +51,7 @@ export interface User {
     image_url: string;
   };
   core: {
-    created_at: string;
+    created_at?: string;
     name: string;
     screen_name: string;
   };
@@ -79,6 +79,7 @@ export interface User {
   };
   // The fields above are originally present in `legacy` but are now moved to the top level.
   parody_commentary_fan_label?: 'None' | 'Parody' | 'Commentary' | 'Fan';
+  community_role?: 'Member' | 'Moderator' | 'Admin';
   tipjar_settings?: {
     is_enabled?: boolean;
     patreon_handle?: string;

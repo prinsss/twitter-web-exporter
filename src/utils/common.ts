@@ -103,7 +103,11 @@ export function strEntitiesToHTML(str: string, urls?: EntityURL[]) {
   return temp;
 }
 
-export function parseTwitterDateTime(str: string) {
+export function parseTwitterDateTime(str: string | undefined) {
+  if (!str) {
+    return dayjs(0);
+  }
+
   // "Thu Sep 28 11:07:25 +0000 2023"
   // const regex = /^\w+ (\w+) (\d+) ([\d:]+) \+0000 (\d+)$/;
   const trimmed = str.replace(/^\w+ (.*)$/, '$1');

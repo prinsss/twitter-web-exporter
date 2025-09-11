@@ -182,6 +182,16 @@ export function isTimelineEntryListSearch(
   );
 }
 
+export function isTimelineEntryCommunitiesGrid(
+  entry: TimelineEntry,
+): entry is TimelineEntry<TimelineTwitterList, TimelineTimelineModule<TimelineTwitterList>> {
+  return (
+    isTimelineEntryModule<TimelineTwitterList>(entry) &&
+    entry.entryId.startsWith('communities-grid-') &&
+    Array.isArray(entry.content.items)
+  );
+}
+
 /*
 |--------------------------------------------------------------------------
 | Object extractors.
