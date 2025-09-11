@@ -1,3 +1,4 @@
+import { unsafeWindow } from '$';
 import Dexie, { KeyPaths } from 'dexie';
 import { exportDB, importInto } from 'dexie-export-import';
 
@@ -8,15 +9,30 @@ import { parseTwitterDateTime } from '@/utils/common';
 import { migration_20250609 } from '@/utils/migration';
 import logger from '@/utils/logger';
 import { ExtensionType } from '../extensions';
+import { options } from '../options';
 
 const DB_NAME = packageJson.name;
 const DB_VERSION = 2;
+
+declare global {
+  interface Window {
+    __META_DATA__: {
+      userId: string;
+      userHash: string;
+    };
+  }
+}
 
 export class DatabaseManager {
   private db: Dexie;
 
   constructor() {
-    this.db = new Dexie(DB_NAME);
+    const globalObject = unsafeWindow ?? window ?? globalThis;
+    const userId = globalObject.__META_DATA__?.userId ?? 'unknown';
+    const suffix = options.get('dedicatedDbForAccounts') ? `_${userId}` : '';
+    logger.debug(`Using database: ${DB_NAME}${suffix} for userId: ${userId}`);
+
+    this.db = new Dexie(`${DB_NAME}${suffix}`);
     this.init();
   }
 
@@ -289,7 +305,7 @@ export class DatabaseManager {
         });
 
       await this.db.open();
-      logger.info('Database connected');
+      logger.info(`Database connected: ${this.db.name}`);
     } catch (error) {
       this.logError(error);
     }

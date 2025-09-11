@@ -128,6 +128,27 @@ export function Settings() {
             />
           </label>
           {/* Database operations. */}
+          <label class={styles.item}>
+            <div class="flex items-center">
+              <span class="label-text whitespace-nowrap">{t('Use dedicated DB for accounts')}</span>
+              <a
+                class="tooltip tooltip-bottom ml-0.5 before:max-w-40"
+                data-tip={t(
+                  'This will create separate database for each Twitter account, which can help reduce the chance of data mixing when you use multiple accounts.',
+                )}
+              >
+                <IconHelp size={20} />
+              </a>
+            </div>
+            <input
+              type="checkbox"
+              class="toggle toggle-primary"
+              checked={options.get('dedicatedDbForAccounts')}
+              onChange={(e) => {
+                options.set('dedicatedDbForAccounts', (e.target as HTMLInputElement)?.checked);
+              }}
+            />
+          </label>
           <div class={styles.item}>
             <div class="flex items-center">
               <span class="label-text whitespace-nowrap">{t('Local Database')}</span>

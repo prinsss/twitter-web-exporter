@@ -8,6 +8,8 @@
   "Debug": "调试开关",
   "Date Time Format": "日期时间格式",
   "Click for more information. This will take effect on both previewer and exported files.": "点击查看详细信息。此选项会影响预览和导出的文件。",
+  "Use dedicated DB for accounts": "为每个账户使用专用数据库",
+  "This will create separate database for each Twitter account, which can help reduce the chance of data mixing when you use multiple accounts.": "这将为每个 Twitter 账户创建单独的数据库，这有助于避免使用多个账户时数据混淆。",
   "Local Database": "本地数据库",
   "Analyze DB": "统计",
   "Export DB": "导出",
