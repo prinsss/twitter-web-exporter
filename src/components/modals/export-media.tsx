@@ -1,6 +1,13 @@
+import { saveAs } from 'file-saver-es';
 import { Table } from '@tanstack/table-core';
 import { useSignal } from '@preact/signals';
-import { IconCircleCheck, IconCircleDashed, IconHelp, IconInfoCircle } from '@tabler/icons-preact';
+import {
+  IconCircleCheck,
+  IconCircleDashed,
+  IconFileDownload,
+  IconHelp,
+  IconInfoCircle,
+} from '@tabler/icons-preact';
 
 import { FileLike, ProgressCallback, zipStreamDownload } from '@/utils/download';
 import { DEFAULT_MEDIA_TYPES, extractMedia, patterns } from '@/utils/media';
@@ -77,12 +84,17 @@ export function ExportMediaModal<T>({
     }
   };
 
-  const onCopy = () => {
+  const onCopy = (saveAsFile = false) => {
     const text = mediaList
       .map((media) => (useAria2Format ? `${media.url}\n  out=${media.filename}` : media.url))
       .join('\n');
 
     try {
+      if (saveAsFile) {
+        saveAs(new Blob([text], { type: 'text/plain;charset=utf-8' }), 'media-urls.txt');
+        return;
+      }
+
       navigator.clipboard.writeText(text);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
@@ -245,9 +257,14 @@ export function ExportMediaModal<T>({
         <button class="btn" onClick={onClose}>
           {t('Cancel')}
         </button>
-        <button class="btn" onClick={onCopy}>
-          {copied ? t('Copied!') : t('Copy URLs')}
-        </button>
+        <div class="join">
+          <button class="btn join-item pr-2" onClick={() => onCopy()}>
+            {copied ? t('Copied!') : t('Copy URLs')}
+          </button>
+          <button class="btn join-item pl-2" onClick={() => onCopy(true)}>
+            <IconFileDownload />
+          </button>
+        </div>
         <button class={cx('btn btn-secondary', loading && 'btn-disabled')} onClick={onExport}>
           {loading && <span class="loading loading-spinner" />}
           {t('Start Export')}
