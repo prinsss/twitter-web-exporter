@@ -60,6 +60,12 @@ export async function migration_20250609(tx: Transaction) {
 export function migrateFromLegacyUser(user: User) {
   const ul = user as UserLegacy;
 
+  if (!ul?.legacy) {
+    logger.debug('migrateFromLegacyUser', user);
+    logger.warn(`User ${user?.rest_id} has no legacy data to migrate.`);
+    return;
+  }
+
   // Modify in-place to avoid creating a new object.
   // See: https://dexie.org/docs/Collection/Collection.modify()
   user.core ??= {

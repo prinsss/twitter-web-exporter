@@ -1,7 +1,7 @@
 {
   "name": "twitter-web-exporter",
   "description": "Export tweets, bookmarks, lists and much more from Twitter(X) web app.",
-  "version": "1.3.1-beta.3",
+  "version": "1.3.1-beta.4",
   "author": "prin <hi@prin.studio>",
   "license": "MIT",
   "homepage": "https://github.com/prinsss/twitter-web-exporter",
