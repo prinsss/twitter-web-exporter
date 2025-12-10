@@ -28,10 +28,10 @@ export async function migration_20250609(tx: Transaction) {
     .table<Tweet>('tweets')
     .toCollection()
     .modify((tweet) => {
-      const user = tweet.core.user_results.result;
+      const user = tweet.core?.user_results?.result;
 
       // Skip if it's already in the new format.
-      if (user.core && user.avatar) {
+      if (user && user.core && user.avatar) {
         return;
       }
 
@@ -39,13 +39,13 @@ export async function migration_20250609(tx: Transaction) {
       logger.debug(`Migrated tweet user: ${tweet.rest_id} `);
 
       const rtSource = extractRetweetedTweet(tweet);
-      if (rtSource) {
+      if (rtSource?.core?.user_results?.result) {
         migrateFromLegacyUser(rtSource.core.user_results.result);
         logger.debug(`Migrated retweeted user: ${rtSource.rest_id}`);
       }
 
       const qtSource = extractQuotedTweet(tweet);
-      if (qtSource) {
+      if (qtSource?.core?.user_results?.result) {
         migrateFromLegacyUser(qtSource.core.user_results.result);
         logger.debug(`Migrated quoted user: ${qtSource.rest_id}`);
       }
