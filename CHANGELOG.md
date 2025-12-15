@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.1](https://github.com/prinsss/twitter-web-exporter/compare/v1.3.0..v1.3.1) - 2025-12-15
+
+### ⛰️  Features
+
+- Add option for using dedicated DB for accounts - ([e7fb63b](https://github.com/prinsss/twitter-web-exporter/commit/e7fb63b0adcb0266691ccc343a3b32157f6a3af9))
+- Add button for saving media urls to a txt file - ([87bb5b2](https://github.com/prinsss/twitter-web-exporter/commit/87bb5b2e9ab0323f788f6bbd57496ebedf508b58))
+- Add support for community timeline and members - ([0ac0f9f](https://github.com/prinsss/twitter-web-exporter/commit/0ac0f9f40ccf1177378e3076aaab8924e700c109))
+- Improve support for mobile twitter web - ([0c1a5af](https://github.com/prinsss/twitter-web-exporter/commit/0c1a5af0ae1b437701f2c7cdf5e48ccecb7ed116))
+
+### 🐛 Bug Fixes
+
+- Possible migration error - ([7a1707b](https://github.com/prinsss/twitter-web-exporter/commit/7a1707b53e06111950f3eaa44e078c58e75e0d8a))
+- Improve robustness when migrating legacy data - ([6370c04](https://github.com/prinsss/twitter-web-exporter/commit/6370c04efe6e86f6179d753507308c107e35c434))
+
 ## [1.3.0](https://github.com/prinsss/twitter-web-exporter/compare/v1.2.1..v1.3.0) - 2025-06-11
 
 ### ⛰️  Features
