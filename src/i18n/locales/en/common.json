@@ -44,6 +44,7 @@
   "ListMembers": "ListMembers",
   "ListSubscribers": "ListSubscribers",
   "ListTimeline": "ListTimeline",
+  "RetweetersModule": "RetweetersModule",
   "RuntimeLogs": "RuntimeLogs",
   "SearchTimeline": "SearchTimeline",
   "TweetDetail": "TweetDetail",

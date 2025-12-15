@@ -29,6 +29,7 @@ export const DEFAULT_APP_OPTIONS: AppOptions = {
     'ListMembersModule',
     'CommunityMembersModule',
     'CommunityTimelineModule',
+    'RetweetersModule',
   ],
   dateTimeFormat: 'YYYY-MM-DD HH:mm:ss Z',
   filenamePattern: '{screen_name}_{id}_{type}_{num}_{date}.{ext}',
