@@ -9,6 +9,11 @@ export const LANGUAGES_CONFIG = {
     nameEn: 'Simplified Chinese',
     test: (code: string) => /^zh/.test(code),
   },
+  id: {
+    name: 'Bahasa Indonesia',
+    nameEn: 'Indonesian',
+    test: (code: string) => /^id/.test(code),
+  },
 };
 
 /**
