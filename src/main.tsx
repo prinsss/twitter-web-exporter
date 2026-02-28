@@ -2,6 +2,7 @@ import { render } from 'preact';
 import { App } from './core/app';
 import extensions from './core/extensions';
 
+import BlueskyUserPostsModule from './modules/bluesky-user-posts';
 import BookmarksModule from './modules/bookmarks';
 import CommunityMembersModule from './modules/community-members';
 import CommunityTimelineModule from './modules/community-timeline';
@@ -40,6 +41,7 @@ extensions.add(UserMediaModule);
 extensions.add(TweetDetailModule);
 extensions.add(SearchTimelineModule);
 extensions.add(DirectMessagesModule);
+extensions.add(BlueskyUserPostsModule);
 extensions.add(RuntimeLogsModule);
 extensions.start();
 

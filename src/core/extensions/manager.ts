@@ -140,15 +140,63 @@ export class ExtensionManager {
 
     logger.info('Hooked into XMLHttpRequest');
 
+    // Also hook fetch for sites that use it (e.g. Bluesky).
+    const originalFetch = globalObject.fetch;
+    globalObject.fetch = async function (input: RequestInfo | URL, init?: RequestInit) {
+      const response = await originalFetch.call(this, input, init);
+
+      try {
+        let method: string;
+        let url: string;
+        if (input instanceof Request) {
+          method = input.method;
+          url = input.url;
+        } else {
+          method = init?.method ?? 'GET';
+          url = input instanceof URL ? input.href : String(input);
+        }
+
+        if (manager.debugEnabled) {
+          logger.debug(`Fetch finished`, { method, url });
+        }
+
+        const clone = response.clone();
+        const responseText = await clone.text();
+
+        const fakeXhr = { responseText, status: response.status } as XMLHttpRequest;
+
+        manager
+          .getExtensions()
+          .filter((ext) => ext.enabled)
+          .forEach((ext) => {
+            const func = ext.intercept();
+            if (func) {
+              func({ method, url }, fakeXhr, ext);
+            }
+          });
+      } catch (err) {
+        logger.error('Fetch hook error', err);
+      }
+
+      return response;
+    };
+
+    logger.info('Hooked into fetch');
+
     // Check for current execution context.
-    // The `webpackChunk_twitter_responsive_web` is injected by the Twitter website.
     // See: https://violentmonkey.github.io/posts/inject-into-context/
     setTimeout(() => {
-      if (!('webpackChunk_twitter_responsive_web' in globalObject)) {
+      const host = globalObject.location?.host ?? '';
+      const isBlueskySite = host.includes('bsky.app');
+
+      // Bluesky injects `__SENTRY__`; Twitter injects `webpackChunk_twitter_responsive_web`.
+      const contextMarker = isBlueskySite ? '__SENTRY__' : 'webpackChunk_twitter_responsive_web';
+
+      if (!(contextMarker in globalObject)) {
         logger.error(
           'Error: Wrong execution context detected.\n  ' +
             'This script needs to be injected into "page" context rather than "content" context.\n  ' +
-            'The XMLHttpRequest hook will not work properly.\n  ' +
+            'The HTTP hooks will not work properly.\n  ' +
             'See: https://github.com/prinsss/twitter-web-exporter/issues/19',
         );
       }

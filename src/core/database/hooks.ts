@@ -1,6 +1,6 @@
 import { ExtensionType } from '@/core/extensions';
 import { db } from '@/core/database';
-import { Tweet, User } from '@/types';
+import { BlueskyPost, Tweet, User } from '@/types';
 import logger from '@/utils/logger';
 import { useLiveQuery } from '@/utils/observable';
 
@@ -31,4 +31,15 @@ export function useClearCaptures(extName: string) {
     logger.debug('Clearing captures for extension:', extName);
     return db.extClearCaptures(extName);
   };
+}
+
+export function useCapturedBlueskyPosts(extName: string) {
+  return useLiveQuery<BlueskyPost[] | void, BlueskyPost[] | void>(
+    () => {
+      logger.debug('useCapturedBlueskyPosts liveQuery re-run', extName);
+      return db.extGetCapturedBlueskyPosts(extName);
+    },
+    [extName],
+    [],
+  );
 }

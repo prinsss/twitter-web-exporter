@@ -3,7 +3,7 @@ import Dexie, { KeyPaths } from 'dexie';
 import { exportDB, importInto } from 'dexie-export-import';
 
 import packageJson from '@/../package.json';
-import { Capture, Tweet, User, WithSortIndex } from '@/types';
+import { BlueskyPost, Capture, Tweet, User, WithSortIndex } from '@/types';
 import { compareSortIndex, extractTweetMedia } from '@/utils/api';
 import { parseTwitterDateTime } from '@/utils/common';
 import { migration_20250609 } from '@/utils/migration';
@@ -12,7 +12,7 @@ import { ExtensionType } from '../extensions';
 import { options } from '../options';
 
 const DB_NAME = packageJson.name;
-const DB_VERSION = 3;
+const DB_VERSION = 4;
 
 declare global {
   interface Window {
@@ -52,6 +52,10 @@ export class DatabaseManager {
 
   private captures() {
     return this.db.table<Capture>('captures');
+  }
+
+  private blueskyPosts() {
+    return this.db.table<BlueskyPost>('bluesky_posts');
   }
 
   /*
@@ -112,6 +116,28 @@ export class DatabaseManager {
     return userIds.map((id) => map.get(id)).filter((u): u is User => !!u);
   }
 
+  async extGetCapturedBlueskyPosts(extName: string) {
+    const captures = await this.extGetCaptures(extName);
+    if (!captures) {
+      return [];
+    }
+
+    const uris = this.sortCaptures(captures).map((capture) => capture.data_key);
+    const posts = await this.blueskyPosts()
+      .where('uri')
+      .anyOf(uris)
+      .filter((p) => !!p?.uri)
+      .toArray()
+      .catch(this.logError);
+    if (!posts) {
+      return [];
+    }
+
+    // Sort again based on capture order since IndexDB query with "anyOf" does not obey that order.
+    const map = new Map(posts.map((p) => [p.uri, p]));
+    return uris.map((uri) => map.get(uri)).filter((p): p is BlueskyPost => !!p);
+  }
+
   /*
   |--------------------------------------------------------------------------
   | Write Methods for Extensions
@@ -150,6 +176,21 @@ export class DatabaseManager {
     );
   }
 
+  async extAddBlueskyPosts(extName: string, items: WithSortIndex<BlueskyPost>[]) {
+    const sorted = this.sortItems(items);
+    await this.upsertBlueskyPosts(sorted.map((item) => item.data));
+    await this.upsertCaptures(
+      sorted.map((item, i) => ({
+        id: `${extName}-${item.data.uri}`,
+        extension: extName,
+        type: ExtensionType.BLUESKY_POST,
+        data_key: item.data.uri,
+        created_at: Date.now() + i,
+        sort_index: item.sortIndex,
+      })),
+    );
+  }
+
   /*
   |--------------------------------------------------------------------------
   | Delete Methods for Extensions
@@ -182,6 +223,7 @@ export class DatabaseManager {
     await this.deleteAllCaptures();
     await this.deleteAllTweets();
     await this.deleteAllUsers();
+    await this.deleteAllBlueskyPosts();
     logger.info('Database cleared');
   }
 
@@ -191,6 +233,7 @@ export class DatabaseManager {
         tweets: await this.tweets().count(),
         users: await this.users().count(),
         captures: await this.captures().count(),
+        bluesky_posts: await this.blueskyPosts().count(),
       };
     } catch (error) {
       this.logError(error);
@@ -245,6 +288,22 @@ export class DatabaseManager {
       .catch(this.logError);
   }
 
+  async upsertBlueskyPosts(posts: BlueskyPost[]) {
+    return this.db
+      .transaction('rw', this.blueskyPosts(), () => {
+        const data: BlueskyPost[] = posts.map((post) => ({
+          ...post,
+          twe_private_fields: {
+            created_at: new Date(post.record.createdAt).getTime(),
+            updated_at: Date.now(),
+          },
+        }));
+
+        return this.blueskyPosts().bulkPut(data);
+      })
+      .catch(this.logError);
+  }
+
   async deleteAllTweets() {
     return this.tweets().clear().catch(this.logError);
   }
@@ -255,6 +314,10 @@ export class DatabaseManager {
 
   async deleteAllCaptures() {
     return this.captures().clear().catch(this.logError);
+  }
+
+  async deleteAllBlueskyPosts() {
+    return this.blueskyPosts().clear().catch(this.logError);
   }
 
   private filterEmptyData(data: Tweet | User) {
@@ -316,6 +379,20 @@ export class DatabaseManager {
       'sort_index',
     ];
 
+    // Indexes for the "bluesky_posts" table.
+    const blueskyPostIndexPaths: string[] = [
+      'uri',
+      'twe_private_fields.created_at',
+      'twe_private_fields.updated_at',
+      'author.handle',
+      'author.did',
+      'likeCount',
+      'repostCount',
+      'replyCount',
+      'quoteCount',
+      'bookmarkCount',
+    ];
+
     // Take care of database schemas and versioning.
     // See: https://dexie.org/docs/Tutorial/Design#database-versioning
     try {
@@ -336,10 +413,18 @@ export class DatabaseManager {
         });
 
       // v3: adds sort_index index to captures for timeline ordering.
+      this.db.version(3).stores({
+        tweets: tweetIndexPaths.join(','),
+        users: userIndexPaths.join(','),
+        captures: captureIndexPaths.join(','),
+      });
+
+      // v4: adds bluesky_posts table.
       this.db.version(DB_VERSION).stores({
         tweets: tweetIndexPaths.join(','),
         users: userIndexPaths.join(','),
         captures: captureIndexPaths.join(','),
+        bluesky_posts: blueskyPostIndexPaths.join(','),
       });
 
       await this.db.open();
