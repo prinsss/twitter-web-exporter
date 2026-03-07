@@ -93,8 +93,8 @@ export interface Tweet {
   // Used for long tweets.
   note_tweet?: {
     is_expandable: boolean;
-    note_tweet_results: {
-      result: NoteTweet;
+    note_tweet_results?: {
+      result?: NoteTweet;
     };
   };
   legacy: {
