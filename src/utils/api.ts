@@ -298,6 +298,15 @@ export function extractTweetMediaTags(tweet: Tweet): Tag[] {
 }
 
 export function extractTweetFullText(tweet: Tweet): string {
+  // Debug code for: https://github.com/prinsss/twitter-web-exporter/issues/124
+  try {
+    // @ts-expect-error it's fine
+    return tweet.note_tweet?.note_tweet_results.result.text ?? tweet.legacy?.full_text;
+  } catch (err) {
+    logger.warn('Failed to extract full text from tweet', err, tweet);
+    logger.debug(JSON.stringify(tweet));
+  }
+
   return tweet?.note_tweet?.note_tweet_results?.result?.text ?? tweet?.legacy?.full_text;
 }
 
