@@ -37,11 +37,13 @@ export interface TweetWithVisibilityResults {
 // See: https://github.com/JustAnotherArchivist/snscrape/issues/392
 export interface TweetTombstone {
   __typename: 'TweetTombstone';
-  tombstone: {
-    __typename: 'TextTombstone';
-    text: {
+  // The tombstone field itself may be absent in some API responses.
+  tombstone?: {
+    __typename: string;
+    // The text field may also be absent (e.g. when __typename is not 'TextTombstone').
+    text?: {
       rtl: boolean;
-      // "You’re unable to view this Post because this account owner limits who can view their Posts. Learn more"
+      // "You're unable to view this Post because this account owner limits who can view their Posts. Learn more"
       // "This Post is from an account that no longer exists. Learn more"
       // "This Post is from a suspended account. Learn more"
       // "This Post was deleted by the Post author. Learn more"
