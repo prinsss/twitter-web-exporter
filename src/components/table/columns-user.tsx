@@ -207,6 +207,59 @@ export const columns = [
       </p>
     ),
   }),
+  columnHelper.accessor('about_profile', {
+    meta: {
+      exportKey: 'about_profile',
+      exportHeader: 'About Profile',
+      exportValue: (row) => row.original.about_profile,
+    },
+    header: () => <Trans i18nKey="About Profile" />,
+    cell: (info) => {
+      const p = info.getValue();
+      if (!p) {
+        return <p>N/A</p>;
+      }
+
+      return (
+        <div class="w-44 text-xs space-y-0.5">
+          <p>
+            <Trans i18nKey="Account based in" /> {p.account_based_in ?? 'N/A'}
+          </p>
+          {p.location_accurate === false && (
+            <p>
+              <Trans i18nKey="Country or region may not be accurate" />
+            </p>
+          )}
+          <p>
+            <Trans i18nKey="Connected via" /> {p.source ?? 'N/A'}
+          </p>
+          <p>
+            <Trans i18nKey="Verified since" />{' '}
+            {info.row.original.verification_info?.reason?.verified_since_msec
+              ? formatDateTime(
+                  +info.row.original.verification_info.reason.verified_since_msec,
+                  'YYYY-MM-DD',
+                )
+              : 'N/A'}
+          </p>
+          {p.affiliate_username && (
+            <p>
+              <Trans i18nKey="An affiliate of" /> @{p.affiliate_username}
+            </p>
+          )}
+          <p>
+            <Trans i18nKey="Username changes" /> {p.username_changes?.count ?? 'N/A'}
+          </p>
+          <p>
+            <Trans i18nKey="Last changed" />{' '}
+            {p.username_changes?.last_changed_at_msec
+              ? formatDateTime(+p.username_changes.last_changed_at_msec, 'YYYY-MM-DD')
+              : 'N/A'}
+          </p>
+        </div>
+      );
+    },
+  }),
   columnHelper.display({
     id: 'url',
     meta: {

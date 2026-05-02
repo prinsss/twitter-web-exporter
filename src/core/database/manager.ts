@@ -23,6 +23,11 @@ declare global {
   }
 }
 
+// Some modules (e.g. UserAboutModule) write special field to users table, which is not included
+// in the default User type and thus not handled by other modules like UserDetailModule.
+// We need to preserve this field when doing upserts to avoid losing data.
+const PRESERVED_USER_FIELDS: (keyof User)[] = ['about_profile'];
+
 export class DatabaseManager {
   private db: Dexie;
 
@@ -150,6 +155,30 @@ export class DatabaseManager {
     );
   }
 
+  async extUpdateUsers(
+    extName: string,
+    items: WithSortIndex<Partial<User> & { rest_id: string }>[],
+  ) {
+    const sorted = this.sortItems(items);
+
+    // Since Dexie's bulkPut will overwrite the entire record if the primary key matches,
+    // we use merge mode to perform a real "upsert" that merges existing data with new data.
+    await this.upsertUsers(
+      sorted.map((item) => item.data),
+      true,
+    );
+    await this.upsertCaptures(
+      sorted.map((item, i) => ({
+        id: `${extName}-${item.data.rest_id}`,
+        extension: extName,
+        type: ExtensionType.USER,
+        data_key: item.data.rest_id,
+        created_at: Date.now() + i,
+        sort_index: item.sortIndex,
+      })),
+    );
+  }
+
   /*
   |--------------------------------------------------------------------------
   | Delete Methods for Extensions
@@ -221,16 +250,33 @@ export class DatabaseManager {
       .catch(this.logError);
   }
 
-  async upsertUsers(users: User[]) {
+  async upsertUsers(users: (Partial<User> & { rest_id: string })[], mergeMode?: boolean) {
     return this.db
-      .transaction('rw', this.users(), () => {
-        const data: User[] = users.map((user) => ({
-          ...user,
-          twe_private_fields: {
-            created_at: +parseTwitterDateTime(user.core?.created_at),
-            updated_at: Date.now(),
-          },
-        }));
+      .transaction('rw', this.users(), async () => {
+        const restIds = users.map((u) => u.rest_id);
+        const existing = await this.users().where('rest_id').anyOf(restIds).toArray();
+        const existingMap = new Map(existing.map((u) => [u.rest_id, u]));
+
+        const data: User[] = users.map((user) => {
+          const prev = existingMap.get(user.rest_id);
+          // In merge mode, all fields from the existing record are preserved (true upsert).
+          // Otherwise the record is overwritten, except for preserved fields.
+          const merged = mergeMode
+            ? { ...prev, ...user }
+            : {
+                ...user,
+                ...Object.fromEntries(
+                  PRESERVED_USER_FIELDS.map((field) => [field, user[field] ?? prev?.[field]]),
+                ),
+              };
+          return {
+            ...merged,
+            twe_private_fields: {
+              created_at: +parseTwitterDateTime(user.core?.created_at),
+              updated_at: Date.now(),
+            },
+          } as User;
+        });
 
         return this.users().bulkPut(data);
       })

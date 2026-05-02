@@ -113,6 +113,7 @@ export interface User {
       icon_name: string;
     }[];
   };
+  about_profile?: AboutProfile;
   /**
    * Some extra properties added by the script when inserting to local database.
    * These are not present in the original tweet object and are used for internal purposes only.
@@ -157,10 +158,23 @@ export interface UserEntities {
   };
 }
 
+export interface AboutProfile {
+  account_based_in?: string;
+  affiliate_username?: string;
+  created_country_accurate?: boolean;
+  learn_more_url?: string;
+  location_accurate?: boolean;
+  source?: string;
+  username_changes?: {
+    count: string;
+    last_changed_at_msec: string;
+  };
+}
+
 export interface VerificationInfo {
   is_identity_verified: boolean;
   reason: {
-    description: {
+    description?: {
       text: string;
       entities: {
         from_index: number;

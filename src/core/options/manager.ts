@@ -23,6 +23,7 @@ export const DEFAULT_APP_OPTIONS: AppOptions = {
   debug: false,
   showControlPanel: true,
   disabledExtensions: [
+    'UserAboutModule',
     'HomeTimelineModule',
     'ListTimelineModule',
     'ListSubscribersModule',
