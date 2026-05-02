@@ -6,6 +6,7 @@ import {
   IconBrandGithubFilled,
   IconHelp,
   IconDatabaseExport,
+  IconDatabaseImport,
   IconTrashX,
   IconReportAnalytics,
 } from '@tabler/icons-preact';
@@ -187,6 +188,43 @@ export function Settings() {
               >
                 <IconDatabaseExport size={20} />
                 {t('Export DB')}
+              </button>
+              <input
+                type="file"
+                accept="application/json"
+                id="twe-import-db-input"
+                class="hidden"
+                onChange={async (e) => {
+                  const input = e.target as HTMLInputElement;
+                  const file = input.files?.[0];
+                  input.value = '';
+                  if (!file) {
+                    return;
+                  }
+
+                  if (
+                    !confirm(
+                      t(
+                        'Import will merge data into the existing database. This may produce unpredictable results when records conflict. For a stable restore, cancel now, export a backup, then clear the DB before importing again.\n\nContinue with merge import?',
+                      ),
+                    )
+                  ) {
+                    return;
+                  }
+
+                  await db.import(file);
+                  alert(t('Database imported. The page will reload now.'));
+                  location.reload();
+                }}
+              />
+              <button
+                class="btn btn-xs btn-primary mr-2"
+                onClick={() => {
+                  document.getElementById('twe-import-db-input')?.click();
+                }}
+              >
+                <IconDatabaseImport size={20} />
+                {t('Import DB')}
               </button>
               <button
                 class="btn btn-xs btn-warning"

@@ -200,11 +200,16 @@ export class DatabaseManager {
   */
 
   async export() {
+    logger.info('Exporting database...');
     return exportDB(this.db).catch(this.logError);
   }
 
   async import(data: Blob) {
-    return importInto(this.db, data).catch(this.logError);
+    logger.info('Importing database...');
+    return importInto(this.db, data, {
+      acceptVersionDiff: true,
+      overwriteValues: true,
+    }).catch(this.logError);
   }
 
   async clear() {
