@@ -55,6 +55,8 @@ export const patterns: Record<string, { description: string; extractor: PatternE
 
 export const DEFAULT_MEDIA_TYPES = ['photo', 'video', 'animated_gif'] as const;
 
+export const MAX_FILENAME_SEGMENT = 240;
+
 /**
  * Extract media from tweets and users.
  */
@@ -79,6 +81,16 @@ export function extractMedia(
         for (const [key, value] of Object.entries(patterns)) {
           filename = filename.replaceAll(`{${key}}`, value.extractor(item, media));
         }
+
+        // Resolve arbitrary property paths like
+        // {tweet.legacy.bookmark_count} or {media.video_info.duration_millis}.
+        filename = filename.replace(/\{(tweet|media)\.([\w.]+)\}/g, (_, root, path) => {
+          const target = root === 'tweet' ? item : media;
+          return toFilenameSafe(property(target, path));
+        });
+
+        // Truncate each segment of a filename so that it fits within OS limits.
+        filename = truncateFilename(filename);
 
         return { filename, type: media.type, url: getMediaOriginalUrl(media) };
       });
@@ -113,4 +125,46 @@ export function extractMedia(
   }
 
   return Array.from(gallery.values());
+}
+
+function property(obj: unknown, path: string): unknown {
+  return path.split('.').reduce<unknown>((acc, key) => {
+    if (acc === null || acc === undefined) {
+      return undefined;
+    }
+    return (acc as Record<string, unknown>)[key];
+  }, obj);
+}
+
+function toFilenameSafe(value: unknown): string {
+  if (value === null || value === undefined) {
+    return '';
+  }
+  const str = typeof value === 'object' ? JSON.stringify(value) : String(value);
+  return (
+    str
+      // eslint-disable-next-line no-control-regex
+      .replace(/[<>:"/\\|?*\x00-\x1F]/g, '_')
+      .replace(/^[. ]+|[. ]+$/g, '_')
+      .slice(0, MAX_FILENAME_SEGMENT) || ''
+  );
+}
+
+function truncateFilename(filename: string): string {
+  return filename
+    .split('/')
+    .map((segment, idx, arr) => {
+      if (segment.length <= MAX_FILENAME_SEGMENT) {
+        return segment;
+      }
+      if (idx === arr.length - 1) {
+        const dot = segment.lastIndexOf('.');
+        if (dot > 0 && segment.length - dot <= 10) {
+          const ext = segment.slice(dot);
+          return segment.slice(0, MAX_FILENAME_SEGMENT - ext.length) + ext;
+        }
+      }
+      return segment.slice(0, MAX_FILENAME_SEGMENT);
+    })
+    .join('/');
 }
