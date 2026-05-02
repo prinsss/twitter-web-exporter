@@ -77,7 +77,7 @@ export function extractMedia(
         // Parse and apply custom filename pattern.
         let filename = filenamePattern;
         for (const [key, value] of Object.entries(patterns)) {
-          filename = filename.replace(`{${key}}`, value.extractor(item, media));
+          filename = filename.replaceAll(`{${key}}`, value.extractor(item, media));
         }
 
         return { filename, type: media.type, url: getMediaOriginalUrl(media) };
