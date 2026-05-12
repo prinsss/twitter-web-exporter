@@ -381,8 +381,8 @@ export function getTweetURL(tweet: Tweet): string {
   return `https://twitter.com/${extractTweetUserScreenName(tweet)}/status/${tweet.legacy?.id_str}`;
 }
 
-export function getUserURL(user: User | string): string {
-  return `https://twitter.com/${typeof user === 'string' ? user : user.core?.screen_name}`;
+export function getUserURL(user: User | string | undefined): string {
+  return `https://twitter.com/${typeof user === 'string' ? user : user?.core?.screen_name}`;
 }
 
 export function getInReplyToTweetURL(tweet: Tweet): string {
