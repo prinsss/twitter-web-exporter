@@ -48,6 +48,34 @@ export interface Message {
   conversation_id: string;
   message_data: MessageData;
   message_reactions?: MessageReaction[];
+  /** Media attachments for encrypted DMs; see `./encrypted-dm.ts`. */
+  encrypted_media?: EncryptedDmMedia[];
+}
+
+/**
+ * A media attachment from an encrypted DM message.
+ *
+ * The metadata comes from the message's CBOR `contents`. The actual file is
+ * end-to-end encrypted: `url` points at the ciphertext on X's CDN, and
+ * `objectUrl`/`blob` are only populated once the X web client decrypts and
+ * renders the media in-session (captured via `URL.createObjectURL`).
+ */
+export interface EncryptedDmMedia {
+  attachmentId: string;
+  type: string;
+  filename: string;
+  width?: number;
+  height?: number;
+  fileSizeBytes?: number;
+  mediaHashKey: string;
+  /** SHA-256 of the decrypted file (base64). Used to match the decrypted blob. */
+  mediaHashBase64: string;
+  /** Reconstructed CDN URL of the *encrypted* blob (reference only). */
+  url: string;
+  /** Object URL of the decrypted blob, set once captured in-session. */
+  objectUrl?: string;
+  /** The decrypted media blob, retained for download. */
+  blob?: Blob;
 }
 
 interface MessageData {
