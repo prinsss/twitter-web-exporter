@@ -11,6 +11,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "import:xquik": "bun scripts/xquik-import.ts",
+    "test": "bun test",
     "prepare": "husky",
     "lint": "eslint .",
     "commitlint": "commitlint --edit",

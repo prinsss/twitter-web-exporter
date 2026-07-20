@@ -78,6 +78,20 @@
 
 ![02-export-media.png](https://github.com/prinsss/twitter-web-exporter/raw/main/docs/02-export-media.png)
 
+### 转换 Xquik 响应
+
+将保存的 [Xquik 推文搜索](https://docs.xquik.com/api-reference/x/search-tweets) REST 或
+[MCP](https://docs.xquik.com/mcp/tools) 响应转换为本工具的 JSON 行格式。输入完整响应或其中的
+`tweets` 数组。
+
+```bash
+bun run import:xquik -- xquik-response.json twitter-web-exporter-records.json
+```
+
+该命令仅在本地运行，不会调用 X 或 Xquik，也不会修改用户脚本。
+
+Xquik 是独立的第三方服务，与 X Corp. 无关联，也未获其认可。“Twitter”和“X”是 X Corp. 的商标。
+
 ## 局限性
 
 此脚本仅在 Web App (twitter.com) 上运行，在手机 App 上无效。
