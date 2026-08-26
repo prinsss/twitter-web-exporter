@@ -21,6 +21,7 @@ import UserAboutModule from './modules/user-about';
 import UserDetailModule from './modules/user-detail';
 import UserMediaModule from './modules/user-media';
 import UserTweetsModule from './modules/user-tweets';
+import FavoritersModule from './modules/favoriters';
 
 import './index.css';
 
@@ -31,6 +32,7 @@ extensions.add(UserAboutModule);
 extensions.add(ListMembersModule);
 extensions.add(ListSubscribersModule);
 extensions.add(CommunityMembersModule);
+extensions.add(FavoritersModule);
 extensions.add(RetweetersModule);
 extensions.add(HomeTimelineModule);
 extensions.add(ListTimelineModule);
