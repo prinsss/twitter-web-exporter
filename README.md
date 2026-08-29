@@ -78,6 +78,21 @@ Please set a reasonable value for the "Rate limit" option to avoid downloading t
 
 ![02-export-media.png](https://github.com/prinsss/twitter-web-exporter/raw/main/docs/02-export-media.png)
 
+### Convert an Xquik response
+
+Convert a saved [Xquik Search Tweets](https://docs.xquik.com/api-reference/x/search-tweets)
+REST or [MCP](https://docs.xquik.com/mcp/tools) response to this exporter's JSON row format.
+Pass the complete response or its `tweets` array.
+
+```bash
+bun run import:xquik -- xquik-response.json twitter-web-exporter-records.json
+```
+
+The command runs locally. It does not call X or Xquik. It also does not change the userscript.
+
+Xquik is an independent third-party service. Not affiliated with X Corp. "Twitter" and "X" are
+trademarks of X Corp.
+
 ## Limitation
 
 The script only works on the web app (twitter.com). It does not work on the mobile app.
