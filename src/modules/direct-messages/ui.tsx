@@ -5,7 +5,7 @@ import { BaseTableView } from '@/components/table/base';
 import { useTranslation } from '@/i18n';
 import { useToggle } from '@/utils/common';
 
-import { messagesSignal } from './api';
+import { clearMessages, messagesSignal } from './api';
 import { columns } from './columns';
 import { Message } from './types';
 
@@ -34,7 +34,7 @@ export function DirectMessagesUI() {
           title={title}
           records={messagesSignal.value}
           columns={columns as ColumnDef<Message>[]}
-          clear={() => (messagesSignal.value = [])}
+          clear={clearMessages}
         />
       </Modal>
     </ExtensionPanel>

@@ -12,7 +12,7 @@ import { ExtensionType } from '../extensions';
 import { options } from '../options';
 
 const DB_NAME = packageJson.name;
-const DB_VERSION = 3;
+const DB_VERSION = 4;
 
 declare global {
   interface Window {
@@ -57,6 +57,12 @@ export class DatabaseManager {
 
   private captures() {
     return this.db.table<Capture>('captures');
+  }
+
+  // DirectMessages are a self-contained record type (not tweets/users), so they
+  // live in their own table keyed by message id rather than via `captures`.
+  private messages() {
+    return this.db.table<{ id: string }>('messages');
   }
 
   /*
@@ -117,11 +123,26 @@ export class DatabaseManager {
     return userIds.map((id) => map.get(id)).filter((u): u is User => !!u);
   }
 
+  // DirectMessages persistence: read all stored messages (bulkPut dedupes by id).
+  async extGetMessages<T extends { id: string }>(): Promise<T[]> {
+    return (this.messages().toArray().catch(this.logError) as Promise<T[] | void>).then(
+      (rows) => rows ?? [],
+    );
+  }
+
   /*
   |--------------------------------------------------------------------------
   | Write Methods for Extensions
   |--------------------------------------------------------------------------
   */
+
+  async extAddMessages(items: { id: string }[]) {
+    return this.messages().bulkPut(items).catch(this.logError);
+  }
+
+  async extClearMessages() {
+    return this.messages().clear().catch(this.logError);
+  }
 
   async extAddTweets(extName: string, items: WithSortIndex<Tweet>[]) {
     const sorted = this.sortItems(items);
@@ -225,6 +246,7 @@ export class DatabaseManager {
     await this.deleteAllCaptures();
     await this.deleteAllTweets();
     await this.deleteAllUsers();
+    await this.extClearMessages();
     logger.info('Database cleared');
   }
 
@@ -234,6 +256,7 @@ export class DatabaseManager {
         tweets: await this.tweets().count(),
         users: await this.users().count(),
         captures: await this.captures().count(),
+        messages: await this.messages().count(),
       };
     } catch (error) {
       this.logError(error);
@@ -404,10 +427,18 @@ export class DatabaseManager {
         });
 
       // v3: adds sort_index index to captures for timeline ordering.
+      this.db.version(3).stores({
+        tweets: tweetIndexPaths.join(','),
+        users: userIndexPaths.join(','),
+        captures: captureIndexPaths.join(','),
+      });
+
+      // v4: adds the "messages" table so DirectMessages survive page reloads.
       this.db.version(DB_VERSION).stores({
         tweets: tweetIndexPaths.join(','),
         users: userIndexPaths.join(','),
         captures: captureIndexPaths.join(','),
+        messages: 'id,time,conversation_id',
       });
 
       await this.db.open();
