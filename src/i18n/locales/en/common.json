@@ -48,6 +48,7 @@
   "ListMembers": "ListMembers",
   "ListSubscribers": "ListSubscribers",
   "ListTimeline": "ListTimeline",
+  "Favoriters": "Likers",
   "Retweeters": "Retweeters",
   "RuntimeLogs": "RuntimeLogs",
   "SearchTimeline": "SearchTimeline",
