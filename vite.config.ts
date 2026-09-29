@@ -47,7 +47,7 @@ export default defineConfig({
           ja: 'Twitter データエクスポーター',
         },
         description: {
-          '': 'Export tweets, bookmarks, lists and much more to JSON/CSV/HTML from Twitter(X) web app.',
+          '': 'Export tweets, bookmarks, lists and much more to JSON/CSV/HTML from Twitter(X) web app, or send media to Meva.',
           'zh-CN': '从 Twitter(X) 网页版导出推文、书签、列表等各种数据，支持导出 JSON/CSV/HTML。',
           'zh-TW': '從 Twitter(X) 網頁版匯出推文、書籤、列表等各種資料，支援匯出 JSON/CSV/HTML。',
           ja: 'Twitter(X) ブラウザ版からツイート、ブックマーク、リストなどを取得し JSON/CSV/HTML に出力します。',
@@ -55,7 +55,9 @@ export default defineConfig({
         namespace: 'https://github.com/prinsss',
         icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABmklEQVR4Ae3XA4wcARSA4dq2bUQ1g9pRbVtBzai2otpug9pxUttn2753/3m9Ozq/5NsdvvfGM6VKoshE8/ORFbAMbxCGWHzDHjS2sXxPlM0eKYclGoq3w1eIHVGYikaYg6e4ZppgAgQrVBSvDw+IEylIhSAATUyTHIYgFdsUNnAGosAfDMccLMtOchli4g7quFC8FhIhCsRD8Bk1sxMdgVjwxRyUdtDABIgKH9DQNNEkiB1fMB9VbDSwEKLQJ1S1TFQRXhAHYnADy9ETdTEeotAze7tzNJIhCiRBFLpnq/hmzMR65UkVO2WrgaOQPLLW3u6XPDLAVgOl8R5isEhUtHcSdkEoxEBXnN3ZuuMbxCDDnTVQF52xBcEQHX1BaWcNtDLwMpzg6tNtN0RnD5U8XsviGkQnYWih9CWjNBbDHaJBMsZqec8rjV54B1EoFXO0Fh+DrxCFEjBTTdFy6IvNGu4Hf9FXSdGheAUvjZdgLPajqtp3+jl4jVSIAgHYjRZ6fWC0wSpcwScEQZCMUPzEfezEYJQrVRKFOdIAZGq1QBG8EiYAAAAASUVORK5CYII=',
         match: ['*://twitter.com/*', '*://x.com/*', '*://mobile.x.com/*'],
-        grant: ['unsafeWindow'],
+        grant: ['unsafeWindow', 'GM_xmlhttpRequest'],
+        // Meva server for "Send to Meva". Any host is allowed since the server URL is configurable.
+        connect: ['localhost', '127.0.0.1', '*'],
         'run-at': 'document-start',
         updateURL:
           'https://github.com/prinsss/twitter-web-exporter/releases/latest/download/twitter-web-exporter.user.js',

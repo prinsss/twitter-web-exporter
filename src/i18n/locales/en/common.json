@@ -55,5 +55,12 @@
   "UserAbout": "UserAbout",
   "UserDetail": "UserDetail",
   "UserMedia": "UserMedia",
-  "UserTweets": "UserTweets"
+  "UserTweets": "UserTweets",
+
+  "Meva": "Meva",
+  "Server URL": "Server URL",
+  "Auth Token": "Auth Token",
+  "Viewer Handle": "Viewer Handle",
+  "Optional. Only needed if your Meva server requires pairing.": "Optional. Only needed if your Meva server requires pairing.",
+  "Optional. Detected automatically from the page. Media is saved under twitter/<viewer>/<author>.": "Optional. Detected automatically from the page. Media is saved under twitter/<viewer>/<author>."
 }

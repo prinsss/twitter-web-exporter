@@ -34,6 +34,7 @@
 - 🔍 Export search results
 - ✉️ Export direct messages (now broken, see [#116](https://github.com/prinsss/twitter-web-exporter/issues/116))
 - 📦 Download images and videos from tweets in bulk at original size
+- 🗂️ Send media straight to your [Meva](https://github.com/rimexe0/meva) library, with `.meva` sidecars
 - 🚀 No developer account or API key required
 - 🛠️ Ship as a UserScript and everything is done in your browser
 - 💾 Your data never leaves your computer
@@ -77,6 +78,18 @@ All media files will be downloaded at its original size in a zip archive. You ca
 Please set a reasonable value for the "Rate limit" option to avoid downloading too many files at once. The default value is 1000 which means the script will wait for 1 second after downloading each file.
 
 ![02-export-media.png](https://github.com/prinsss/twitter-web-exporter/raw/main/docs/02-export-media.png)
+
+### Send to Meva
+
+This fork can hand media directly to a [Meva](https://github.com/rimexe0/meva) server instead of downloading a zip. In the "Export Media" dialog, click **Send to Meva**. The Meva server downloads each file and writes its `.meva` sidecar itself, using the same `POST /api/import/url` request as Meva's own Twitter extension. Files land in `twitter/<your handle>/<author>` with matching filenames and idempotency keys, so re-sending a tweet, or importing it with both tools, does not create duplicates.
+
+Set up the connection in Settings → Meva:
+
+- **Server URL**: defaults to `http://localhost:3301`.
+- **Auth Token**: optional, only needed if your Meva server requires pairing.
+- **Viewer Handle**: optional, detected from the page by default.
+
+The script uses `GM_xmlhttpRequest` to reach the server (the Twitter page's CSP blocks direct requests), so your userscript manager will ask you to approve the connection the first time. Sending only queues the imports; check Meva for the result of each download. The dialog's media type and retweet filters apply.
 
 ## Limitation
 

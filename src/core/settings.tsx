@@ -246,6 +246,62 @@ export function Settings() {
             </div>
           </div>
         </div>
+        {/* Meva media library. */}
+        <p class={styles.subtitle}>{t('Meva')}</p>
+        <div class={cx(styles.block, 'flex-col')}>
+          <label class={styles.item}>
+            <span class="label-text whitespace-nowrap">{t('Server URL')}</span>
+            <input
+              type="text"
+              class="input input-bordered input-xs w-48"
+              placeholder={DEFAULT_APP_OPTIONS.mevaServerUrl}
+              value={options.get('mevaServerUrl')}
+              onChange={(e) => {
+                options.set('mevaServerUrl', (e.target as HTMLInputElement)?.value);
+              }}
+            />
+          </label>
+          <label class={styles.item}>
+            <div class="flex items-center">
+              <span class="label-text whitespace-nowrap">{t('Auth Token')}</span>
+              <a
+                class="tooltip tooltip-bottom ml-0.5 before:max-w-40"
+                data-tip={t('Optional. Only needed if your Meva server requires pairing.')}
+              >
+                <IconHelp size={20} />
+              </a>
+            </div>
+            <input
+              type="password"
+              class="input input-bordered input-xs w-48"
+              value={options.get('mevaAuthToken')}
+              onChange={(e) => {
+                options.set('mevaAuthToken', (e.target as HTMLInputElement)?.value);
+              }}
+            />
+          </label>
+          <label class={styles.item}>
+            <div class="flex items-center">
+              <span class="label-text whitespace-nowrap">{t('Viewer Handle')}</span>
+              <a
+                class="tooltip tooltip-bottom ml-0.5 before:max-w-40"
+                data-tip={t(
+                  'Optional. Detected automatically from the page. Media is saved under twitter/<viewer>/<author>.',
+                )}
+              >
+                <IconHelp size={20} />
+              </a>
+            </div>
+            <input
+              type="text"
+              class="input input-bordered input-xs w-48"
+              value={options.get('mevaViewerHandle')}
+              onChange={(e) => {
+                options.set('mevaViewerHandle', (e.target as HTMLInputElement)?.value);
+              }}
+            />
+          </label>
+        </div>
         {/* Enable or disable modules. */}
         <p class={styles.subtitle}>{t('Modules (Scroll to see more)')}</p>
         <div class={cx(styles.block, 'flex-col', 'max-h-44 overflow-scroll')}>

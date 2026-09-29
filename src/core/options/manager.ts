@@ -15,6 +15,9 @@ export interface AppOptions {
   filenamePattern?: string;
   language?: string;
   dedicatedDbForAccounts?: boolean;
+  mevaServerUrl?: string;
+  mevaAuthToken?: string;
+  mevaViewerHandle?: string;
   version?: string;
 }
 
@@ -36,6 +39,9 @@ export const DEFAULT_APP_OPTIONS: AppOptions = {
   filenamePattern: '{screen_name}_{id}_{type}_{num}_{date}.{ext}',
   language: '',
   dedicatedDbForAccounts: false,
+  mevaServerUrl: 'http://localhost:3301',
+  mevaAuthToken: '',
+  mevaViewerHandle: '',
   version: packageJson.version,
 };
 

@@ -11,6 +11,12 @@ import {
 
 import { FileLike, ProgressCallback, zipStreamDownload } from '@/utils/download';
 import { DEFAULT_MEDIA_TYPES, extractMedia, patterns } from '@/utils/media';
+import {
+  buildMevaImportRequests,
+  checkMevaStatus,
+  getViewerHandle,
+  importAllToMeva,
+} from '@/utils/meva';
 import { Modal, MultiSelect } from '@/components/common';
 import { options } from '@/core/options';
 import { TranslationKey, useTranslation } from '@/i18n';
@@ -41,6 +47,8 @@ export function ExportMediaModal<T>({
   const { t } = useTranslation('exporter');
 
   const [loading, setLoading] = useSignalState(false);
+  const [sendingToMeva, setSendingToMeva] = useSignalState(false);
+  const [mevaFailures, setMevaFailures] = useSignalState(0);
   const [copied, setCopied] = useSignalState(false);
 
   const [useAria2Format, toggleUseAria2Format] = useToggle(false);
@@ -63,6 +71,21 @@ export function ExportMediaModal<T>({
     filenamePattern ?? '',
   ).filter((media) => filters.includes(media.type as MediaFilterType));
 
+  // Meva stores Twitter media under `twitter/<viewer>/<author>`, like the Meva extension does.
+  const viewerHandle = getViewerHandle();
+  const mevaRequests = isTweet
+    ? buildMevaImportRequests(
+        table.getSelectedRowModel().rows.map((row) => row.original) as Tweet[],
+        includeRetweets,
+        filters.filter((filter): filter is Media['type'] => filter !== 'retweet'),
+        viewerHandle,
+      )
+    : [];
+
+  const mevaKeyByUrl = new Map(
+    mevaRequests.map((request) => [request.url, request.idempotencyKey]),
+  );
+
   const onProgress: ProgressCallback<FileLike> = (current, total, value) => {
     setCurrentProgress(current);
     setTotalProgress(total);
@@ -81,6 +104,43 @@ export function ExportMediaModal<T>({
     } catch (err) {
       setLoading(false);
       logger.error(t('Failed to export media. Open DevTools for more details.'), err);
+    }
+  };
+
+  const onSendToMeva = async () => {
+    setSendingToMeva(true);
+    setMevaFailures(0);
+    setCurrentProgress(0);
+    setTotalProgress(mevaRequests.length);
+
+    try {
+      if (!(await checkMevaStatus())) {
+        logger.error(t('Could not connect to Meva server. Check the server URL in settings.'));
+        return;
+      }
+
+      let failures = 0;
+      await importAllToMeva(
+        mevaRequests,
+        (current, total, request) => {
+          setCurrentProgress(current);
+          setTotalProgress(total);
+          if (request) {
+            taskStatusSignal.value = { ...taskStatusSignal.value, [request.idempotencyKey]: 100 };
+          }
+        },
+        (request, err) => {
+          failures++;
+          logger.error(`Failed to send ${request.preferredFilename} to Meva`, err);
+        },
+      );
+      setMevaFailures(failures);
+      logger.info(
+        `Sent ${mevaRequests.length - failures}/${mevaRequests.length} media to Meva` +
+          (viewerHandle ? ` (viewer: @${viewerHandle})` : ''),
+      );
+    } finally {
+      setSendingToMeva(false);
     }
   };
 
@@ -218,7 +278,8 @@ export function ExportMediaModal<T>({
               {mediaList.map((media, index) => (
                 <tr>
                   <td>
-                    {taskStatusSignal.value[media.filename] ? (
+                    {taskStatusSignal.value[media.filename] ||
+                    taskStatusSignal.value[mevaKeyByUrl.get(media.url) ?? ''] ? (
                       <IconCircleCheck class="text-success" size={14} />
                     ) : (
                       <IconCircleDashed size={14} />
@@ -255,7 +316,9 @@ export function ExportMediaModal<T>({
             max="100"
           />
           <span class="text-sm h-4 leading-none mt-2 text-base-content text-opacity-60">
-            {`${currentProgress}/${mediaList.length}`}
+            {`${currentProgress}/${totalProgress || mediaList.length}`}
+            {mevaFailures > 0 &&
+              ` · ${t('Failed to send to Meva:')} ${mevaFailures} (${t('Open DevTools for more details.')})`}
           </span>
         </div>
       </div>
@@ -273,6 +336,15 @@ export function ExportMediaModal<T>({
             <IconFileDownload />
           </button>
         </div>
+        {isTweet && (
+          <button
+            class={cx('btn btn-primary', (sendingToMeva || loading) && 'btn-disabled')}
+            onClick={onSendToMeva}
+          >
+            {sendingToMeva && <span class="loading loading-spinner" />}
+            {t('Send to Meva')}
+          </button>
+        )}
         <button class={cx('btn btn-secondary', loading && 'btn-disabled')} onClick={onExport}>
           {loading && <span class="loading loading-spinner" />}
           {t('Start Export')}

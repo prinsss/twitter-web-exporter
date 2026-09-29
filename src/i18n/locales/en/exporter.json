@@ -91,5 +91,10 @@
   "filter.photo": "Photo",
   "filter.video": "Video",
   "filter.animated_gif": "GIF",
-  "filter.retweet": "Include retweets"
+  "filter.retweet": "Include retweets",
+
+  "Send to Meva": "Send to Meva",
+  "Failed to send to Meva:": "Failed to send to Meva:",
+  "Open DevTools for more details.": "Open DevTools for more details.",
+  "Could not connect to Meva server. Check the server URL in settings.": "Could not connect to Meva server. Check the server URL in settings."
 }

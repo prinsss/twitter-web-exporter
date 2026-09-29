@@ -1,6 +1,6 @@
 {
   "name": "twitter-web-exporter",
-  "description": "Export tweets, bookmarks, lists and much more from Twitter(X) web app.",
+  "description": "Export tweets, bookmarks, lists and much more from Twitter(X) web app, or send media to Meva.",
   "version": "1.4.3",
   "author": "prin <hi@prin.studio>",
   "license": "MIT",
